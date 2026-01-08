@@ -1,0 +1,46 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\vastleggen\opgave_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    Aangever:
+      description: >-
+        De aangever is degene (vooralsnog kan dit alleen een natuurlijk persoon zijn) die opgave doet.
+      properties:
+
+
+    Opgave:
+      description: >-
+        Een opgave is de verzameling brondocumenten die de aangever aan de Kamer heeft aangeleverd - of die namens de aangever zijn gecreëerd door een Kamer-applicatie - en die tot doel hebben om één of meer materiële gebeurtenissen te beschrijven, zodat deze kunnen worden geregistreerd in een door de Kamer beheerd register.
+Er zijn een aantal speciaal soort opgaven, die slechts door een aantal speciaal soort aangevers kunnen worden opgegeven. Zie daarvoor de beschrijvingen van deze specialisaties. 
+      required:
+        - opgavenummer
+      properties:
+        opgavedatum:
+          description: >-
+            De deelopgave deelt de datum met de hoofdopgave.
+          type: DatumIncompleet
+        opgavenummer:
+          type: string
+        aangever:
+          $ref: '#/components/schemas/Aangever'
+        bewijsstuk:
+          type: array
+          items:
+            $ref: 'document_v1.yaml#/components/schemas/Bewijsstuk'
+        brondocument:
+          type: array
+          items:
+            $ref: 'document_v1.yaml#/components/schemas/Brondocument'
+        juridischeGebeurtenis:
+          $ref: 'juridischegebeurtenis_v1.yaml#/components/schemas/JuridischeGebeurtenis'

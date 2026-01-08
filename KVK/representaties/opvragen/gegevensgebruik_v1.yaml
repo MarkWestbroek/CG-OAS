@@ -1,0 +1,33 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\opvragen\gegevensgebruik_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    Gegevensgebruik:
+      description: >-
+        D eigenaar van de maatschappelijke activiteit geeft aan of hij/zij wil dat zijn / haar adresgegevens door derden gebruikt worden voor het sturen van fysieke post of huis-aan-huis bezoek op het ingeschreven adres.
+        
+      required:
+        - directMarketing
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            directMarketing:
+              description: >-
+                De waarde is één van de volgende:
+                <li>WelDirectMarketing
+                <li>GeenDirectMarketing
+              type: string
+              enum:
+                - WelDirectMarketing
+                - GeenDirectMarketing

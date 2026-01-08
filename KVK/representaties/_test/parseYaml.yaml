@@ -1,0 +1,34 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\testen\parseYaml.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    Testrep:
+      description: >-
+        Testrepresentatie regel 1.
+        Regel2.
+        
+      required:
+        - directMarketing
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            directMarketing:
+              description: >-
+                De waarde is één van de volgende:
+                <li>WelDirectMarketing
+                <li>GeenDirectMarketing
+              type: string
+              enum:
+                - WelDirectMarketing
+                - GeenDirectMarketing

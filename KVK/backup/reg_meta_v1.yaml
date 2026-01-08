@@ -1,0 +1,345 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    reg_meta
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # CorrectieregistratieRequest representatie
+    CorrectieregistratieRequest:
+      description: >-
+        Het abstracte <i>gebeurtenis-registratie-request</i> bevat de basisinformatie die nodig is in elk request van een Registratiegebeurtenisservice:
+        <ul>
+        	<li>de actie (registreren of valideren)</li>
+        	<li>het registratietijdstip</li>
+        	<li>de juridische gebeurtenis die aan de registratie ten grondslag ligt</li>
+        </ul>
+      required:
+        - actie
+        - registratietijdstip
+      properties:
+        actie:
+          description: >-
+            De actie die voor de gebeurtenis uitgevoerd moet worden. De acties kunnen zijn:
+          <ul>
+          	<li>Valideren - er wordt gevalideerd of de gebeurtenis geregistreerd kan worden</li>
+          	<li>Registreren - de gebeurtenis wordt geregistreerd</li>
+          </ul>
+          type: string
+          enum:
+            - Valideren
+            - Registreren
+        registratietijdstip:
+          description: >-
+            Het moment waarop de gebeurtenis geregistreerd moet worden.
+          type: string
+          format: datetime
+        correctieVanEenJuridischeGebeurtenis:
+          $ref: 'vastleggen_juridischegebeurtenis_v1.yaml#/components/schemas/CorrectieVanEenJuridischeGebeurtenis'
+
+
+    # DoorhalingJuridischeGebeurtenis representatie
+    DoorhalingJuridischeGebeurtenis:
+      description: >-
+        De doorhaling van een juridische gebeurtenis. Deze maakt dus alle door deze gebeurtenis geregistreerde registraties ongedaan.
+      required:
+        - doorhalingnummer
+        - tijdstip
+        - juridischeGebeurtenis
+      properties:
+        doorhalingnummer:
+          description: >-
+            Het nummer van de doorhaling.
+          type: string
+          format: UUID
+        tijdstip:
+          description: >-
+            het tijdstip waarop deze doorhaling is gedaan.
+          type: string
+          format: datetime
+        juridischeGebeurtenis:
+          $ref: 'vastleggen_juridischegebeurtenis_v1.yaml#/components/schemas/JuridischeGebeurtenis'
+
+
+    # Entiteit representatie
+    Entiteit:
+      description: >-
+        
+      required:
+        - naam
+        - identificatie
+      properties:
+        naam:
+          description: >-
+            De naam van de entiteit.
+          type: string
+        identificatie:
+          $ref: '#/components/schemas/Gegeven'
+
+
+    # GebeurtenisregistratieRequest representatie
+    GebeurtenisregistratieRequest:
+      description: >-
+        Het abstracte <i>gebeurtenis-registratie-request</i> bevat de basisinformatie die nodig is in elk request van een Registratiegebeurtenisservice:
+        <ul>
+        	<li>de actie (registreren of valideren)</li>
+        	<li>het registratietijdstip</li>
+        	<li>de juridische gebeurtenis die aan de registratie ten grondslag ligt</li>
+        </ul>
+      required:
+        - actie
+        - registratietijdstip
+      properties:
+        actie:
+          description: >-
+            De actie die voor de gebeurtenis uitgevoerd moet worden. De acties kunnen zijn:
+          <ul>
+          	<li>Valideren - er wordt gevalideerd of de gebeurtenis geregistreerd kan worden</li>
+          	<li>Registreren - de gebeurtenis wordt geregistreerd</li>
+          </ul>
+          type: string
+          enum:
+            - Valideren
+            - Registreren
+        registratietijdstip:
+          description: >-
+            Het moment waarop de gebeurtenis geregistreerd moet worden.
+          type: string
+          format: datetime
+        correctieVanEenJuridischeGebeurtenis:
+          $ref: 'vastleggen_juridischegebeurtenis_v1.yaml#/components/schemas/CorrectieVanEenJuridischeGebeurtenis'
+
+
+    # Gegeven representatie
+    Gegeven:
+      description: >-
+        Een {gegeven} representeert een gegeven in een {Gegevenselement} door middel van:
+        <ul>
+        	<li>de naam</li>
+        	<li>optioneel een alias</li>
+        	<li>een beschrijving</li>
+        	<li>het {<i>type}</i> van het {gegeven}: een DataType zoals beschreven in het Logisch Model</li>
+        </ul>
+      required:
+        - naam
+        - type
+      properties:
+        naam:
+          description: >-
+            De naam van de {Waarde}.
+          type: string
+        alias:
+          description: >-
+            De alias is een alternatieve omschrijving van de naam de {Waarde}.
+          type: 
+        beschrijving:
+          description: >-
+            De beschrijving van de {Waarde}.
+          type: 
+        type:
+          type: {Gegevenstype}
+
+
+    # Gegeven representatie
+    Gegeven:
+      description: >-
+        
+      required:
+        - naam
+        - type
+        - waarde
+      properties:
+        naam:
+          description: >-
+            De naam van het gegeven.
+          type: string
+        type:
+          description: >-
+            het type van het gegeven, bijvoorbeeld 'UUID' of 'DatumIncompleet'.
+          type: string
+        waarde:
+          description: >-
+            De waarde van het gegeven.
+          type: string
+
+
+    # HerstelRegistratieRequest representatie
+    HerstelRegistratieRequest:
+      description: >-
+        De representatie met alle gegevens voor de request van de herstel registratie service.
+        
+      required:
+        - actie
+        - registratietijdstip
+        - doorTeHalenRegistratie
+      properties:
+        actie:
+          description: >-
+            De actie die voor de gebeurtenis uitgevoerd moet worden. De acties kunnen zijn:
+          <ul>
+          	<li>Valideren - er wordt gevalideerd of de gebeurtenis geregistreerd kan worden</li>
+          	<li>Registreren - de gebeurtenis wordt geregistreerd</li>
+          </ul>
+          type: string
+        registratietijdstip:
+          description: >-
+            Het moment waarop de gebeurtenis geregistreerd moet worden.
+          type: string
+          format: datetime
+        doorhalingJuridischeGebeurtenis:
+          $ref: '#/components/schemas/DoorhalingJuridischeGebeurtenis'
+        doorTeHalenRegistratie:
+          $ref: 'gebeurtenis_v1.yaml#/components/schemas/Registratiegebeurtenis'
+
+
+    # HerstelRegistratieResponse representatie
+    HerstelRegistratieResponse:
+      description: >-
+        
+      required:
+        - doorgehaaldeRegistratie
+      allOf:
+        - $ref: '#/components/schemas/RegistratieResponse'
+        - properties:
+            doorgehaaldeRegistratie:
+              $ref: 'gebeurtenis_v1.yaml#/components/schemas/Registratiegebeurtenis'
+
+
+    # RegistratieResponse representatie
+    RegistratieResponse:
+      description: >-
+        Het abstracte Registratiegebeurtenis object.
+      required:
+        - gebeurtenisnummer
+        - type
+      properties:
+        gebeurtenisnummer:
+          description: >-
+            Het nummer van de gebeurtenis (unieke identificatie).
+          type: string
+          format: UUID
+        type:
+          description: >-
+            Het type van de gebeurtenis die is geregistreerd.
+<i>Dit weet alleen de concrete implementatie, bijvoorbeeld NPA:</i>
+          <i>- NatuurlijkPersoonRegistratie</i>
+          <i>- LocatieRegistratie</i>
+          <i>- VerhuizingNatuurlijkPersoonRegistratie</i>
+          type: string
+        gerelateerdeRegistratie:
+          $ref: '#/components/schemas/RegistratieResponse'
+
+
+    # Entiteit representatie
+    Entiteit:
+      description: >-
+        Een entiteit is een representatie van een subject in de werkelijkheid dat een enkelvoudig bestaan kent: het ontstaat &#233;&#233;nmaal en kan maar &#233;&#233;nmaal ophouden te bestaan. Er is er maar &#233;&#233;n van en we kunnen een entiteit in werkelijkheid op &#233;&#233;n of andere manier 'aanwijzen'.
+De concrete representatie van de entiteit <i>(bijv. in een bericht, op een formulier, in een systeem of in een databasetabel)</i> kunnen we 'aanwijzen' door middel van een unieke identificatie of een uniek sleutelgegeven of set sleutelgegevens <i>(bijv. het persoonsnummer of een combinatie van BSN en geboortedatum, een vestigingsnummer,. een KvK-nummer, enz.</i>).
+Daarmee bevat een entiteit in principe maar &#233;&#233;n {gegeven}, namelijk haar identificatie, bijvoorbeeld het <i>kvkNummer </i>van de .<i>maatschappelijke activiteit</i> Zij kan wel <i>afgeleide gegevens</i> bevatten, bijvoorbeeld de <i>naam </i>van een maatschappelijke activiteit.
+      allOf:
+        - $ref: '#/components/schemas/Representatie'
+        - properties:
+            gegevenselement:
+              type: array
+              items:
+                $ref: '#/components/schemas/Gegevenselement'
+            identificatie:
+              $ref: '#/components/schemas/Gegeven'
+
+
+    # Gegevenselement representatie
+    Gegevenselement:
+      description: >-
+        Een gegevenselement is een eenheid van informatie die een bepaalde set eigenschappen representeert.
+We defini&#235;ren een gegevenselement als volgt:
+        <ul>
+        	<li>door de naam, alias en omschrijving, die het overerft van de {representatie}.</li>
+        	<li>met nul of meer waarden die (indien meer: elk een deel van) het gegevenselement verder representeren <i>(bijv. ‘voornaam’, ‘straatnaam’)</i>.</li>
+        </ul>
+        <i>
+        </i><i>N.B.: een gegevenselement behoeft geen waarde te hebben. Het bestaan van het element is op zich al informatie.</i>
+      allOf:
+        - $ref: '#/components/schemas/Representatie'
+        - properties:
+
+
+    # {Relatie} representatie
+    {Relatie}:
+      description: >-
+        De relatie tussen twee representaties.
+        Een relatie is altijd van &#233;&#233;n representatie (de bron) naar &#233;&#233;n andere representatie (het doel).
+Voor de relaties naar bron en doel kunnen de volgende attributen worden gedefini&#235;erd:
+        <ul>
+        	<li>de <u>kardinaliteit </u>(zoals in UML: 0..1, 0..*, 1..* of meer specifiek indien nodig)</li>
+        	<li>de <u>rol</u> van de bron of het doel in de vorm van een naam</li>
+        </ul>
+        Voor bron of doel kunnen constraints worden gesteld, waarvan de volgende een speciale functie hebben:
+        <ul>
+        	<li><u>{enkelvoudig}</u>: dit betekent dat de kardinaliteit van bron of doel slechts 1 is op een enkel punt in de formele of materi&#235;le tijd</li>
+        	<li><u>{meervoudig}</u>: dit betekent dat de kardinaliteit van bron of doel nog steeds meervoudig is op een enkel punt in de formele of materi&#235;le tijd</li>
+        	<li><u>{ordered}</u>: alleen bij meervoudig bron of doel; dit betekent dat er volgordelijkheid is in de lijst van gerelateerde representaties. <i>Bijvoorbeeld: bij elke Handelsnaam die bij een Maatschappelijke Activiteit hoort kan de plaats in de lijst worden vastgelegd.</i></li>
+        </ul>
+N.B.: een relatie is ook een soort gegevenselement, en kan dus ook eigen {waarden} bevatten. Sommigen daarvan hebben we speciaal gedefini&#235;erd in dit metamodel <i>(bijv. de stereotypen  &#171;formeel&#187; en &#171;materieel&#187;)</i>.
+        <i>
+        </i>De relatietypen die worden gebruikt zijn:
+        <ul>
+        	<li>associatie (directioneel of niet)</li>
+        	<li>aggregatie</li>
+        	<li>compositie</li>
+        	<li>overerving</li>
+        </ul>
+Op het relatietype "overerving" zijn geen {waarden} mogelijk die in het LGM alleen in een associatieklasse zouden kunnen worden getekend.
+        De betekenis van dit type relatie is bovendien zoals overerving in UML is gedefinieerd, namelijk dat het doel (de zogenaamde "subklasse") alle eigenschappen (relaties en waarden) van de bron (de zogenaamde "superklasse") erft.
+      required:
+        - type
+        - tijdlijn
+        - bron
+        - doel
+      allOf:
+        - $ref: '#/components/schemas/Gegevenselement'
+        - properties:
+            type:
+              type: {Relatietype}
+            tijdlijn:
+              type: {Tijdlijnvoorkomen}
+            bron:
+              $ref: '#/components/schemas/Representatie'
+            doel:
+              $ref: '#/components/schemas/Representatie'
+
+
+    # Representatie representatie
+    Representatie:
+      description: >-
+        [abstract] De representatie van iets in de werkelijkheid.
+Dit 'iets' kan een subject zijn <i>(bijv. een persoon, een onderneming, enz.)</i>, een set eigenschap(pen) van een subject <i>(bijv. handelsnaam, activiteiten)</i>, of relaties tussen subjecten of eigenschappen <i>(bijv. de relaties tussen een rechtspersoon en een onderneming, of de rol die de ene (rechts)persoon t.o.v. de ander vervult</i>).
+Als concrete soorten representatie defini&#235;ren wij:
+        <ul>
+        	<li>een entiteit,</li>
+        	<li>een gegevenselement of</li>
+        	<li>een relatie tussen twee representaties.</li>
+        </ul>
+Een representatie wordt altijd aangeduid met een naam <i>(bijv. "Vestiging", "Samenwerkingsverband", "hoofdvestiging", NatuurlijkPersoon") </i>en heeft optioneel een alias <i>(bijv. "natuurlijk peroon")</i>, en heeft - wanneer het model finaal is - altijd een beschrijving.
+      required:
+        - naam
+      properties:
+        naam:
+          description: >-
+            De naam van de {Representatie}. Deze is uniek en identificerend binnen de context van het register waarbinnen deze is gedefiniëerd.
+          type: string
+        alias:
+          description: >-
+            De alias is een alternatieve omschrijving van de naam de {Representatie}.
+          type: 
+        beschrijving:
+          description: >-
+            De beschrijving van de {Representatie}.
+          type: 

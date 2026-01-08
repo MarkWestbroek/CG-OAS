@@ -1,0 +1,483 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\opvragen\natuurlijkpersoon_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    NatuurlijkPersoonReferentie:
+      description: >-
+        #TODO
+      allOf:
+        - $ref: 'persoon_v1.yaml#/components/schemas/PersoonReferentie'
+        - properties:
+
+
+    NatuurlijkPersoon:
+      description: >-
+        Deze natuurlijk persoon representatie bevat een uitgebreid aantal gegevens.
+      required:
+        - persoonsnummer
+        - geslacht
+        - geboorte
+        - naam
+      properties:
+        persoonsnummer:
+          description: >-
+            De waarde is één van de volgende:
+            <li>BinnenlandsNatuurlijkPersoon
+            <li>BuitenlandsNatuurlijkPersoon
+          type: string
+          enum:
+            - BinnenlandsNatuurlijkPersoon
+            - BuitenlandsNatuurlijkPersoon
+        staatsburgerschap:
+          $ref: '#/components/schemas/Staatsburgerschap'
+        huwelijk:
+          $ref: '#/components/schemas/Huwelijk'
+        bereikbaarheid:
+          $ref: '#/components/schemas/Bereikbaarheid'
+        geslacht:
+          $ref: '#/components/schemas/Geslacht'
+        natuurlijkPersoonsHerkenning:
+          $ref: '#/components/schemas/NatuurlijkPersoonsHerkenning'
+        geboorte:
+          $ref: '#/components/schemas/Geboorte'
+        overlijden:
+          $ref: '#/components/schemas/Overlijden'
+        vertrokken:
+          $ref: '#/components/schemas/Vertrokken'
+        faillissementMetOmgezetteInsolventies:
+          $ref: 'persoon_v1.yaml#/components/schemas/FaillissementMetOmgezetteInsolventies'
+        beperkingInRechtshandeling:
+          $ref: 'persoon_v1.yaml#/components/schemas/BeperkingInRechtshandeling'
+        handlichtingen:
+          type: array
+          items:
+            $ref: '#/components/schemas/Handlichting'
+        naam:
+          $ref: '#/components/schemas/SamengesteldeNatuurlijkPersoonsNaam'
+        schuldsaneringMetOmgezetteInsolventies:
+          $ref: '#/components/schemas/SchuldsaneringMetOmgezetteInsolventies'
+        afgeschermdBRP:
+          $ref: '#/components/schemas/AfgeschermdBRP'
+        nPStatus:
+          $ref: 'natuurlijkpersoonhr_v1.yaml#/components/schemas/NPStatus'
+
+
+    Staatsburgerschap:
+      description: >-
+        De natuurlijk persoon bezit het staatsburgerschap van een land, wat wordt aangeduid met een nationaliteit volgens de referentielijst "Nationaliteit".
+        
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            nationaliteit:
+              $ref: 'algemeen_v1.yaml#/components/schemas/Nationaliteit'
+
+
+    Huwelijk:
+      description: >-
+        Een huwelijk of geregistreerd partnerschap.
+        N.B.: momenteel wordt van alle huwelijken en/of geregistreerd partnerschappen alleen (mogelijk) de datum van het eerste huwelijk geregistreerd.
+        
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            datumAanvang:
+              description: >-
+                De datum waarop het huwelijk of geregistreerd partnerschap heeft plaatsgevonden.
+              type: string
+              format: DatumIncompleet
+            datumOntbinding:
+              description: >-
+                [optioneel]
+          De datum waarop de ontbinding van het huwelijk of geregistreerd partnerschap heeft plaatsgevonden.
+              type: string
+              format: DatumIncompleet
+            datumEersteHuwelijk:
+              type: string
+              format: DatumIncompleet
+
+
+    Geboorte:
+      description: >-
+        De gegevens omtrent de geboorte van een natuurlijk persoon, te weten de geboortedatum, -plaats en -land.
+        <i>Indien het geboorteland Nederland is, hoeft dit niet te worden genoteerd.</i>
+      required:
+        - datum
+        - plaats
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            datum:
+              description: >-
+                De datum waarop de geboorte van een natuurlijk persoon heeft plaatsgevonden.
+          <i>N.B. dit is mogelijk een niet complete datum; dag of maand (of jaar?) kunnen onbekend zijn.</i>
+              type: string
+              format: DatumIncompleet
+            plaats:
+              description: >-
+                De plaats van geboorte van een natuurlijk persoon.
+              type: string
+              format: Alfanumeriek40
+            land:
+              $ref: 'algemeen_v1.yaml#/components/schemas/Land'
+
+
+    Overlijden:
+      description: >-
+        De gegevens omtrent het overlijden van een natuurlijk persoon, indien dit reeds heeft plaatsgevonden.
+        <i>We leggen alleen de datum van overlijden vast.</i>
+      required:
+        - datum
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            datum:
+              description: >-
+                De datum waarop het overlijden van en natuurlijk persoon heeft plaatsgevonden.
+          <i>N.B. dit is mogelijk een niet complete datum; dag of maand kunnen onbekend zijn.</i>
+              type: string
+              format: DatumIncompleet
+
+
+    NatuurlijkPersoonsHerkenning:
+      description: >-
+        <i>abstract</i>
+        De superklasse voor alle (binnen NPA) ondersteunde manieren waarop een natuurlijk persoon herkend kan worden.
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            a-nummer:
+              description: >-
+                Het administratienummer van de persoon, bedoeld in de Wet BRP. Zie ook http://data.stelselvanbasisregistraties.nl/gba/doc/gegevenselement/A-nummer_persoon-Natuurlijk_persoon
+              type: string
+            bsn:
+              description: >-
+                Identificatie van een natuurlijk persoon middels het Burger Service Nummer.
+          Een BSN is een door de BSN-uitdeler met een ingezetene geassocieerd kenmerk, bedoeld voor herkenning van deze ingezetene in administraties of bij ontmoetingen door hen die wettelijk gerechtigd zijn het BSN voor dat doel te gebruiken.
+          
+              type: string
+            tIN:
+              $ref: '#/components/schemas/TIN'
+
+
+    AfgeschermdBRP:
+      description: >-
+        #TODO
+      required:
+        - afgeschermdBRP
+      properties:
+        afgeschermdBRP:
+          description: >-
+          type: string
+          enum:
+            - ja
+
+
+    TIN:
+      description: >-
+        TIN is een nummer dat wordt gebruikt om natuurlijk personen of rechtspersonen te herkennen voor belasting gerelateerde doeleinden, zoals het indienen van belastingaangiften of andere acties, zoals het openen van een bankrekening.
+        Voor het domein van natuurlijke personen en adressen zijn alleen de TIN's relevant voor natuurlijke personen
+              properties:
+        
+      required:
+        - tin
+      properties:
+        tin:
+          type: string
+        landVanUitgifte:
+          $ref: 'algemeen_v1.yaml#/components/schemas/Land'
+
+
+    SamengesteldeNatuurlijkPersoonsNaam:
+      description: >-
+        samengestelde representatie van NatuurlijkePersoonsNaam, Partnernaam en Naamgebruik t.b.v. de subresource 'NatuurlijkPersoon/Naam'
+                deze bevat ook de afgeleide 'volledige naam'
+      required:
+        - volledigeNatuurlijkePersoonsnaam
+      properties:
+        volledigeNatuurlijkePersoonsnaam:
+          type: string
+        natuurlijkPersoonsnaam:
+          $ref: '#/components/schemas/NatuurlijkPersoonsnaam'
+        partnernaam:
+          $ref: '#/components/schemas/Partnernaam'
+        naamgebruik:
+          $ref: '#/components/schemas/Naamgebruik'
+
+
+    NatuurlijkPersoonsnaam:
+      description: >-
+        De gegevens omtrent de naam en eventueel titel van een natuurlijk persoon.
+                Wij baseren ons hierbij op het volgende.
+                - indien de natuurlijk persoon bekend is bij een basisregister (bij. het BRP) prevaleren de gegevens zoals daar bekend doorgaans boven die, die de persoon zelf opgeeft.
+                - indien we ons baseren op de opgave, zal daarbij een identificatie document gevoegd zijn. De gegevens worden dan daarvandaan overgenomen.
+        
+      required:
+        - voorletters
+        - geslachtsnaam
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            adellijkeTitel:
+              description: >-
+                Indien de natuurlijk persoon een adellijke titel voert, kan deze hier worden genoteerd.
+          De titel is er één uit de lijst Adellijke titels zoals gespecificeerd in de enumeratie "Adellijke Titel".
+                De waarde is één van de volgende:
+                <li>Baron
+                <li>Barones
+                <li>Graaf
+                <li>Gravin
+                <li>Hertog
+                <li>Hertogin
+                <li>Jonkheer
+                <li>Jonkvrouw
+                <li>Markies
+                <li>Markiezin
+                <li>Prins
+                <li>Prinses
+                <li>Ridder
+              type: string
+              enum:
+                - Baron
+                - Barones
+                - Graaf
+                - Gravin
+                - Hertog
+                - Hertogin
+                - Jonkheer
+                - Jonkvrouw
+                - Markies
+                - Markiezin
+                - Prins
+                - Prinses
+                - Ridder
+            voorletters:
+              description: >-
+                De initialen (eerste letters) van de voornamen, in dezelfde volgorde als die waarin de voornamen voorkomen, gescheiden door punten.
+              type: string
+            voornamen:
+              description: >-
+                De voornaam of voornamen zoals de natuurlijk persoon deze officieel voert.
+          <i>N.B. niet in elk land is de voornaam of zijn de voornamen de naam of namen voorafgaand aan geslachtsnaam (ook wel achternaam). Toch noemen we de naam die niet de geslachtsnaam is dan de voornaam.</i>
+          <i>
+          </i><i>Voorbeeld: In Hongarije schrijft men de voornaam achter de familienaam.</i>
+              type: string
+            geslachtsnaam:
+              description: >-
+                De geslachtsnaam (ook wel 'achternaam' of 'familienaam') van een natuurlijk persoon, is het gedeelte van de naam van deze persoon, dat hij of zij ontvangen heeft van de voorgaande generatie.
+          <i>N.B.: het voorvoegsel, dat deel uitmaakt van de geslachtsnaam, noteren wij in het veld [voorvoegselGeslachtsnaam]. De gehele geslachtsnaam is dus het voorvoegsel plus de geslachtsnaam, gescheiden door een spatie indien er een voorvoegsel is.</i>
+              type: string
+            voorvoegselGeslachtsnaam:
+              description: >-
+                Het voorvoegsel (ten onrechte ook wel 'tussenvoegsel' genoemd) dat in sommige gevallen voorafgaat aan de geslachtsnaam.
+<i>Bijvoorbeeld:</i>
+          <ul>
+          	<li><i>het voorvoegsel 'de' en geslachtsnaam 'Vries' vormen samen de gehele geslachtsnaam 'de Vries'</i></li>
+          	<li><i>'van der' en 'Vrieze' vormen samen 'van der Vrieze'</i></li>
+          	<li><i>zie https://nl.wikipedia.org/wiki/Tussenvoegsel voor een lijst van meer voorkomende voorvoegsels.</i></li>
+          </ul>
+              type: string
+
+
+    Partnernaam:
+      description: >-
+        De (volledige) geslachtsnaam van de partner van de natuurlijk persoon, indien er een partner is.
+        Met partner wordt een geregistreerd partner of echtgeno(o)t(e) bedoeld.
+        <i>N.B. we noteren geen voornaam, titel of geslacht, noch gegevens over de periode waarin het partnerschap plaatshad, noch over het soort partnerschap.</i>
+      required:
+        - geslachtsnaam
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            voorvoegselGeslachtsnaam:
+              description: >-
+                Zie [voorvoegselGeslachtsnaam] bij NatuurlijkPersoonsnaam.
+              type: string
+              format: Alfanumeriek10
+            geslachtsnaam:
+              description: >-
+                Zie [geslachtsnaam] bij NatuurlijkPersoonsnaam.
+          
+              type: string
+              format: Alfanumeriek200
+
+
+    Naamgebruik:
+      description: >-
+        De manier waarop de natuurlijk persoon aangeeft zijn of haar (volledige) geslachtsnaam wil gebruiken in combinatie met de (volledige) geslachtsnaam van zijn of haar partner, indien deze aanwezig is.
+      required:
+        - naamGebruik
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            naamGebruik:
+              description: >-
+                Het naamgebruik zoals beschreven in elk van de items in de enumeratie " NaamgebruikSoort".
+                De waarde is één van de volgende:
+                <li>EigenNaam: alleen de (volledige) eigen geslachtsnaam.
+                <li>NaamPartner: alleen de (volledige) geslachtsnaam van de partner.
+                <li>EigenNaam-NaamPartner: de (volledige) eigen geslachtsnaam gevolgd door een scheidingsstreepje ( '- ') en de (volledige) geslachtsnaam van de partner.
+
+Bijvoorbeeld: 'Jansen - van der Vrieze' als 'Jansen' de eigen naam is, en 'van der Vrieze' de volledige geslachtsnaam van de partner.
+                <li>NaamPartner-EigenNaam: de (volledige) geslachtsnaam van de partner, gevolgd door een scheidingsstreepje ( '- ') en de (volledige) eigen geslachtsnaam.
+              type: string
+              enum:
+                - EigenNaam
+                - NaamPartner
+                - EigenNaam-NaamPartner
+                - NaamPartner-EigenNaam
+
+
+    Vertrokken:
+      description: >-
+        Geeft aan dat de natuurlijk persoon vanaf beginDatum vertrokken is, en niet bekend is waarheen.
+      required:
+        - ingangsdatum
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            ingangsdatum:
+              description: >-
+                Datum waarop de natuurlijk persoon is vertrokken (onbekend waarheen)
+              type: string
+              format: DatumIncompleet
+
+
+    Bereikbaarheid:
+      description: >-
+        Vanaf welke datum en op welke locatie is een natuurlijk persoon bereikbaar.
+                Er zijn twee mogelijke functies die de locatie voor de natuurlijk persoon kan hebben, weergegeven in de locatiefunctie: woonadres of briefadres.
+        
+      required:
+        - afgeschermd
+        - ingangsdatum
+        - locatieFunctie
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            afgeschermd:
+              description: >-
+                <i>Afgeleid.</i>
+          afgeschermd is 'ja' als er <u>op dit moment</u> (voor deze Bezoeklocatie) een AfgeschermdRegistratie is die op 'afgeschermd' staat.
+<b><u>afgeschermd is er niet</u></b> als er <u>op dit moment</u> (voor deze Bezoeklocatie) nooit een Afgeschermdregistratie is geweest of er een AfgeschermdRegistratie is die op 'NietAfgeschermd' staat.
+<i>N.B. de waarde van deze property kan dus alleen maar 'ja' zijn!</i>
+              type: string
+            ingangsdatum:
+              description: >-
+                Vanaf wanneer de persoon bereikbaar is op deze locatie.
+              type: string
+              format: DatumIncompleet
+            locatieFunctie:
+              description: >-
+                De functie van de locatie in het kader van de bereikbaarheid van de natuurlijk persoon.
+                De waarde is één van de volgende:
+                <li>Woonadres: de locatie dient als (primair) woonadres.
+                <li>Briefadres: de locatie is niet het woonadres van de natuurlijk persoon, maar via iemand die wel op de locatie woont <i>(bijv. een familielid) </i>kan de persoon worden bereikt.
+<i>Dit kan bijvoorbeeld het geval zijn bij detentie van de natuurlijk persoon.</i>
+              type: string
+              enum:
+                - Woonadres
+                - Briefadres
+            buitenlandseLocatie:
+              $ref: '#/components/schemas/BuitenlandseLocatie'
+            binnenlandseLocatie:
+              $ref: '#/components/schemas/BinnenlandseLocatie'
+
+
+    Geslacht:
+      description: >-
+        Het geslacht van een natuurlijk persoon. Dit kan naast "man" of "vrouw" ook "vastgesteld onbekend" zijn.
+      required:
+        - geslacht
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            geslacht:
+              description: >-
+                Het geslacht zoals beschreven in elk van de items in de enumeratie "Geslachtssoort".
+          
+                De waarde is één van de volgende:
+                <li>Vrouw: een natuurlijk persoon is van het vrouwelijk geslacht.
+                <li>Man: een natuurlijk persoon is van het mannelijk geslacht.
+                <li>Vastgesteld onbekend: van een natuurlijk persoon is vastgesteld dat het geslacht onbekend is.
+              type: string
+              enum:
+                - Vrouw
+                - Man
+                - Vastgesteld onbekend
+
+
+    Handlichting:
+      description: >-
+        Het verlenen van bevoegdheden aan een zestien- of zeventienjarige minderjarige die anders alleen toekomen aan meerderjarigen. Zo mag een minderjarige door handlichting een beroep of bedrijf uitoefenen of in een vennootschap deelnemen.
+        Handlichting wordt (op verzoek van de minderjarige) verleend door de kantonrechterechter. Bij misbruik van de verleende handlichting kan de rechter het (op verzoek van de ouders) intrekken.
+         
+        De handlichting betreft altijd een onderneming, waarvoor de handlichting is verleend. Indien functievervullingAlsAansprakelijke niet is gevuld, is de natuurlijk persoon aan wie de handlichting is verleend de eigenaar van de onderneming. Indien deze wel is gevuld, is de persoon (één van de) aansprakelijke(n) voor de onderneming.
+      required:
+        - staatscourantNummer
+        - staatscourantDatum
+        - onderneming
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            staatscourantNummer:
+              description: >-
+                Het nummer van de Staatscourant waarin de rechterlijke beschikking inzake de handlichting is openbaar gemaakt.
+              type: integer
+            staatscourantDatum:
+              description: >-
+                De datum van uitgave van de Staatscourant waarin de rechterlijke beschikking inzake de handlichting is openbaar gemaakt.
+              type: string
+              format: DatumIncompleet
+            onderneming:
+              $ref: 'maatschappelijkeactiviteit_v1.yaml#/components/schemas/OndernemingReferentie'
+            functievervullingAlsAansprakelijke:
+              $ref: 'rol_v1.yaml#/components/schemas/AansprakelijkeType'
+
+
+    Schuldsanering:
+      description: >-
+        Schuldsanering zorgt ervoor dat de schuldenaar na verloop van een zekere tijd bevrijd wordt van zijn schuldenlast omdat de vorderingen van zijn schuldeisers niet langer afdwingbaar zijn. Een schuldsanering is alleen van toepassing op een natuurlijk persoon.
+      allOf:
+        - $ref: 'persoon_v1.yaml#/components/schemas/Insolventie'
+        - properties:
+            redenEindeSchuldsanering:
+              description: >-
+                De waarde is één van de volgende:
+                <li>AanvangFaillissement: de reden van de overgang is dat een faillissement is aangevangen (gebeurtenis failliet verklaren). 
+
+                <li>HomologatieAkkoord: de reden van de status overgang is dat een faillissement wordt beëindigd (Gebeurtenis beëindigen uitspraak faillissement) door een homologatie akkoord (een homologatie is een bemiddelingsakkoord tussen partijen).
+
+                <li>RechterlijkeUitspraak: de reden van de status overgang is dat er een rechterlijke uitspraak is geweest, waardoor de schuldsanering is beëindigd (Gebeurtenis Beëindigen toepassing schuldsanering).
+
+                <li>VerbindendeSlotuitdelingslijst: de reden van de status overgang is dat het faillissement wordt beëindigd (Gebeurtenis Beëindigen uitspraak faillissement) door het verbind verklaren van de slotuitdelingslijst.
+
+              type: string
+              enum:
+                - AanvangFaillissement
+                - HomologatieAkkoord
+                - RechterlijkeUitspraak
+                - VerbindendeSlotuitdelingslijst
+            status:
+              $ref: 'persoon_v1.yaml#/components/schemas/StatusInsolventie'
+
+
+    SchuldsaneringMetOmgezetteInsolventies:
+      description: >-
+        #TODO
+      allOf:
+        - $ref: '#/components/schemas/Schuldsanering'
+        - properties:
+            omgezetteInsolventies:
+              $ref: 'persoon_v1.yaml#/components/schemas/OmgezetteInsolventie'

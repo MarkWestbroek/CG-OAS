@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\registreren\locatie_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    BinnenlandseLocatie:
+      description: >-
+        Een <i>Binnenlandse locatie </i>die ligt binnen de rijksgrenzen van Nederland binnen het Koninkrijk der Nederlanden, waarbij de ruimte verder wordt beperkt door de rijksgrens met Duitsland en België. De drie openbare lichamen: Bonaire, Sint Eustatius en Saba vallen <u>niet</u> binnen deze ruimte. In de BAG betreffen dit de verblijfsobjecten, lig- en standplaatsen. 
+      allOf:
+        - $ref: '#/components/schemas/BinnenlandseLocatieMetAlleenBinnenlandsAdres'
+        - properties:
+            adres:
+              $ref: 'adres_v1.yaml#/components/schemas/AanduidingBijBinnenlandsAdres'
+            adres:
+              $ref: 'adres_v1.yaml#/components/schemas/VrijeLocatie'
+
+
+    BinnenlandseLocatieMetAlleenBinnenlandsAdres:
+      description: >-
+        
+      allOf:
+        - $ref: '#/components/schemas/FysiekBezoekbareLocatie'
+        - properties:
+            bagAdresseerbaarObjectIdentificatie:
+              description: >-
+                De unieke identificatie van het adresseerbaar object (verblijfsobject, stand- of ligplaats) uitgegeven door het bevoegd gemeentelijke orgaan. In de BAG betreft dit de nummeraanduiding van een verblijfsobject, een standplaats of een ligplaats.
+          N.B.: deze is alleen bekend indien het adres een BinnenlandsAdres is.
+              type: string
+            adres:
+              $ref: 'adres_v1.yaml#/components/schemas/BinnenlandsAdres'
+
+
+    BinnenlandsePostLocatie:
+      description: >-
+        Een <i>Binnenlandse postlocatie</i> is een door de PostNL aangewezen<i> postontvanglocatie </i>die ligt binnen de rijksgrenzen van Nederland binnen het Koninkrijk der Nederlanden, waarbij de ruimte verder wordt beperkt door de rijksgrens met Duitsland en België. De drie openbare lichamen: Bonaire, Sint Eustatius en Saba vallen <u>niet</u> binnen de ruimte.
+      allOf:
+        - $ref: '#/components/schemas/Postontvanglocatie'
+        - properties:
+            adres:
+              $ref: 'adres_v1.yaml#/components/schemas/BinnenlandsPostadres'
+
+
+    BuitenlandseLocatie:
+      description: >-
+        Een <i>Buitenlandse locatie </i>is een op het aardoppervlak gelegen locatie, maar die niet ligt binnen de rijksgrenzen van Nederland binnen het Koninkrijk der Nederlanden, waarbij de ruimte verder wordt beperkt door de rijksgrens met Duitsland en België.
+        
+      required:
+        - adres
+      allOf:
+        - $ref: '#/components/schemas/FysiekBezoekbareLocatie'
+        - properties:
+            adres:
+              $ref: 'adres_v1.yaml#/components/schemas/BuitenlandsAdres'
+
+
+    FysiekBezoekbareLocatie:
+      description: >-
+        Fysiek bezoekbare locatie is een locatie die fysiek bezocht kan worden en is gelegen op het aardoppervlak. De locatie is verdeeld in twee typen:
+        <ol>
+        	<li>Een binnenlandse locatie</li>
+        	<li>Een buitenlandse locatie</li>
+        </ol>
+      allOf:
+        - $ref: '#/components/schemas/Locatie'
+        - properties:
+
+
+    Locatie:
+      description: >-
+        
+      required:
+        - locatienummer
+      properties:
+        locatienummer:
+          description: >-
+            Het locatienummer van de locatie.
+          type: string
+          format: UUID
+
+
+    Postontvanglocatie:
+      description: >-
+        Een postontvanglocatie is een locatie met als enig doel:
+        <ul>
+        	<li>het onvangen van post op die locatie en</li>
+        	<li>het door de gebruiker van die locatie ophalen van deze post van deze locatie.</li>
+        </ul>
+Typisch zijn dit postbussen en antwoordnummers.
+<i>Deze locatie kan dus niet bewoond worden, niet als bedrijfslocatie worden gebruikt enz.</i>
+        
+      allOf:
+        - $ref: '#/components/schemas/Locatie'
+        - properties:

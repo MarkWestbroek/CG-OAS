@@ -1,0 +1,195 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1
+  title: >-
+    representaties\opvragen\testYaml_v0.yaml
+  description: >-
+    De beschrijving van deze representatie map.
+     <ul>
+     	<li>lijstjes</li>
+     	<li>mogen</li>
+     </ul>
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    TestRepresentatie:
+      description: >-
+        Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw, toen een onbekende drukker een vellen met Lorem Ipsum passages en meer recentelijk door desktop publishing software zoals Aldus PageMaker die versies van Lorem Ipsum bevatten.
+        Waarom gebruiken we het?
+Het is al geruime tijd een bekend gegeven dat een lezer, tijdens het bekijken van de layout van een pagina, afgeleid wordt door de tekstuele inhoud. Verscheidene versies hebben zich ontwikkeld in de loop van de jaren, soms per ongeluk soms expres (ingevoegde humor en dergelijke).
+Waar komt het vandaan?
+In tegenstelling tot wat algemeen aangenomen wordt is Lorem Ipsum niet zomaar willekeurige tekst. het heeft zijn wortels in een stuk klassieke latijnse literatuur uit 45 v.Chr. en is dus meer dan 2000 jaar oud. Richard McClintock,
+      required:
+        - veld1
+        - formattedVeld2
+        - enumVeldMetTV
+        - meervoudigVeld
+        - enumVeldZonderTV
+        - enumInAnderPackageZonderTV
+        - enumInAnderPackageMetTV
+        - deEen
+        - hoofdEen
+        - anyOffie
+      allOf:
+        - $ref: '#/components/schemas/OuderRepresentatie'
+        - properties:
+            veld1:
+              description: >-
+                Het is al geruime tijd een bekend gegeven dat een lezer, tijdens het bekijken van de layout van een pagina, afgeleid wordt door de tekstuele inhoud.
+Er zijn vele variaties van passages van Lorem Ipsum beschikbaar maar het merendeel heeft te lijden gehad van wijzigingen in een of andere vorm.
+              type: string
+            formattedVeld2:
+              type: string
+              format: Formaat
+            optioneelVeld3:
+              type: int
+            enumVeldMetTV:
+              description: >-
+                De waarde is één van de volgende:
+                <li>waarde1: de eerste waarde in deze enumeratie.
+                <li>waarde2: de tweede waarde in deze enumeratie.
+
+              type: string
+              enum:
+                - waarde1
+                - waarde2
+            meervoudigVeld:
+              type: array
+              items:
+                type: string
+                format: Kleur
+            enumVeldZonderTV:
+              description: >-
+                De waarde is één van de volgende:
+                <li>waarde1: de eerste waarde in deze enumeratie.
+                <li>waarde2: de tweede waarde in deze enumeratie.
+
+              type: string
+              enum:
+                - waarde1
+                - waarde2
+            enumInAnderPackageZonderTV:
+              description: >-
+                De waarde is één van de volgende:
+                <li>vreemdewaarde1
+                <li>vreemdewaarde2
+              type: string
+              enum:
+                - vreemdewaarde1
+                - vreemdewaarde2
+            enumInAnderPackageMetTV:
+              description: >-
+                De waarde is één van de volgende:
+                <li>vreemdewaarde1
+                <li>vreemdewaarde2
+              type: string
+              enum:
+                - vreemdewaarde1
+                - vreemdewaarde2
+            deEen:
+              description: >-
+                Een lijstje van EenRepresentaties. Het mogen er maximaal 5 zijn.
+              type: array
+              items:
+                $ref: '#/components/schemas/EenRepresentatie'
+            deAnder:
+              $ref: '../../representaties/_test/anderemap_v1.0.yaml#/components/schemas/RepresentatieInAndereMap'
+            hoofdEen:
+              $ref: '#/components/schemas/EenRepresentatie'
+            anyOffie:
+              type: array
+              items:
+                anyOf:
+                  - $ref: '#/components/schemas/EenRepresentatie'
+                  - $ref: '../../representaties/_test/anderemap_v1.0.yaml#/components/schemas/RepresentatieInAndereMap'
+
+
+    RepMetMaarEenVeld:
+      description: >-
+        #TODO
+      required:
+        - enigVeld
+      properties:
+        enigVeld:
+          description: >-
+            De waarde is één van de volgende:
+            <li>waarde1: de eerste waarde in deze enumeratie.
+            <li>waarde2: de tweede waarde in deze enumeratie.
+
+          type: string
+          enum:
+            - waarde1
+            - waarde2
+
+
+    RepMetMaarEenStringVeld:
+      description: >-
+        #TODO
+      required:
+        - datum
+        - enigeStringVeld
+        - getal
+      properties:
+        datum:
+          type: string
+          format: DatumIncompleet
+        enigeStringVeld:
+          description: >-
+            De waarde is één van de volgende:
+            <li>waarde1: de eerste waarde in deze enumeratie.
+            <li>waarde2: de tweede waarde in deze enumeratie.
+
+          type: string
+          enum:
+            - waarde1
+            - waarde2
+        getal:
+          type: integer
+
+
+    RepMetMeerStringVelden:
+      description: >-
+        #TODO
+      required:
+        - datum
+        - eersteStringVeld
+        - getal
+        - nogEenStringVeld
+      properties:
+        datum:
+          type: string
+          format: DatumIncompleet
+        eersteStringVeld:
+          type: string
+        getal:
+          type: integer
+        nogEenStringVeld:
+          description: >-
+            De waarde is één van de volgende:
+            <li>vreemdewaarde1
+            <li>vreemdewaarde2
+          type: String
+          enum:
+            - vreemdewaarde1
+            - vreemdewaarde2
+
+
+    OuderRepresentatie:
+      description: >-
+        #TODO
+      required:
+        - ouderschap
+      properties:
+        ouderschap:
+          type: boolean
+
+
+    EenRepresentatie:
+      description: >-
+        #TODO
+      properties:

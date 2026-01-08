@@ -1,0 +1,67 @@
+openapi: 3.0.0
+info:
+  version: 1.0
+  title: >-
+    meta
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # FormeleRelatie representatie
+    FormeleRelatie:
+      description: >-
+        
+      required:
+        - geregistreerdGedurende
+      properties:
+        geregistreerdGedurende:
+          $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormelePeriode'
+
+
+    # MaterieleRelatie representatie
+    MaterieleRelatie:
+      description: >-
+        Een materiele relatie geeft de relatie weer tussen twee gegevenselementen, waarbij het ene tot het andere toebehoort gedurende een zekere materiele periode.
+      required:
+        - behoortToeGedurende
+      allOf:
+        - $ref: '#/components/schemas/FormeleRelatie'
+        - properties:
+            behoortToeGedurende:
+              $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterielePeriode'
+
+
+    # OmgekeerdeMaterieleRelatie representatie
+    OmgekeerdeMaterieleRelatie:
+      description: >-
+        Een omgekeerde materiele relatie geeft de relatie weer tussen twee gegevenselementen, waarbij het ene element het andere 'heeft' gedurende een zekere materiele periode.
+        
+      required:
+        - heeftGedurende
+      allOf:
+        - $ref: '#/components/schemas/FormeleRelatie'
+        - properties:
+            heeftGedurende:
+              $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterielePeriode'
+
+
+    # VolgordelijkeMaterieleRelatie representatie
+    VolgordelijkeMaterieleRelatie:
+      description: >-
+        Een volgordelijke materiele relatie is een materiële relatie, waarbij elke relatie geördend is ten opzichte van de andere relaties van het hetzelfde type (als die op hetzelfde - materiële en formele - moment bestaan).
+N.B.: in de praktijk is deze volgordelijkheid alleen beschikbaar voor opvragingen in het materiële en formele nu (peiltijdstip "nu" en peildatum "vandaag"), omdat er in de (HRD) database van deze volgordelijkheid geen historie wordt bijgehouden.
+      required:
+        - positie
+      allOf:
+        - $ref: '#/components/schemas/MaterieleRelatie'
+        - properties:
+            positie:
+              description: >-
+                De positie in de lijst (1 of meer, 1 is de hoogste positie).
+              type: integer

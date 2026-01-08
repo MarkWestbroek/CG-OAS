@@ -1,0 +1,419 @@
+openapi: 3.0.0
+info:
+  version: 1.0.11
+  title: >-
+    reg_natuurlijkpersoon
+  description: >-
+    Natuurlijk Persoon representaties t.b.v registreren
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # Bereikbaarheid representatie
+    Bereikbaarheid:
+      description: >-
+        
+      properties:
+        locatiefunctie:
+          description: >-
+            De functie van de locatie in het kader van de bereikbaarheid van de natuurlijk persoon.
+          type: string
+        buitenlandseLocatie:
+          $ref: '#/components/schemas/BuitenlandseLocatie'
+        binnenlandseLocatie:
+          $ref: '#/components/schemas/BinnenlandseLocatie'
+
+
+    # Geheimhouding representatie
+    Geheimhouding:
+      description: >-
+        GBA:
+        Elementnummer 70.10
+        Elementnaam Indicatie geheim
+        Toelichting Een aanduiding die aangeeft dat gegevens wel of niet verstrekt mogen worden.
+        Lengte 1
+        Type Numeriek Standaardwaarde 0
+<u>Mogelijke waarden:</u>
+        <ul>
+        	<li>0 (= geen beperking)</li>
+        	<li>1 (= niet zonder toestemming aan derden ter uitvoering van een algemeen verbindend voorschrift)</li>
+        	<li>2 (= niet aan kerken)</li>
+        	<li>3 (= niet aan vrije derden)</li>
+        	<li>4 (= niet zonder toestemming aan derden ter uitvoering van een algemeen verbindend voorschrift en niet aan kerken)</li>
+        	<li>5 (= niet zonder toestemming aan derden ter uitvoering van een algemeen verbindend voorschrift en niet aan vrije derden)</li>
+        	<li>6 (= niet aan kerken en niet aan vrije derden)</li>
+        	<li>7 (= niet zonder toestemming aan derden ter uitvoering van een algemeen verbindend voorschrift en niet aan vrije derden en niet aan kerken)</li>
+        </ul>
+      required:
+        - niveauGeheimhouding
+      properties:
+        niveauGeheimhouding:
+          description: >-
+            Mogelijke waarden:
+          0 (= geen beperking)
+          1 (= niet zonder toestemming aan derden ter uitvoering van een
+          algemeen verbindend voorschrift)
+          2 (= niet aan kerken)
+          3 (= niet aan vrije derden)
+          4 (= niet zonder toestemming aan derden ter uitvoering van een
+          algemeen verbindend voorschrift en niet aan kerken)
+          5 (= niet zonder toestemming aan derden ter uitvoering van een
+          algemeen verbindend voorschrift en niet aan vrije derden)
+          6 (= niet aan kerken en niet aan vrije derden)
+          7 (= niet zonder toestemming aan derden ter uitvoering van een
+          algemeen verbindend voorschrift en niet aan vrije derden en niet
+          aan kerken)
+          type: string
+          enum:
+            - geen beperking # <u>Mogelijke waarden</u>
+<ul>
+	<li>0 (= geen beperking)</li>
+	<li>1 (= niet zonder toestemming aan derden ter uitvoering van een algemeen verbindend voorschrift)</li>
+	<li>2 (= niet aan kerken)</li>
+	<li>3 (= niet aan vrije derden)</li>
+	<li>4 (= niet zonder toestemming aan derden ter uitvoering van een algemeen verbindend voorschrift en niet aan kerken)</li>
+	<li>5 (= niet zonder toestemming aan derden ter uitvoering van een algemeen verbindend voorschrift en niet aan vrije derden)</li>
+	<li>6 (= niet aan kerken en niet aan vrije derden)</li>
+	<li>7 (= niet zonder toestemming aan derden ter uitvoering van een algemeen verbindend voorschrift en niet aan vrije derden en niet aan kerken)</li>
+</ul>
+            - niet zonder toestemming aan derden ter uitvoering van een algemeen verbindend voorschrift
+            - niet aan kerken
+            - niet aan vrije derden
+            - niet zonder toestemming aan derden ter uitvoering van een algemeen verbindend voorschrift en niet aan kerken
+            - niet zonder toestemming aan derden ter uitvoering van een algemeen verbindend voorschrift en niet aan vrije derden
+            - niet aan kerken en niet aan vrije derden
+            - niet zonder toestemming aan derden ter uitvoering van een algemeen verbindend voorschrift en niet aan vrije derden en niet aan kerken
+
+
+    # GemeenteVanInschrijving representatie
+    GemeenteVanInschrijving:
+      description: >-
+        De gemeente waar een natuurlijk persoon, die het BRP bekend is, staat ingeschreven.
+Het veld wordt tevens gebruikt om het ingeschreven staan in het RNI vast te leggen.
+      required:
+        - code
+      properties:
+        code:
+          description: >-
+            De code van de gemeente.
+N.B. "1999" wordt door het BRP gebruikt om aan te duiden dat de persoon niet in een gemeente maar in het RNI is ingeschreven.
+          type: string
+          format: Numeriek4
+
+
+    # Land representatie
+    Land:
+      description: >-
+        Een land is een gebied, afgebakend door middel van grenzen, waar een zelfstandige regering de scepter zwaait. De Kamer van Koophandel beheert haar eigen lijst met landen. Deze lijst is gebaseerd op de landenlijst van de GBA en ISO-Landen.
+      required:
+        - code
+        - naam
+        - toegangsnummer
+      properties:
+        code:
+          description: >-
+            De unieke code die door de BRP is uitgegeven voor het betreffende land. Voor natuurlijke personen die gekoppeld zijn aan de BRP kan op basis van de code de naamgeving van het land geraadpleegd worden.
+          type: string
+          format: Numeriek4
+        naam:
+          type: string
+        toegangsnummer:
+          description: >-
+            Het land-toegangsnummer voor telefonie.
+Bijv. +32 of 0032 voor België of +44 voor Verenigd Koninkrijk.
+          type: string
+
+
+    # Nationaliteit representatie
+    Nationaliteit:
+      description: >-
+        
+      required:
+        - code
+        - nationaliteit
+      allOf:
+        - $ref: '#/components/schemas/Referentie'
+        - properties:
+            code:
+              type: string
+              format: Numeriek4
+            nationaliteit:
+              type: string
+              format: Alfanumeriek42
+
+
+    # NatuurlijkPersoon representatie
+    NatuurlijkPersoon:
+      description: >-
+        
+      required:
+        - persoonsnummer
+      properties:
+        persoonsnummer:
+          description: >-
+            Het persoonsnummer van de natuurlijk persoon.
+          type: string
+          format: UUID
+
+
+    # NatuurlijkPersoonsherkenning representatie
+    NatuurlijkPersoonsherkenning:
+      description: >-
+        <i>abstract</i>
+        De superklasse voor de (binnen het register ondersteunde manieren waarop een natuurlijk persoon herkend (geïdentificeerd) kan worden.
+      properties:
+
+
+    # A-nummer representatie
+    A-nummer:
+      description: >-
+        Het administratienummer van de persoon, bedoeld in de Wet BRP.
+        http://data.stelselvanbasisregistraties.nl/gba/doc/gegevenselement/A-nummer_persoon-Natuurlijk_persoon
+
+      required:
+        - a-nummer
+      allOf:
+        - $ref: '#/components/schemas/NatuurlijkPersoonsherkenning'
+        - properties:
+            a-nummer:
+              description: >-
+                Het a-nummer zelf, bestaande uit 10 cijfers.
+              type: string
+              format: Numeriek10
+
+
+    # BSN representatie
+    BSN:
+      description: >-
+        Identificatie van een natuurlijk persoon middels het <b>B</b>urger <b>S</b>ervice <b>N</b>ummer.
+        Een BSN is een door de BSN-uitdeler met een ingezetene geassocieerd kenmerk, bedoeld voor herkenning van deze ingezetene in administraties of bij ontmoetingen door hen die wettelijk gerechtigd zijn het BSN voor dat doel te gebruiken.
+      required:
+        - bsn
+      allOf:
+        - $ref: '#/components/schemas/NatuurlijkPersoonsherkenning'
+        - properties:
+            bsn:
+              description: >-
+                Het Burger Service Nummer zelf.
+          Het is een 9-cijferig nummer dat voldoet aan de 11-proef, waarbij het eerste cijfer niet nul is.
+              type: string
+              format: Numeriek9
+
+
+    # TIN representatie
+    TIN:
+      description: >-
+        TIN is een nummer dat wordt gebruikt om natuurlijk personen of rechtspersonen te herkennen voor belasting gerelateerde doeleinden, zoals het indienen van belastingaangiften of andere acties, zoals het openen van een bankrekening.
+Voor het domein van natuurlijke personen en adressen zijn alleen de TIN's relevant voor natuurlijke personen
+      required:
+        - tin
+        - landVanUitgifte
+      allOf:
+        - $ref: '#/components/schemas/NatuurlijkPersoonsherkenning'
+        - properties:
+            tin:
+              description: >-
+                Voor een natuurlijk persoon wordt zijn of haar sofinummer (SSN) gebruikt als TIN.
+              type: string
+              format: Alfanumeriek20
+            landVanUitgifte:
+              $ref: '#/components/schemas/Land'
+
+
+    # NatuurlijkPersoonsnaam representatie
+    NatuurlijkPersoonsnaam:
+      description: >-
+        De gegevens omtrent de naam en eventueel titel van een natuurlijk persoon.
+        Wij baseren ons hierbij op het volgende.
+        <ul>
+        	<li>indien de natuurlijk persoon bekend is bij een basisregister (bij. het BRP) prevaleren de gegevens zoals daar bekend doorgaans boven die, die de persoon zelf opgeeft.</li>
+        	<li>indien we ons baseren op de opgave, zal daarbij een identificatie document gevoegd zijn. De gegevens worden dan daarvandaan overgenomen.</li>
+        </ul>
+      required:
+        - geslachtsnaam
+      properties:
+        adellijkeTitel:
+          description: >-
+            Indien de natuurlijk persoon een adellijke titel voert, kan deze hier worden genoteerd.
+          De titel is er één uit de lijst Adellijke titels zoals gespecificeerd in de enumeratie "Adellijke Titel".
+          type: string
+          enum:
+            - Baron
+            - Barones
+            - Graaf
+            - Gravin
+            - Hertog
+            - Hertogin
+            - Jonkheer
+            - Jonkvrouw
+            - Markies
+            - Markiezin
+            - Prins
+            - Prinses
+            - Ridder
+        voornamen:
+          description: >-
+            De voornaam of voornamen zoals de natuurlijk persoon deze officieel voert.
+          <i>N.B. niet in elk land is de voornaam of zijn de voornamen de naam of namen voorafgaand aan geslachtsnaam (ook wel achternaam). Toch noemen we de naam die niet de geslachtsnaam is dan de voornaam.</i>
+          <i>
+          </i><i>Voorbeeld: In Hongarije schrijft men de voornaam achter de familienaam.</i>
+          type: string
+          format: Alfanumeriek200
+        voorvoegselGeslachtsnaam:
+          description: >-
+            Het voorvoegsel (ten onrechte ook wel 'tussenvoegsel' genoemd) dat in sommige gevallen voorafgaat aan de geslachtsnaam.
+<i>Bijvoorbeeld:</i>
+          <ul>
+          	<li><i>het voorvoegsel 'de' en geslachtsnaam 'Vries' vormen samen de gehele geslachtsnaam 'de Vries'</i></li>
+          	<li><i>'van der' en 'Vrieze' vormen samen 'van der Vrieze'</i></li>
+          	<li><i>zie https://nl.wikipedia.org/wiki/Tussenvoegsel voor een lijst van meer voorkomende voorvoegsels.</i></li>
+          </ul>
+          type: string
+          format: Alfanumeriek10
+        geslachtsnaam:
+          description: >-
+            De geslachtsnaam (ook wel 'achternaam' of 'familienaam') van een natuurlijk persoon, is het gedeelte van de naam van deze persoon, dat hij of zij ontvangen heeft van de voorgaande generatie.
+          <i>N.B.: het voorvoegsel, dat deel uitmaakt van de geslachtsnaam, noteren wij in het veld [voorvoegselGeslachtsnaam]. De gehele geslachtsnaam is dus het voorvoegsel plus de geslachtsnaam, gescheiden door een spatie indien er een voorvoegsel is.</i>
+          type: string
+          format: Alfanumeriek200
+
+
+    # Geslacht representatie
+    Geslacht:
+      description: >-
+        Het geslacht van een natuurlijk persoon.
+        Dit kan naast "man" of "vrouw" ook "vastgesteld onbekend" zijn.
+      required:
+        - geslacht
+      properties:
+        geslacht:
+          description: >-
+            Het geslacht zoals beschreven in elk van de items in de enumeratie "Geslachtssoort".
+          
+          type: string
+          enum:
+            - Vrouw # Een natuurlijk persoon is van het vrouwelijk geslacht.
+            - Man # Een natuurlijk persoon is van het mannelijk geslacht.
+            - VastgesteldOnbekend # Van een natuurlijk persoon is vastgesteld dat het geslacht onbekend is.
+
+
+    # Naamgebruik representatie
+    Naamgebruik:
+      description: >-
+        De manier waarop de natuurlijk persoon aangeeft zijn of haar (volledige) geslachtsnaam te willen gebruiken in combinatie met de (volledige) geslachtsnaam van zijn of haar partner, indien deze aanwezig is.
+      required:
+        - naamGebruik
+      properties:
+        naamGebruik:
+          description: >-
+            Het naamgebruik zoals beschreven in elk van de items in de enumeratie " NaamgebruikSoort".
+          type: string
+          enum:
+            - EigenNaam # Alleen de (volledige) eigen geslachtsnaam.
+            - NaamPartner # Alleen de (volledige) geslachtsnaam van de partner.
+            - EigenNaam-NaamPartner # De (volledige) eigen geslachtsnaam gevolgd door een scheidingsstreepje ( '- ') en de (volledige) geslachtsnaam van de partner.
+
+Bijvoorbeeld: 'Jansen - van der Vrieze' als 'Jansen' de eigen naam is, en 'van der Vrieze' de volledige geslachtsnaam van de partner.
+            - NaamPartner-EigenNaam # De (volledige) geslachtsnaam van de partner, gevolgd door een scheidingsstreepje ( '- ') en de (volledige) eigen geslachtsnaam.
+
+
+    # Partnernaam representatie
+    Partnernaam:
+      description: >-
+        De (volledige) geslachtsnaam van de partner van de natuurlijk persoon, indien er een partner is.
+        Met partner wordt een geregistreerd partner of echtgeno(o)t(e) bedoeld.
+        <i>N.B. we noteren geen voornaam, titel of geslacht, noch gegevens over de periode waarin het partnerschap plaatshad, noch over het soort partnerschap.</i>
+      required:
+        - geslachtsnaam
+      properties:
+        voorvoegselGeslachtsnaam:
+          description: >-
+            Zie [voorvoegselGeslachtsnaam] bij NatuurlijkPersoonsnaam.
+          type: string
+          format: Alfanumeriek10
+        geslachtsnaam:
+          description: >-
+            Zie [geslachtsnaam] bij NatuurlijkPersoonsnaam.
+          
+          type: string
+          format: Alfanumeriek200
+
+
+    # Geboorte representatie
+    Geboorte:
+      description: >-
+        De gegevens omtrent de geboorte van een natuurlijk persoon, te weten de geboortedatum, -plaats en -land.
+        <i>Indien het geboorteland Nederland is, hoeft dit niet te worden genoteerd.</i>
+      required:
+        - datum
+        - plaats
+        - geboorteland
+      properties:
+        datum:
+          description: >-
+            De datum waarop de geboorte van een natuurlijk persoon heeft plaatsgevonden.
+          <i>N.B. dit is mogelijk een niet complete datum; dag of maand (of jaar?) kunnen onbekend zijn.</i>
+          type: string
+          format: DatumIncompleet
+        plaats:
+          description: >-
+            De plaats van geboorte van een natuurlijk persoon.
+          type: string
+          format: Alfanumeriek40
+        geboorteland:
+          $ref: '#/components/schemas/Land'
+
+
+    # Overlijden representatie
+    Overlijden:
+      description: >-
+        De gegevens omtrent het overlijden van een natuurlijk persoon, indien dit reeds heeft plaatsgevonden.
+        <i>We leggen alleen de datum van overlijden vast.</i>
+      required:
+        - datum
+      properties:
+        datum:
+          description: >-
+            De datum waarop het overlijden van en natuurlijk persoon heeft plaatsgevonden.
+          <i>N.B. dit is mogelijk een niet complete datum; dag of maand kunnen onbekend zijn.</i>
+          type: string
+          format: DatumIncompleet
+
+
+    # Staatsburgerschap representatie
+    Staatsburgerschap:
+      description: >-
+        De natuurlijk persoon bezit het staatsburgerschap van een land, wat wordt aangeduid met een nationaliteit volgens de referentielijst "Nationaliteit".
+        
+      properties:
+        nationaliteit:
+          $ref: '#/components/schemas/Nationaliteit'
+
+
+    # Ondercuratelestelling representatie
+    Ondercuratelestelling:
+      description: >-
+        Geeft aan dat de natuurlijk persoon ondercuratele is gesteld. 
+      required:
+        - isOndercuratelegesteld
+      properties:
+        isOndercuratelegesteld:
+          type: string
+
+
+    # Vertrokken representatie
+    Vertrokken:
+      description: >-
+        Geeft aan dat de natuurlijk persoon vanaf ingangsdatum vertrokken is, en dat niet bekend is waarheen.
+      required:
+        - ingangsdatum
+      properties:
+        ingangsdatum:
+          description: >-
+            De datum waarop de persoon vertrokken is.
+          type: string
+          format: DatumIncompleet

@@ -1,0 +1,137 @@
+openapi: 3.0.0
+info:
+  version: 1.0
+  title: >-
+    \_v1.0.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    AanduidingBijBinnenlandsAdres:
+      description: >-
+        De aanduiding van een vrije locatie die gegeven wordt aan een locatie indien geen binnenlands adres bekend is. De aanduiding wordt geleverd door de BRP.
+      allOf:
+        - $ref: '../representaties/opvragen/gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            aanduiding:
+              description: >-
+                Een geheel of gedeeltelijke omschrijving van de binnenlandse locatie.
+                De waarde is één van de volgende:
+                <li>Bij
+                <li>Tegenover
+              type: string
+              enum:
+                - Bij
+                - Tegenover
+            referentielocatie:
+              $ref: '#/components/schemas/BinnenlandseLocatieMetAlleenBinnenlandsAdres'
+
+
+    BinnenlandseLocatie:
+      description: >-
+        Een <i>Binnenlandse locatie </i>die ligt binnen de rijksgrenzen van Nederland binnen het Koninkrijk der Nederlanden, waarbij de ruimte verder wordt beperkt door de rijksgrens met Duitsland en België. De drie openbare lichamen: Bonaire, Sint Eustatius en Saba vallen <u>niet</u> binnen deze ruimte. In de BAG betreffen dit de verblijfsobjecten, lig- en standplaatsen. 
+      allOf:
+        - $ref: '#/components/schemas/BinnenlandseLocatieMetAlleenBinnenlandsAdres'
+        - properties:
+            adres:
+              $ref: '#/components/schemas/VrijeLocatie'
+            adres:
+              $ref: '#/components/schemas/AanduidingBijBinnenlandsAdres'
+
+
+    BinnenlandseLocatieMetAlleenBinnenlandsAdres:
+      description: >-
+        #TODO
+      allOf:
+        - $ref: '#/components/schemas/FysiekBezoekbareLocatie'
+        - properties:
+            bagLocatieIdentificatie:
+              description: >-
+                De unieke identificatie van het adresseerbaar object (verblijfsobject, stand- of ligplaats) uitgegeven door het bevoegd gemeentelijke orgaan. In de BAG betreft dit de nummeraanduiding van een verblijfsobject, een standplaats of een ligplaats.
+          
+              type: string
+            adres:
+              $ref: '#/components/schemas/BinnenlandsAdres'
+
+
+    BinnenlandsePostLocatie:
+      description: >-
+        Een <i>Binnenlandse postlocatie</i> is een door de PostNL aangewezen<i> postontvanglocatie </i>die ligt binnen de rijksgrenzen van Nederland binnen het Koninkrijk der Nederlanden, waarbij de ruimte verder wordt beperkt door de rijksgrens met Duitsland en België. De drie openbare lichamen: Bonaire, Sint Eustatius en Saba vallen <u>niet</u> binnen de ruimte.
+      allOf:
+        - $ref: '#/components/schemas/Postontvanglocatie'
+        - properties:
+            adres:
+              $ref: '#/components/schemas/BinnenlandsPostadres'
+
+
+    BuitenlandseLocatie:
+      description: >-
+        Een <i>Buitenlandse locatie </i>is een op het aardoppervlak gelegen locatie, maar die niet ligt binnen de rijksgrenzen van Nederland binnen het Koninkrijk der Nederlanden, waarbij de ruimte verder wordt beperkt door de rijksgrens met Duitsland en België.
+        
+      required:
+        - adres
+      allOf:
+        - $ref: '#/components/schemas/FysiekBezoekbareLocatie'
+        - properties:
+            adres:
+              $ref: '#/components/schemas/BuitenlandsAdres'
+
+
+    FysiekBezoekbareLocatie:
+      description: >-
+        Fysiek bezoekbare locatie is een locatie die fysiek bezocht kan worden en is gelegen op het aardoppervlak. De locatie is verdeeld in twee typen:
+        <ol>
+        	<li>Een binnenlandse locatie</li>
+        	<li>Een buitenlandse locatie</li>
+        </ol>
+      allOf:
+        - $ref: '#/components/schemas/Locatie'
+        - properties:
+
+
+    Locatie:
+      description: >-
+        Een locatie is een eenheid van ruimte. Dat wil zeggen dat, vanuit een bepaalde ruimte (het aardoppervlak, een archiefruimte, een vliegtuigvloot, het World-Wide Web, …) iets als een locatie kan worden aangewezen.
+        
+      required:
+        - locatietype
+        - locatienummer
+      allOf:
+        - $ref: '../representaties/opvragen/gebeurtenis_v1.yaml#/components/schemas/FormeleEntiteit'
+        - properties:
+            locatietype:
+              description: >-
+                De waarde is één van de volgende:
+                <li>BinnenlandseLocatie
+                <li>BuitenlandseLocatie
+                <li>BinnenlandsePostlocatie
+              type: string
+              enum:
+                - BinnenlandseLocatie
+                - BuitenlandseLocatie
+                - BinnenlandsePostlocatie
+            locatienummer:
+              description: >-
+                Het locatienummer is een door de KvK eigen uitgegeven nummer om een locatie uniek te kunnen aanwijzen.
+              type: string
+
+
+    Postontvanglocatie:
+      description: >-
+        Een postontvanglocatie is een locatie met als enig doel:
+        <ul>
+        	<li>het onvangen van post op die locatie en</li>
+        	<li>het door de gebruiker van die locatie ophalen van deze post van deze locatie.</li>
+        </ul>
+Typisch zijn dit postbussen en antwoordnummers.
+<i>Deze locatie kan dus niet bewoond worden, niet als bedrijfslocatie worden gebruikt enz.</i>
+        
+      allOf:
+        - $ref: '#/components/schemas/Locatie'
+        - properties:

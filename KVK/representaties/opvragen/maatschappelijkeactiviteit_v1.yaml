@@ -1,0 +1,348 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\opvragen\maatschappelijkeactiviteit_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    Activiteitcode:
+      description: >-
+        De activiteitcode legt de registratie <i>(het formele bestaan) </i>van een activiteitcode van een Vestiging (via de Activiteiten), een Maatschappelijke Activiteit of een Onderneming vast via een SBI-code.
+Aangezien SBI-codes tijdens een verandering van SBI-codestelsel (dit kan jaarlijks wijzigen) kunnen wijzigen, hoeft dit tijdens het bestaan van de Activiteitcode niet altijd dezelfde SBI-code te zijn. Er moet wel altijd &#233;&#233;n (niet meer en niet minder) SBI-code zijn om de activiteitcode betekenis te laten hebben.
+<i>Opmerking: Er is dus op enig moment altijd maar &#233;&#233;n SBICode aan een activiteitcode gekoppeld.</i>
+        <i>Deze relatie is formeel, en gaat altijd over ambtshalve wijzigingen als gevolg van SBICodestelselwijzigingen of correcties (bijv. er was een verkeerde code gekoppeld.</i>
+        
+      required:
+        - sBICode
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            sBICode:
+              $ref: 'referentie_v1.yaml#/components/schemas/SBICode'
+
+
+    OndernemingsOverdragerOfOvernemer:
+      description: >-
+        Bevat de gegevens van de overdrager of de overnemer van een onderneming.
+      properties:
+        persoonReferentie:
+          $ref: 'persoon_v1.yaml#/components/schemas/PersoonReferentie'
+        maatschappelijkeActiviteitsnaam:
+          $ref: '#/components/schemas/MaatschappelijkeActiviteitsnaam'
+        maatschappelijkeActiviteitReferentie:
+          $ref: '#/components/schemas/MaatschappelijkeActiviteitReferentie'
+
+
+    MaatschappelijkeActiviteit:
+      description: >-
+        De entiteit die de ´inschrijving in het handelsregister´ vertegenwoordigt:
+        <ul>
+        	<li>hetzij voor de activiteit van een rechtspersoon zonder onderneming,</li>
+        	<li>hetzij voor een onderneming, waarbij we de onderneming als een aparte entiteit zien (zie onderneming).</li>
+        </ul>
+Zowel de rechtspersoon zonder onderneming als de onderneming zien we dus als een 'maatschappelijke activiteit', en het is de maatschappelijke activiteit waaraan we het KVK-nummer toekennen.
+Het KVK-nummer geldt daarbij dus voor zowel de rechtspersoon zonder onderneming als voor de onderneming.
+      required:
+        - kvkNummer
+        - gegevensgebruik
+        - naam
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/Entiteit'
+        - properties:
+            kvkNummer:
+              type: string
+              format: Numeriek8
+            incidenteelUitlenenArbeidskrachten:
+              type: array
+              items:
+                $ref: '#/components/schemas/IncidenteelUitlenenArbeidskrachten'
+            gegevensgebruik:
+              $ref: 'gegevensgebruik_v1.yaml#/components/schemas/Gegevensgebruik'
+            onderneming:
+              $ref: '#/components/schemas/MaatschappelijkeactiviteitsOnderneming'
+            naam:
+              $ref: '#/components/schemas/MaatschappelijkeActiviteitsnaam'
+            namen:
+              type: array
+              items:
+                $ref: 'algemeen_v1.yaml#/components/schemas/VolgordelijkeNaamrelatie'
+            bezoeklocatie:
+              $ref: 'algemeen_v1.yaml#/components/schemas/Bezoeklocatie'
+            postlocatie:
+              $ref: 'algemeen_v1.yaml#/components/schemas/Postlocatie'
+            maatschappelijkeActiviteitsvestiging:
+              type: array
+              items:
+                $ref: 'vestiging_v1.yaml#/components/schemas/VestigingsrelatieReferentie'
+            hoofdvestiging:
+              $ref: 'vestiging_v1.yaml#/components/schemas/VestigingsrelatieReferentie'
+            communicatiegegevens:
+              $ref: 'algemeen_v1.yaml#/components/schemas/Communicatiegegevens'
+            eigenaarrelatie:
+              $ref: '#/components/schemas/Eigenaarrelatie'
+            maatschappelijkeactiviteitsactiviteit:
+              type: array
+              items:
+                $ref: '#/components/schemas/ActiviteitcodeOpVolgorde'
+            mAStatus:
+              $ref: '#/components/schemas/MAStatus'
+
+
+    MaatschappelijkeActiviteitReferentie:
+      description: >-
+        Deze representatie geeft alleen de referentiegegevens terug van de  maatschappelijke activiteit.
+        Dit betreft het KVK-nummer en gegevens over de periode waarin de onderneming actief is of was.
+        
+      required:
+        - kvkNummer
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/Entiteit'
+        - properties:
+            kvkNummer:
+              type: string
+              format: Numeriek8
+            kVKnummer:
+              $ref: '#/components/schemas/KVKnummer'
+
+
+    MaatschappelijkeactiviteitsOnderneming:
+      description: >-
+        De onderneming zoals deze door de maatschappelijke activiteit wordt uitgeoefende gedurende een bepaalde periode.
+      required:
+        - wordtUitgeoefendDoorRechtspersoonGedurende
+      allOf:
+        - $ref: '#/components/schemas/Onderneming'
+        - properties:
+            wordtUitgeoefendDoorRechtspersoonGedurende:
+              $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterielePeriode'
+
+
+    MAStatus:
+      description: >-
+        #TODO
+      required:
+        - status
+      properties:
+        status:
+          type: String
+
+
+    Onderneming:
+      description: >-
+        Een onderneming levert goederen en/of diensten waarvoor meer dan een symbolische vergoeding voor wordt gevraagd, en neemt deel aan het (normale) economische verkeer.
+                Verder is het zo dat een onderneming die in het handelsregister wordt ingeschreven (zie HRW 2007, art 5):
+                a. een onderneming is die in Nederland is gevestigd en die toebehoort aan een naamloze vennootschap, een besloten vennootschap met beperkte aansprakelijkheid, een vennootschap onder firma, een commanditaire vennootschap, een maatschap, een rederij, een coöperatie, een onderlinge waarborgmaatschappij, een vereniging, een stichting, een kerkgenootschap of een publiekrechtelijke rechtspersoon;
+                b. een onderneming is die in Nederland gevestigd is en die toebehoort aan een natuurlijke persoon;
+                c. een onderneming is die toebehoort aan een Europese naamloze vennootschap, een Europese coöperatieve vennootschap of een Europees economisch samenwerkingverband die volgens haar statuten haar zetel in Nederland heeft;
+                d. een onderneming is die toebehoort aan een buitenlandse rechtspersoon die een hoofd- of een nevenvestiging in Nederland heeft;
+                e. een onderneming die in Nederland is gevestigd en die toebehoort aan een ander dan genoemd in onderdeel a tot en met d.
+                Een onderneming wordt geïdentificeerd door het KVK-nummer van de maatschappelijke activiteit waarin de onderneming wordt uitgeoefend.
+      required:
+        - kvkNummer
+        - handelsnamen
+        - ondernemingsvestiging
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/StartOpheffingsEntiteit'
+        - properties:
+            kvkNummer:
+              type: string
+              format: Numeriek8
+            handelsnamen:
+              type: array
+              items:
+                $ref: '#/components/schemas/VolgordelijkeHandelsnaamrelatie'
+            ondernemingsvestiging:
+              type: array
+              items:
+                $ref: 'vestiging_v1.yaml#/components/schemas/VestigingsrelatieReferentie'
+            ondernemingsactiviteit:
+              type: array
+              items:
+                $ref: '#/components/schemas/ActiviteitcodeOpVolgorde'
+            onderneming Status:
+              $ref: '#/components/schemas/Onderneming Status'
+
+
+    OndernemingReferentie:
+      description: >-
+        Deze representatie geeft alleen de referentiegegevens terug van de onderneming.
+        Dit betreft het KVK-nummer en gegevens over de periode waarin de onderneming actief is of was.
+      required:
+        - kvkNummer
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/StartOpheffingsEntiteit'
+        - properties:
+            kvkNummer:
+              type: string
+              format: Numeriek8
+            kVKnummer:
+              $ref: '#/components/schemas/KVKnummer'
+
+
+    Onderneming Status:
+      description: >-
+        #TODO
+      required:
+        - Status
+      properties:
+        Status:
+          type: String
+
+
+    Eigenaarrelatie:
+      description: >-
+        Beschrijft een periode waarin de persoon eigenaar is van de maatschappelijke activiteit.
+      required:
+        - eigenaar
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/MaterieleRelatie'
+        - properties:
+            eigenaar:
+              $ref: 'persoon_v1.yaml#/components/schemas/PersoonReferentie'
+            persoon:
+              $ref: '#/components/schemas/Persoon'
+            nietNatuurlijkPersoon:
+              $ref: 'nietnatuurlijkpersoon_v1.yaml#/components/schemas/NietNatuurlijkPersoon'
+            natuurlijkPersoon:
+              $ref: 'natuurlijkpersoon_v1.yaml#/components/schemas/NatuurlijkPersoon'
+
+
+    MaatschappelijkeActiviteitsnaam:
+      description: >-
+        <i>Afgeleid.</i>
+        De naam van de maatschappelijke activiteit:
+        <ul>
+        	<li>indien er geen hoofdvestiging is: de<i> (/administratieve) naam</i> van de niet-natuurlijk persoon die eigenaar is</li>
+        	<li>van de hoofdvestiging de <i> (/administratieve) naam </i>indien de hoofdvestiging een vestiging van de maatschappelijke activiteit is</li>
+        	<li>van de hoofdvestiging de <i>eerste handelsnaam </i>indien de hoofdvestiging een vestiging van de onderneming is</li>
+        </ul>
+      properties:
+        eersteHandelsnaamHoofdvestiging:
+          $ref: '#/components/schemas/Handelsnaamrelatie'
+        naamEigenaar:
+          $ref: 'algemeen_v1.yaml#/components/schemas/Naamrelatie'
+        naamHoofdvestiging:
+          $ref: 'algemeen_v1.yaml#/components/schemas/Naamrelatie'
+
+
+    Handelsnaam:
+      description: >-
+        De naam waaronder een onderneming of vestiging handelt.
+      required:
+        - administratieveHandelsnaam
+        - volledigeHandelsnaam
+      properties:
+        administratieveHandelsnaam:
+          description: >-
+            <i>Afgeleid.</i>
+          De administratieve handelsnaam in het handelsregister. Dit is de verkorte handelsnaam of de volledige handelsnaam indien er geen verkorte handelsnaam is vastgelegd.
+          type: 
+        volledigeHandelsnaam:
+          description: >-
+            De volledige handelsnaam.
+          type: 
+        verkorteHandelsnaam:
+          description: >-
+            De verkorte handelsnaam is de administratieve naam in het handelsregister indien de handelsnaam wordt gebruikt als eerste handelsnaam van een vestiging en indien de volledige handelsnaam langer is dan 45 karakters.
+N.B.: de eerste handelsnaam is de handelsnaam die als eerste in de geordende lijst van handelsnamen van een vestiging geplaatst staat.
+          type: 
+
+
+    Handelsnaamrelatie:
+      description: >-
+        #TODO
+      required:
+        - handelsnaam
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/MaterieleRelatie'
+        - properties:
+            handelsnaam:
+              $ref: '#/components/schemas/Handelsnaam'
+
+
+    VolgordelijkeHandelsnaamrelatie:
+      description: >-
+        #TODO
+      required:
+        - handelsnaam
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/VolgordelijkeMaterieleRelatie'
+        - properties:
+            handelsnaam:
+              $ref: '#/components/schemas/Handelsnaam'
+
+
+    ActiviteitcodeOpVolgorde:
+      description: >-
+        Bevat ofwel een hoofdactiviteit ofwel een nevenactiviteit van de maatschappelijke activiteit.
+      required:
+        - hoofdOfNevenactiviteit
+        - sbiCode
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/VolgordelijkeFormeleRelatie'
+        - properties:
+            hoofdOfNevenactiviteit:
+              description: >-
+                De waarde is één van de volgende:
+                <li>hoofdactiviteit
+                <li>nevenactiviteit
+              type: string
+              enum:
+                - hoofdactiviteit
+                - nevenactiviteit
+            sbiCode:
+              $ref: 'referentie_v1.yaml#/components/schemas/SBICode'
+
+
+    IncidenteelUitlenenArbeidskrachten:
+      description: >-
+        <i>Ook wel de Waadi-indicator genoemd.</i>
+        Beschrijft of een maatschappelijke activiteit al dan niet incidenteel uitzendkrachten uitleent.
+      required:
+        - leentIncidenteelUitzendkrachtenUit
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            leentIncidenteelUitzendkrachtenUit:
+              description: >-
+                De onderneming leent incidenteel uitzendkrachten uit (ja of nee).
+              type: string
+              enum:
+                - ja
+                - nee
+
+
+    KVKnummer:
+      description: >-
+        Het door de Kamer van Koophandel uitgedeelde KVK nummer.
+      required:
+        - kvkNummer
+      properties:
+        kvkNummer:
+          type: string
+          format: Numeriek8
+
+
+    Ondernemingsoverdracht:
+      description: >-
+        De overdracht van een onderneming van de ene maatschappelijke activiteit naar de andere maatschappelijke activiteit.
+        <font color="#ff0000">
+        </font>N.B.: een onderneming kan meermalen overgedragen zijn. Op enig moment kunnen er dus meer ondernemingsoverdrachten bij een maatschappelijke activiteit bekend zijn.
+      required:
+        - momentVanOverdracht
+      properties:
+        momentVanOverdracht:
+          type: string
+          format: DatumIncompleet
+        overnemer:
+          $ref: '#/components/schemas/OndernemingsOverdragerOfOvernemer'
+        overdrager:
+          $ref: '#/components/schemas/OndernemingsOverdragerOfOvernemer'

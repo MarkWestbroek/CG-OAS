@@ -1,0 +1,92 @@
+openapi: 3.0.0
+info:
+  version: 1.0
+  title: >-
+    gebeurtenis
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # FormeelObject representatie
+    FormeelObject:
+      description: >-
+        Het FormeelObject is de basisrepresentatie waarvan representaties afgeleid moeten worden, indien de registratietijdstippen van opvoer en mogelijk afvoer moeten kunnen worden weergegeven.
+Ten overvloede; deze tijdstippen gaan over de formele levensduur van de geregistreerde data die door de representatie wordt gerepresenteerd.
+Het bevat altijd een registratietijdstipOpvoer en kan een registratietijdstipAfvoer bevatten.
+        
+      required:
+        - registratietijdstipOpvoer
+      properties:
+        registratietijdstipOpvoer:
+          description: >-
+            <i>Afgeleid.</i>
+          Het eerste tijdstip waarop deze representatie is geregistreerd (registratieGebeurtenis.registratie), en waarvan de registratie niet ongedaan gemaakt is.
+          type: string
+        registratietijdstipAfvoer:
+          description: >-
+            <i>Afgeleid</i>, <i>optioneel</i>.
+          Het tijdstip waarop deze representatie is gederegistreerd (deregistratieGebeurtenis.registratie) en waarvan de deregistratie niet ongedaan gemaakt is.
+          type: string
+
+
+    # MaterieelObject representatie
+    MaterieelObject:
+      description: >-
+        Het MaterieelObject is de basisrepresentatie waarvan representaties afgeleid moeten worden, indien er de datumAanvang en datumEinde moeten worden kunnen weergegeven.
+Ten overvloede; deze datums gaan over de materiële levensduur van dat wat door de representatie wordt gerepresenteerd.
+Het bevat altijd een aanvangsdatum (een mogelijk incomplete datum) en kan een einddatum (idem mogelijk incompleet) bevatten.
+      required:
+        - datumAanvang
+      allOf:
+        - $ref: '#/components/schemas/FormeelObject'
+        - properties:
+            datumAanvang:
+              description: >-
+                De datum waarop deze representatie is aangevangen.
+              type: string
+              format: DatumIncompleet
+            datumEinde:
+              description: >-
+                (optioneel) De datum waarop deze representatie is beeindigd.
+              type: string
+              format: DatumIncompleet
+
+
+    # MaterielePeriode representatie
+    MaterielePeriode:
+      description: >-
+        Een Materiele Periode geeft een periode weer waarin een object - of relatie - juridisch bestaat of heeft bestaan.
+Het bevat altijd de datum waarop de periode is aangevangen en mogelijk een einddatum van de periode.
+Wanneer de einddatum leeg is, bestaat het betreffende object juridisch nog.
+      required:
+        - datumAanvang
+        - registratieDatumAanvang
+      properties:
+        datumAanvang:
+          description: >-
+            De datum waarop deze representatie is aangevangen.
+          type: DatumIncompleet
+        datumEinde:
+          description: >-
+            (optioneel) De datum waarop deze representatie is beeindigd.
+          type: DatumIncompleet
+        registratieDatumAanvang:
+          $ref: '#/components/schemas/Registratie'
+        registratieDatumEinde:
+          $ref: '#/components/schemas/Registratie'
+
+
+    # Registratie representatie
+    Registratie:
+      description: >-
+        
+      properties:
+        tijdstip:
+          type: string
+          format: datetime

@@ -1,0 +1,25 @@
+openapi: 3.0.0
+info:
+  version: 1.0
+  title: >-
+    anderemap
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # RepresentatieInAndereMap representatie
+    RepresentatieInAndereMap:
+      description: >-
+        
+      required:
+        - eigenschap
+      properties:
+        eigenschap:
+          type: string
+          format: SpeciaalFormaat

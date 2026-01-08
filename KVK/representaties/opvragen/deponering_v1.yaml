@@ -1,0 +1,432 @@
+openapi: 3.0.0
+info:
+  version: 1.1.1
+  title: >-
+    representaties\opvragen\deponering_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    AansprakelijkheidMetDeponeringen:
+      description: >-
+        #TODO
+      allOf:
+        - $ref: '#/components/schemas/Aansprakelijkheid'
+        - properties:
+            voornemenTotIntrekkingVanOverblijvendeAansprakelij:
+              $ref: '#/components/schemas/Deponering'
+            intrekking:
+              $ref: '#/components/schemas/Deponering'
+
+
+    Aansprakelijkheidsdeponering:
+      description: >-
+        Is altijd &#233;&#233;n van de volgende drie soorten deponering:
+Het depotstuk van het type aansprakelijksheidsverklaring waarbij de aansprakelijkheid wordt aangegeven tussen een moeder en dochter. Toelichting uit het vennootschapsrecht: schriftelijke verklaring van de moedervennootschap dat zij zich hoofdelijk aansprakelijk stelt voor de schulden die voortvloeien uit door de dochtervennootschap verrichte rechtshandelingen.
+Voornemen tot intrekking van overblijvende aansprakelijkheid: het voornemen tot intrekking van overblijvende aansprakelijkheid is gedeponeerd. Zie ook art. 404 lid 3 BW2.
+Intrekking: een deponering van het type intrekking. Een intrekking wordt altijd bij de dochter gedeponeerd en betekent dat een moeder zicht niet meer aansprakelijk stelt voor de schulden van de dochter.
+      allOf:
+        - $ref: '#/components/schemas/Deponering'
+        - properties:
+            aansprakelijkheid:
+              $ref: '#/components/schemas/Aansprakelijkheid'
+
+
+    Deponering:
+      description: >-
+        Een deponering bevat een deel van de informatie uit een door een rechtspersoon bij de KVK gedeponeerd depotstuk, of een aantal samenhangende depotstukken.
+Een deponering heeft altijd een uniek identificerend depotnummer en de datum waarop de deponering is gedaan.
+Specifieke deponeringen (zoals het fusievoorstel of de jaarrekening) kunnen meer informatie bevatten, die gestructureerd wordt vastgelegd in het handelsregister.
+      required:
+        - type
+        - depotnummer
+        - status
+        - depotstukken
+      properties:
+        type:
+          description: >-
+            De waarde is één van de volgende:
+            <li>VoorstelTotSplitsing
+            <li>VoorstelTotFusie
+            <li>Jaarrekening
+            <li>JaarrekeningOngewijzigdVastgesteld
+            <li>Instemmingsverklaring
+            <li>Ontheffing
+            <li>BijzondereDeponering
+            <li>Aansprakelijkheidsverklaring
+            <li>VoornemenTotIntrekkingVanOverblijvendeAansprakelijkheid
+            <li>AanvullendeMededelingOpJaarrekening
+            <li>DeponeringMbtJaarrekeningenrecht
+            <li>Intrekking
+          type: string
+          enum:
+            - VoorstelTotSplitsing
+            - VoorstelTotFusie
+            - Jaarrekening
+            - JaarrekeningOngewijzigdVastgesteld
+            - Instemmingsverklaring
+            - Ontheffing
+            - BijzondereDeponering
+            - Aansprakelijkheidsverklaring
+            - VoornemenTotIntrekkingVanOverblijvendeAansprakelijkheid
+            - AanvullendeMededelingOpJaarrekening
+            - DeponeringMbtJaarrekeningenrecht
+            - Intrekking
+        depotnummer:
+          type: string
+        deponeringsdatum:
+          description: >-
+            De datum waarop de deponering is gedaan.
+          type: string
+          format: DatumIncompleet
+        status:
+          description: >-
+            De status van de deponering.
+          Een status van een deponering kan gewijzigd worden door een andere deponering. Dit is afhankelijk van het soort deponering dat gedaan wordt.
+            De waarde is één van de volgende:
+            <li>Actueel: de deponering is een geldig en actueel depotstuk
+            <li>Vernietigd: het deponering is vernietigd door de rechter
+            <li>Ingetrokken: het depotstuk is intgetrokken door de ondernemer
+            <li>Vervallen: de deponering is komen te vervallen, bijvoorbeeld bij een opnieuw gedeponeerde jaarrekening
+            <li>Doorgevoerd: de deponering is doorgevoerd, bijvoorbeeld bij een besluit tot kapitaal tot kapitaalsvermindering is daadwerkelijk het kapitaal verminderd. De deponering is dan niet meer ´geldig´ voor een volgende kapitaalsvermindering.
+            <li>Gecorrigeerd: de status van een deponering indien de betreffende deponering is gecorrigeerd (is alleen van toepassing bij jaarrekeningen).
+            <li>GegevensGecorrigeerd: de status van een deponering indien de gegevens, die bij een depotstuk zijn vastgelegd, zijn gecorrigeerd.
+            <li>Hersteld: deze status geeft aan dat een deponering is hersteld. Hiermee wordt aangegeven dat een deponering niet in het depot hoort te zitten van de betreffende vennootschap.
+          type: string
+          enum:
+            - Actueel
+            - Vernietigd
+            - Ingetrokken
+            - Vervallen
+            - Doorgevoerd
+            - Gecorrigeerd
+            - GegevensGecorrigeerd
+            - Hersteld
+        deponeringsreferentie:
+          $ref: '#/components/schemas/Deponeringsreferentie'
+        aansprakelijkheidMetDeponeringen:
+          $ref: '#/components/schemas/AansprakelijkheidMetDeponeringen'
+        depotstukken:
+          type: array
+          items:
+            $ref: '#/components/schemas/Depotstukken'
+        GedeponeerdBij:
+          $ref: 'nietnatuurlijkpersoon_v1.yaml#/components/schemas/NietNatuurlijkPersoonReferentie'
+
+
+    deponeringBijAansprakelijkheid:
+      description: >-
+        Een deponering bevat een deel van de informatie uit een door een rechtspersoon bij de KVK gedeponeerd depotstuk, of een aantal samenhangende depotstukken.
+Een deponering heeft altijd een uniek identificerend depotnummer en de datum waarop de deponering is gedaan.
+Specifieke deponeringen (zoals het fusievoorstel of de jaarrekening) kunnen meer informatie bevatten, die gestructureerd wordt vastgelegd in het handelsregister.
+      required:
+        - type
+        - depotnummer
+        - status
+      properties:
+        type:
+          description: >-
+            De waarde is één van de volgende:
+            <li>VoorstelTotSplitsing
+            <li>VoorstelTotFusie
+            <li>Jaarrekening
+            <li>JaarrekeningOngewijzigdVastgesteld
+            <li>Instemmingsverklaring
+            <li>Ontheffing
+            <li>BijzondereDeponering
+            <li>Aansprakelijkheidsverklaring
+            <li>VoornemenTotIntrekkingVanOverblijvendeAansprakelijkheid
+            <li>AanvullendeMededelingOpJaarrekening
+            <li>DeponeringMbtJaarrekeningenrecht
+            <li>Intrekking
+          type: string
+          enum:
+            - VoorstelTotSplitsing
+            - VoorstelTotFusie
+            - Jaarrekening
+            - JaarrekeningOngewijzigdVastgesteld
+            - Instemmingsverklaring
+            - Ontheffing
+            - BijzondereDeponering
+            - Aansprakelijkheidsverklaring
+            - VoornemenTotIntrekkingVanOverblijvendeAansprakelijkheid
+            - AanvullendeMededelingOpJaarrekening
+            - DeponeringMbtJaarrekeningenrecht
+            - Intrekking
+        depotnummer:
+          type: string
+        deponeringsdatum:
+          description: >-
+            De datum waarop de deponering is gedaan.
+          type: string
+          format: DatumIncompleet
+        status:
+          description: >-
+            De status van de deponering.
+          Een status van een deponering kan gewijzigd worden door een andere deponering. Dit is afhankelijk van het soort deponering dat gedaan wordt.
+            De waarde is één van de volgende:
+            <li>Actueel: de deponering is een geldig en actueel depotstuk
+            <li>Vernietigd: het deponering is vernietigd door de rechter
+            <li>Ingetrokken: het depotstuk is intgetrokken door de ondernemer
+            <li>Vervallen: de deponering is komen te vervallen, bijvoorbeeld bij een opnieuw gedeponeerde jaarrekening
+            <li>Doorgevoerd: de deponering is doorgevoerd, bijvoorbeeld bij een besluit tot kapitaal tot kapitaalsvermindering is daadwerkelijk het kapitaal verminderd. De deponering is dan niet meer ´geldig´ voor een volgende kapitaalsvermindering.
+            <li>Gecorrigeerd: de status van een deponering indien de betreffende deponering is gecorrigeerd (is alleen van toepassing bij jaarrekeningen).
+            <li>GegevensGecorrigeerd: de status van een deponering indien de gegevens, die bij een depotstuk zijn vastgelegd, zijn gecorrigeerd.
+            <li>Hersteld: deze status geeft aan dat een deponering is hersteld. Hiermee wordt aangegeven dat een deponering niet in het depot hoort te zitten van de betreffende vennootschap.
+          type: string
+          enum:
+            - Actueel
+            - Vernietigd
+            - Ingetrokken
+            - Vervallen
+            - Doorgevoerd
+            - Gecorrigeerd
+            - GegevensGecorrigeerd
+            - Hersteld
+
+
+    Deponeringsreferentie:
+      description: >-
+        Beschrijft op welke andere deponering de deponering betrekking heeft. Bijvoorbeeld een mededeling bij een jaarrekening heeft betrekking op een Jaarrekening.
+      required:
+        - depotnummer
+      properties:
+        depotnummer:
+          type: string
+
+
+    SoortDeponering:
+      description: >-
+        Een item uit de referentielijst met soorten deponering ("SoortDeponering").
+      required:
+        - code
+        - soortDeponering
+      allOf:
+        - $ref: 'referentie_v1.yaml#/components/schemas/ReferentielijstItem'
+        - properties:
+            code:
+              description: >-
+                De unieke code van het soort deponering in de KVK referentielijst "Soort Deponering".
+              type: string
+              format: Numeriek4
+            soortDeponering:
+              type: string
+              format: Alfanumeriek200
+
+
+    Jaarstuk:
+      description: >-
+        Een jaarstuk is een deponering in het kader van het jaarrekeningrecht.
+      required:
+        - boekjaar
+      allOf:
+        - $ref: '#/components/schemas/Deponering'
+        - properties:
+            boekjaar:
+              description: >-
+                Het boekjaar waarin het jaarstuk is gedeponeerd
+              type: string
+              format: Jaar
+
+
+    Jaarrekening:
+      description: >-
+        Een deponering van het type jaarrekening
+      required:
+        - buitenlandseJaarrekening
+      allOf:
+        - $ref: '#/components/schemas/Jaarstuk'
+        - properties:
+            datumVaststelling:
+              description: >-
+                Als de datum is ingevuld is de jaarrekening vastgesteld, anders spreken we over een voorlopige jaarrekening.
+              type: string
+              format: DatumIncompleet
+            buitenlandseJaarrekening:
+              description: >-
+                Indicatie die aangeeft of het een buitenlandse jaarrekening betreft.
+              type: string
+              enum:
+                - ja
+                - nee
+            vaststelling:
+              $ref: 'referentie_v1.yaml#/components/schemas/Vaststelling'
+            grootteRechtspersoon:
+              $ref: 'referentie_v1.yaml#/components/schemas/GrootteRechtspersoon'
+            maandEindeBoekjaar:
+              $ref: 'referentie_v1.yaml#/components/schemas/MaandEindeBoekjaar'
+            plaatsJaarverslag:
+              $ref: 'referentie_v1.yaml#/components/schemas/PlaatsJaarverslag'
+
+
+    DeponeringMbtJaarrekeningenrecht:
+      description: >-
+        Een deponering die betrekking heeft op het Jaarrekeningenrecht (titel 9. BW 2), zoals bijvoorbeeld:
+        <ul>
+        	<li>Jaarrekening conform buitenlands recht (art. 24 lid 5 HrB en art. 25 lid 5 HrB)</li>
+        	<li>Jaarrekening/Jaarverslag (Beleggingsmaatschappijen o.b.v. art. 401 BW2)</li>
+        	<li>Geconsolideerde jaarrekening (art. 408 BW2)</li>
+        	<li>Halfjaarcijfers (art 7. lid 11 Btev)</li>
+        	<li>Kwartaalcijfers (art. 7 lid 11 Btev)</li>
+        	<li>Verslag over betalingen aan overheden (besluit rapportage van betalingen aan overheden)</li>
+        </ul>
+
+      required:
+        - soortDeponeringMbtJaarrekeningrecht
+      allOf:
+        - $ref: '#/components/schemas/Jaarstuk'
+        - properties:
+            soortDeponeringMbtJaarrekeningrecht:
+              $ref: '#/components/schemas/SoortDeponeringMbtJaarrekeningrecht'
+
+
+    SoortDeponeringMbtJaarrekeningrecht:
+      description: >-
+        Een item uit de referentielijst met soorten deponering m.b.t. het jaarrekeningrecht.
+Deze lijst is de lijst met alle items uit de referentielijst "SoortDeponering", waarbij de indicatie "boekjaartonen" aanwezig is.
+        
+      allOf:
+        - $ref: '#/components/schemas/SoortDeponering'
+        - properties:
+
+
+    Aansprakelijkheid:
+      description: >-
+        De aansprakelijkheid geeft aan wanneer welke moeder zich aansprakelijk stelt of heeft gesteld voor een dochter. Deze informatie komt uit de aansprakelijkheidsverklaring die gedeponeerd is geworden bij de dochter.
+        Aangezien er de mogelijkheid bestaat dat een aansprakelijkstelling (bij fusie) overgaat naar een andere moeder, zonder dat de aansprakelijkstelling daarbij wijzigt, kunnen er dus - gedurende steeds een bepaalde (niet overlappende) periode - meerdere aansprakelijke moeders bij een aansprakelijkheid horen
+      required:
+        - datumIngang
+        - dochter
+        - aansprakelijkeMoeders
+      properties:
+        datumIngang:
+          description: >-
+            Datum waarop de aansprakelijkheid ingaat.
+          type: string
+          format: DatumIncompleet
+        datumIntrekking:
+          description: >-
+            Datum intrekking van de aansprakelijkheid
+          type: string
+          format: DatumIncompleet
+        dochter:
+          $ref: 'nietnatuurlijkpersoon_v1.yaml#/components/schemas/NietNatuurlijkPersoonReferentie'
+        aansprakelijkeMoeders:
+          type: array
+          items:
+            $ref: 'nietnatuurlijkpersoon_v1.yaml#/components/schemas/NietNatuurlijkPersoonRelatie'
+
+
+    Instemmingsverklaring:
+      description: >-
+        Een instemmingsverklaring die wordt gedeponeerd, waarbij de dochter (waarvoor een moeder zich aansprakelijk heeft gesteld) een ontheffing heeft voor het deponeren van de jaarrekening.
+Bij het deponeren van een instemming moet aangegeven worden bij welke (buitenlandse) rechtspersoon of vennootschap de groepsjaarrekening ligt.
+      required:
+        - groepsjaarrekeninghouder
+      allOf:
+        - $ref: '#/components/schemas/Jaarstuk'
+        - properties:
+            groepsjaarrekeninghouder:
+              $ref: 'nietnatuurlijkpersoon_v1.yaml#/components/schemas/NietNatuurlijkPersoonReferentie'
+
+
+    Ontheffing:
+      description: >-
+        Een deponering van het type ontheffing, waarbij de rechtspersoon ontheffing heeft gekregen voor het deponeren van de jaarrekening.
+Bij een ontheffing moet in sommige gevallen aangegeven worden waar de groepsjaarrekening is gedeponeerd. Dit geldt alleen voor banken.
+NB: Dit heeft te maken met een afspraak die de kamer van koophandel heeft gemaakt met de Rabobank, zodat de rabobank maar &#233;&#233;n keer hoeft te deponeren en dat alle overige rabobanken een ontheffing kunnen deponeren.
+        
+      required:
+        - reden
+      allOf:
+        - $ref: '#/components/schemas/Jaarstuk'
+        - properties:
+            reden:
+              description: >-
+                De reden van vrijstelling voor het deponeren van jaarstukken is toegestaan.
+                De waarde is één van de volgende:
+                <li>OntheffingGeenWinstoogmerk
+                <li>OntheffingMinisterEZ
+                <li>Ontheffingbanken
+              type: string
+              enum:
+                - OntheffingGeenWinstoogmerk
+                - OntheffingMinisterEZ
+                - Ontheffingbanken
+            groepsjaarrekeninghouder:
+              $ref: 'nietnatuurlijkpersoon_v1.yaml#/components/schemas/NietNatuurlijkPersoonReferentie'
+
+
+    BijzondereDeponering:
+      description: >-
+        Een bijzondere deponering is een deponering die voortvloeit uit de BW2 of uit de statutaire bepalingen van de rechtspersoon
+      required:
+        - soortBijzondereDeponering
+      allOf:
+        - $ref: '#/components/schemas/Deponering'
+        - properties:
+            omschrijving:
+              description: >-
+                Een omschrijving van de deponering indien een deponering wordt gedaan op basis van een statuaire bepaling.
+              type: string
+              format: Alfanumeriek500
+            soortBijzondereDeponering:
+              $ref: '#/components/schemas/SoortBijzondereDeponering'
+
+
+    SoortBijzondereDeponering:
+      description: >-
+        Het soort bijzondere deponering.
+Dit is ook een item uit de referentielijst met soorten deponering ("SoortDeponering").
+      allOf:
+        - $ref: '#/components/schemas/SoortDeponering'
+        - properties:
+
+
+    VoorstelTotVermogensoverdracht:
+      description: >-
+        Voor de rechtspersonen is een fusie- of splitsingsvoorstel gedeponeerd. Dit is het voorstel tot vermogensoverdracht.
+      required:
+        - partijen
+      allOf:
+        - $ref: '#/components/schemas/Deponering'
+        - properties:
+            redenEinde:
+              description: >-
+                De waarde is één van de volgende:
+                <li>VoorstelIngetrokken: het fusie- of splitsingsvoorstel is ingetrokken.
+                <li>VoorstelVernietigd: het fusie- of splitsingsvoorstel is bij rechterlijke uitspraak vernietigd.
+                <li>VoorstelVervallen: het voorstel is i.v.m.  foutieve invoer komen te vervallen.
+              type: string
+              enum:
+                - VoorstelIngetrokken
+                - VoorstelVernietigd
+                - VoorstelVervallen
+            partijen:
+              type: array
+              items:
+                $ref: 'nietnatuurlijkpersoon_v1.yaml#/components/schemas/Vermogensoverdrachtspartij'
+
+
+    GegevensOpTeRichtenRechtspersoon:
+      description: >-
+        De rechtspersoon die wordt opgericht als gevolg van een fusie. Dit object wordt ook gebruikt als placeholder voor een rechtspersoon om tijdens de verwerking van de fusie of splitsing een bestaande rechtspersoon te selecteren. Er wordt een associatie bijgehouden naar de rechtspersoon (niet-natuurlijk persoon of privaatrechtelijke rechtspersoon) die opgericht is of gebruikt wordt.
+      required:
+        - naam
+        - rechtsvorm
+      properties:
+        naam:
+          description: >-
+            De naam van de op te richten rechtspersoon.
+          type: string
+        rechtsvorm:
+          description: >-
+            De rechtsvorm van de op te richten rechtspersoon.
+          
+          type: string

@@ -1,0 +1,40 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\opvragen\natuurlijkpersoonhr_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    NatuurlijkPersoon:
+      description: >-
+        Een natuurlijk persoon is een mens in juridische zin, als iemand die drager van rechten en verplichtingen kan zijn.
+      required:
+        - persoonsnummer
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeleEntiteit'
+        - properties:
+            persoonsnummer:
+              type: string
+              format: UUID
+            statussen:
+              type: array
+              items:
+                $ref: '#/components/schemas/NPStatus'
+
+
+    NPStatus:
+      description: >-
+        #TODO
+      required:
+        - status
+      properties:
+        status:
+          type: String

@@ -1,0 +1,58 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\vastleggen\document_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    Bewijsstuk:
+      description: >-
+        #TODO
+      allOf:
+        - $ref: '#/components/schemas/Document'
+        - properties:
+            brondocument:
+              type: array
+              items:
+                $ref: '#/components/schemas/Brondocument'
+
+
+    Brondocument:
+      description: >-
+        Het brondocument bevat (een deel van) de voor een (of meer) opgave(n) van een (of meer) gebeurtenis(sen) benodigde gegevens in een analoge (gescand papieren) of digitale (pdf, csv, text, xml, json, enz.) vorm.
+Het brondocument moet kunnen worden opgeslagen in een <b>(het?) </b>documentbeheersysteem en kunnen worden geidentificeerd en aangewezen middels het identificatienummer en de locatie.
+Het is bij de meeste brondocument-typen mogelijk om in termen van het logisch model te beschrijven welke {representaties} het document bevat.
+        Er bestaan echter ook brondocumenttypen waarbij dat slechts voor de concrete instanties mogelijk is. Bijvoorbeeld: papieren formulier 18, een blanco formulier.
+      allOf:
+        - $ref: '#/components/schemas/Document'
+        - properties:
+
+
+    Document:
+      description: >-
+        #TODO
+      required:
+        - identificatienummer
+        - locatie
+        - datumOntvangst
+      properties:
+        identificatienummer:
+          description: >-
+            Het identificatienummer van het document.
+          type: 
+        locatie:
+          description: >-
+            De locatie in het documentbeheersysteem.
+          type: 
+        datumOntvangst:
+          type: Datum
+        tijdstipOntvangst:
+          type: Tijdstip

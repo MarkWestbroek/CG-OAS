@@ -1,0 +1,234 @@
+openapi: 3.0.0
+info:
+  version: 1.0
+  title: >-
+    maatschappelijkeactiviteit
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # ActiviteitcodeOpVolgorde representatie
+    ActiviteitcodeOpVolgorde:
+      description: >-
+        Bevat ofwel een hoofdactiviteit ofwel een nevenactiviteit van de maatschappelijke activiteit.
+      required:
+        - hoofdOfNevenactiviteit
+      allOf:
+        - $ref: '#/components/schemas/VolgordelijkeFormeleRelatie'
+        - properties:
+            hoofdOfNevenactiviteit:
+              type: string
+            sbiCode:
+              $ref: 'referentie_v1.yaml#/components/schemas/SBICode'
+
+
+    # Eigenaarrelatie representatie
+    Eigenaarrelatie:
+      description: >-
+        
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/MaterieleRelatie'
+        - properties:
+            eigenaar:
+              $ref: 'persoon_v1.yaml#/components/schemas/Persoon'
+
+
+    # Handelsnaamrelatie representatie
+    Handelsnaamrelatie:
+      description: >-
+        
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/MaterieleRelatie'
+        - properties:
+            handelsnaam:
+              $ref: '#/components/schemas/Handelsnaam'
+
+
+    # IncidenteelUitlenenArbeidskrachten representatie
+    IncidenteelUitlenenArbeidskrachten:
+      description: >-
+        <i>Ook wel de Waadi-indicator genoemd.</i>
+        Beschrijft of een maatschappelijke activiteit al dan niet incidenteel uitzendkrachten uitleent.
+      required:
+        - leentIncidenteelUitzendkrachtenUit
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            leentIncidenteelUitzendkrachtenUit:
+              description: >-
+                De onderneming leent incidenteel uitzendkrachten uit (ja of nee).
+              type: string
+
+
+    # MaatschappelijkeActiviteit representatie
+    MaatschappelijkeActiviteit:
+      description: >-
+        De entiteit die de ´inschrijving in het handelsregister´ vertegenwoordigt:
+        <ul>
+        	<li>hetzij voor de activiteit van een rechtspersoon zonder onderneming,</li>
+        	<li>hetzij voor een onderneming, waarbij we de onderneming als een aparte entiteit zien (zie onderneming).</li>
+        </ul>
+Zowel de rechtspersoon zonder onderneming als de onderneming zien we dus als een 'maatschappelijke activiteit', en het is de maatschappelijke activiteit waaraan we het KVK-nummer toekennen.
+Het KVK-nummer geldt daarbij dus voor zowel de rechtspersoon zonder onderneming als voor de onderneming.
+      allOf:
+        - $ref: '#/components/schemas/MaatschappelijkeActiviteitBasisgegevens'
+        - properties:
+            onderneming:
+              $ref: '#/components/schemas/MaatschappelijkeactiviteitsOnderneming'
+            naam:
+              $ref: '#/components/schemas/MaatschappelijkeActiviteitsnaam'
+            namen:
+              $ref: 'algemeen_v1.yaml#/components/schemas/VolgordelijkeNaamrelatie'
+
+
+    # MaatschappelijkeActiviteitBasisgegevens representatie
+    MaatschappelijkeActiviteitBasisgegevens:
+      description: >-
+        Deze representatie geeft alleen een set aan basisgegevens terug van de maatschappelijke activiteit. Het betreft de periode waarin de maatschappelijkeactiviteit geldig is, het KvK-nummer en het gegevensgebruik (direct mailing)
+      required:
+        - kvkNummer
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            kvkNummer:
+              type: string
+              format: Numeriek8
+            incidenteelUitlenenArbeidskrachten:
+              $ref: '#/components/schemas/IncidenteelUitlenenArbeidskrachten'
+            gegevensgebruik:
+              $ref: 'gegevensgebruik_v1.yaml#/components/schemas/DirectMailing'
+
+
+    # MaatschappelijkeActiviteitsnaam representatie
+    MaatschappelijkeActiviteitsnaam:
+      description: >-
+        <i>Afgeleid.</i>
+        De naam van de maatschappelijke activiteit:
+        <ul>
+        	<li>indien er geen hoofdvestiging is: de<i> (/administratieve) naam</i> van de niet-natuurlijk persoon die eigenaar is</li>
+        	<li>van de hoofdvestiging de <i> (/administratieve) naam </i>indien de hoofdvestiging een vestiging van de maatschappelijke activiteit is</li>
+        	<li>van de hoofdvestiging de <i>eerste handelsnaam </i>indien de hoofdvestiging een vestiging van de onderneming is</li>
+        </ul>
+      properties:
+        eersteHandelsnaamHoofdvestiging:
+          $ref: '#/components/schemas/Handelsnaamrelatie'
+        naamEigenaar:
+          $ref: 'algemeen_v1.yaml#/components/schemas/Naamrelatie'
+        naamHoofdvestiging:
+          $ref: 'algemeen_v1.yaml#/components/schemas/Naamrelatie'
+
+
+    # MaatschappelijkeactiviteitsOnderneming representatie
+    MaatschappelijkeactiviteitsOnderneming:
+      description: >-
+        De onderneming zoals deze door de maatschappelijke activiteit wordt uitgeoefende gedurende een bepaalde periode.
+      allOf:
+        - $ref: '#/components/schemas/Onderneming'
+        - properties:
+            wordtUitgeoefendSinds:
+              $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterielePeriode'
+
+
+    # Onderneming representatie
+    Onderneming:
+      description: >-
+        Een onderneming levert goederen en/of diensten waarvoor meer dan een symbolische vergoeding voor wordt gevraagd, en neemt deel aan het (normale) economische verkeer.
+                Verder is het zo dat een onderneming die in het handelsregister wordt ingeschreven (zie HRW 2007, art 5):
+                a. een onderneming is die in Nederland is gevestigd en die toebehoort aan een naamloze vennootschap, een besloten vennootschap met beperkte aansprakelijkheid, een vennootschap onder firma, een commanditaire vennootschap, een maatschap, een rederij, een coöperatie, een onderlinge waarborgmaatschappij, een vereniging, een stichting, een kerkgenootschap of een publiekrechtelijke rechtspersoon;
+                b. een onderneming is die in Nederland gevestigd is en die toebehoort aan een natuurlijke persoon;
+                c. een onderneming is die toebehoort aan een Europese naamloze vennootschap, een Europese coöperatieve vennootschap of een Europees economisch samenwerkingverband die volgens haar statuten haar zetel in Nederland heeft;
+                d. een onderneming is die toebehoort aan een buitenlandse rechtspersoon die een hoofd- of een nevenvestiging in Nederland heeft;
+                e. een onderneming die in Nederland is gevestigd en die toebehoort aan een ander dan genoemd in onderdeel a tot en met d.
+                Een onderneming wordt geïdentificeerd door het KVK-nummer van de maatschappelijke activiteit waarin de onderneming wordt uitgeoefend.
+      allOf:
+        - $ref: '#/components/schemas/OndernemingBasisgegevens'
+        - properties:
+            handelsnamen:
+              $ref: '#/components/schemas/VolgordelijkeHandelsnaamrelatie'
+
+
+    # OndernemingBasisgegevens representatie
+    OndernemingBasisgegevens:
+      description: >-
+        Deze representatie geeft alleen een set aan basisgegevens terug van de onderneming. Het betreft de periode waarin de onderneming geldig is en het KvK-nummer
+      required:
+        - kvkNummer
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            kvkNummer:
+              type: string
+              format: Numeriek8
+
+
+    # Ondernemingsrelatie representatie
+    Ondernemingsrelatie:
+      description: >-
+        De relatie terug naar de onderneming.
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/OmgekeerdeMaterieleRelatie'
+        - properties:
+            onderneming:
+              $ref: '#/components/schemas/OndernemingBasisgegevens'
+
+
+    # VolgordelijkeFormeleRelatie representatie
+    VolgordelijkeFormeleRelatie:
+      description: >-
+        Een volgordelijke materiele relatie is een materiële relatie, waarbij elke relatie geördend is ten opzichte van de andere relaties van het hetzelfde type (als die op hetzelfde - materiële en formele - moment bestaan).
+N.B.: in de praktijk is deze volgordelijkheid alleen beschikbaar voor opvragingen in het materiële en formele nu (peiltijdstip "nu" en peildatum "vandaag"), omdat er in de (HRD) database van deze volgordelijkheid geen historie wordt bijgehouden.
+      required:
+        - positie
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/FormeleRelatie'
+        - properties:
+            positie:
+              description: >-
+                De positie in de lijst (1 of meer, 1 is de hoogste positie).
+              type: int
+
+
+    # VolgordelijkeHandelsnaamrelatie representatie
+    VolgordelijkeHandelsnaamrelatie:
+      description: >-
+        
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/VolgordelijkeMaterieleRelatie'
+        - properties:
+            handelsnaam:
+              $ref: '#/components/schemas/Handelsnaam'
+
+
+    # Handelsnaam representatie
+    Handelsnaam:
+      description: >-
+        De naam waaronder een onderneming of vestiging handelt.
+      required:
+        - administratieveHandelsnaam
+        - volledigeHandelsnaam
+      properties:
+        administratieveHandelsnaam:
+          description: >-
+            <i>Afgeleid.</i>
+          De administratieve handelsnaam in het handelsregister. Dit is de verkorte handelsnaam of de volledige handelsnaam indien er geen verkorte handelsnaam is vastgelegd.
+          type: 
+        volledigeHandelsnaam:
+          description: >-
+            De volledige handelsnaam.
+          type: 
+        verkorteHandelsnaam:
+          description: >-
+            De verkorte handelsnaam is de administratieve naam in het handelsregister indien de handelsnaam wordt gebruikt als eerste handelsnaam van een vestiging en indien de volledige handelsnaam langer is dan 45 karakters.
+N.B.: de eerste handelsnaam is de handelsnaam die als eerste in de geordende lijst van handelsnamen van een vestiging geplaatst staat.
+          type: 
+        tevensBekendOnder:
+          description: >-
+            De indicatie die aangeeft of ondernemer handelt onder een andere naam als franchisenemer
+<i>Opmerking: in HRD heet dit veld 'tevensHandelendOnder'.</i>
+          type: 

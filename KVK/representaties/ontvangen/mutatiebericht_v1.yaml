@@ -1,0 +1,67 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\ontvangen\mutatiebericht_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    NatuurlijkPersoonMutatiebericht:
+      description: >-
+        #TODO
+      required:
+        - nieuweGegevens
+      allOf:
+        - $ref: '../../representaties/vastleggen/juridischegebeurtenis_v1.yaml#/components/schemas/Bron'
+        - properties:
+            aNummer:
+              $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/A-nummer'
+            oudeGegevens:
+              $ref: '#/components/schemas/NatuurlijkPersoonsgegevens'
+            nieuweGegevens:
+              $ref: '#/components/schemas/NatuurlijkPersoonsgegevens'
+            entiteit:
+              $ref: '../../representaties/meta_v1.yaml#/components/schemas/Entiteit'
+
+
+    NatuurlijkPersoonsgegevens:
+      description: >-
+        #TODO
+      properties:
+        natuurlijkPersoonsnaam:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/NatuurlijkPersoonsnaam'
+        partnernaam:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/Partnernaam'
+        naamgebruik:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/Naamgebruik'
+        bsn:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/BSN'
+        tin:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/TIN'
+        geboorte:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/Geboorte'
+        overlijden:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/Overlijden'
+        staatsburgerschap:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/Staatsburgerschap'
+        gemeenteVanInschrijving:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/GemeenteVanInschrijving'
+        geheimhouding:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/Geheimhouding'
+        ondercuratelestelling:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/Ondercuratelestelling'
+        geslacht:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/Geslacht'
+        bereikbaarheid:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/Bereikbaarheid'
+        vertrokken:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/Vertrokken'
+        aNummer:
+          $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/A-nummer'

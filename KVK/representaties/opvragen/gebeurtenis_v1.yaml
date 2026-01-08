@@ -1,0 +1,180 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\opvragen\gebeurtenis_v1.yaml
+  description: >-
+    TODO: peilmoment parameter ook genereren! Die ontbreekt nu in de gegenereerde yaml!
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    Entiteit:
+      description: >-
+        De Entiteit is de basisrepresentatie waarvan entiteiten (of referenties naar entiteiten) afgeleid worden, die een zogenaamde aanvang en be&#235;indiging kennen.
+Deze datums gaan over de materi&#235;le levensduur van dat wat door de eniteit wordt gerepresenteerd.
+Het bevat altijd een aanvangsdatum (een mogelijk incomplete datum) en kan een be&#235;indigingsdatum (idem mogelijk incompleet) bevatten. Van beide gegevens wordt het registratietijdstip meegegeven.
+      required:
+        - datumAanvang
+        - registratietijdstipAanvang
+      properties:
+        datumAanvang:
+          description: >-
+            De datum waarop deze representatie is aangevangen.
+          type: string
+          format: DatumIncompleet
+        datumBeeindiging:
+          description: >-
+            <i>Optioneel</i>
+          De datum waarop deze representatie is be&#235;indigd.
+          type: string
+          format: DatumIncompleet
+        registratietijdstipAanvang:
+          description: >-
+            Het tijdstip waarop de registratie van de start heeft plaatsgevonden.
+          
+          type: string
+          format: datetime
+        registratietijdstipBeeindiging:
+          description: >-
+            <i>Optioneel</i>
+          Het tijdstip waarop de registratie van de be&#235;indiging heeft plaatsgevonden.
+          type: string
+          format: datetime
+
+
+    FormeelObject:
+      description: >-
+        Het FormeelObject is de basisrepresentatie waarvan representaties afgeleid moeten worden, indien de registratietijdstippen van opvoer en mogelijk afvoer moeten kunnen worden weergegeven.
+Ten overvloede; deze tijdstippen gaan over de formele levensduur van de geregistreerde data die door de representatie wordt gerepresenteerd.
+Het bevat altijd een registratietijdstipOpvoer en kan een registratietijdstipAfvoer bevatten.
+        
+      required:
+        - registratietijdstipOpvoer
+      properties:
+        registratietijdstipOpvoer:
+          description: >-
+            Het eerste tijdstip waarop deze representatie is geregistreerd (registratieGebeurtenis.registratie), en waarvan de registratie niet ongedaan gemaakt is.
+          type: string
+        registratietijdstipAfvoer:
+          description: >-
+            <i>Optioneel</i>.
+          Het tijdstip waarop deze representatie is gederegistreerd (deregistratieGebeurtenis.registratie) en waarvan de deregistratie niet ongedaan gemaakt is.
+          type: string
+        opvoer:
+          $ref: '#/components/schemas/Registratie'
+        afvoer:
+          $ref: '#/components/schemas/Registratie'
+
+
+    FormeleEntiteit:
+      description: >-
+        Het FormeelObject is de basisrepresentatie waarvan representaties afgeleid moeten worden, indien de registratietijdstippen van opvoer en mogelijk afvoer moeten kunnen worden weergegeven.
+Ten overvloede; deze tijdstippen gaan over de formele levensduur van de geregistreerde data die door de representatie wordt gerepresenteerd.
+Het bevat altijd een registratietijdstipOpvoer en kan een registratietijdstipAfvoer bevatten.
+        
+      required:
+        - registratietijdstipOpvoer
+      properties:
+        registratietijdstipOpvoer:
+          description: >-
+            Het eerste tijdstip waarop deze representatie is geregistreerd (registratieGebeurtenis.registratie), en waarvan de registratie niet ongedaan gemaakt is.
+          type: string
+
+
+    MaterieelObject:
+      description: >-
+        Het MaterieelObject is de basisrepresentatie waarvan representaties afgeleid moeten worden, indien er de datumAanvang en datumEinde moeten worden kunnen weergegeven.
+Ten overvloede; deze datums gaan over de materiële levensduur van dat wat door de representatie wordt gerepresenteerd.
+Het bevat altijd een aanvangsdatum (een mogelijk incomplete datum) en kan een einddatum (idem mogelijk incompleet) bevatten.
+      required:
+        - datumAanvang
+      allOf:
+        - $ref: '#/components/schemas/FormeelObject'
+        - properties:
+            datumAanvang:
+              description: >-
+                De datum waarop deze representatie is aangevangen.
+              type: string
+              format: DatumIncompleet
+            datumEinde:
+              description: >-
+                <i>Optioneel</i>
+          De datum waarop deze representatie is beeindigd.
+              type: string
+              format: DatumIncompleet
+
+
+    MaterielePeriode:
+      description: >-
+        Een Materiele Periode geeft een periode weer waarin een object - of relatie - juridisch bestaat of heeft bestaan.
+Het bevat altijd de datum waarop de periode is aangevangen en mogelijk een einddatum van de periode.
+Wanneer de einddatum leeg is, bestaat het betreffende object juridisch nog.
+      required:
+        - datumAanvang
+        - registratieDatumAanvang
+      properties:
+        datumAanvang:
+          description: >-
+            De datum waarop deze representatie is aangevangen.
+          type: DatumIncompleet
+        datumEinde:
+          description: >-
+            <i>Optioneel</i>
+          De datum waarop deze representatie is beeindigd.
+          type: DatumIncompleet
+        registratieDatumAanvang:
+          $ref: '#/components/schemas/Registratie'
+        registratieDatumEinde:
+          $ref: '#/components/schemas/Registratie'
+
+
+    Registratie:
+      description: >-
+        De registratie van een gegevenselement, in het handelsregister.
+        Hiervan wordt hier alleen het moment van registratie teruggegeven.
+      properties:
+        tijdstip:
+          description: >-
+            Het tijdstip waarop de registratie heeft plaatsgevonden.
+          type: string
+          format: datetime
+
+
+    StartOpheffingsEntiteit:
+      description: >-
+        De StartOpheffingsEntiteit is de basisrepresentatie waarvan entiteiten (of referenties naar entiteiten) afgeleid worden, die een zogenaamde start en opheffing kennen.
+Deze datums gaan over de materi&#235;le levensduur van dat wat door de eniteit wordt gerepresenteerd.
+Het bevat altijd een startdatum (een mogelijk incomplete datum) en kan een opheffingsdatum (idem mogelijk incompleet) bevatten. Van beide gegevens wordt het registratietijdstip meegegeven.
+        
+      required:
+        - datumStart
+        - registratietijdstipStart
+      properties:
+        datumStart:
+          description: >-
+            De datum waarop deze entiteit is gestart.
+          type: string
+          format: DatumIncompleet
+        datumOpheffing:
+          description: >-
+            <i>Optioneel</i>
+          De datum waarop deze entiteit is opgeheven.
+          type: string
+          format: DatumIncompleet
+        registratietijdstipStart:
+          description: >-
+            Het tijdstip waarop de registratie van de start heeft plaatsgevonden.
+          
+          type: string
+          format: datetime
+        registratietijdstipOpheffing:
+          description: >-
+            <i>Optioneel</i>
+          Het tijdstip waarop de registratie van de opheffing heeft plaatsgevonden.
+          type: string
+          format: datetime

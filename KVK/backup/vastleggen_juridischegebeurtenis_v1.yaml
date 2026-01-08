@@ -1,0 +1,115 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    vastleggen_juridischegebeurtenis
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # Bron representatie
+    Bron:
+      description: >-
+        
+      required:
+        - type
+      properties:
+        type:
+          type: string
+
+
+    # CorrectieVanEenJuridischeGebeurtenis representatie
+    CorrectieVanEenJuridischeGebeurtenis:
+      description: >-
+        De jurische gebeurtenis beschrijft, zoveel mogelijk in termen van het logisch model, een gebeurtenis, zoals die in jurische termen in 'de werkelijkheid' heeft plaatsgehad.
+Er kunnen één of meerdere juridische gebeurtenissen zijn die één of meer <i>materiële gebeurtenissen </i>beschrijven.
+Hoewel een gebeurtenis vanwege haar aard altijd gedurende een periode plaatsheeft, die verschillende lengten kan hebben, benoemen we altijd een datum als het <i>moment</i> waarop de gebeurtenis plaatsvond.
+N.B. : deze datum kan ook een incomplete datum zijn.
+      required:
+        - gebeurtenisnummer
+        - datum
+        - type
+        - gecorreigeerdeJuridischeGebeurtenis
+      properties:
+        gebeurtenisnummer:
+          description: >-
+            Het nummer van de juridische gebeurtenis.
+          type: string
+        datum:
+          description: >-
+            De datum van een juridische gebeurtenis is de datum waarop de <i>aangever </i>aangeeft dat de gebeurtenis heeft plaatsgevonden.
+          type: string
+          format: DatumIncompleet
+        type:
+          description: >-
+            Het type van de juridische gebeurtenis.
+          type: string
+        gecorreigeerdeJuridischeGebeurtenis:
+          $ref: '#/components/schemas/JuridischeGebeurtenis'
+
+
+    # JuridischeGebeurtenis representatie
+    JuridischeGebeurtenis:
+      description: >-
+        De jurische gebeurtenis beschrijft, zoveel mogelijk in termen van het logisch model, een gebeurtenis, zoals die in jurische termen in 'de werkelijkheid' heeft plaatsgehad.
+Er kunnen één of meerdere juridische gebeurtenissen zijn die één of meer <i>materiële gebeurtenissen </i>beschrijven.
+Hoewel een gebeurtenis vanwege haar aard altijd gedurende een periode plaatsheeft, die verschillende lengten kan hebben, benoemen we altijd een datum als het <i>moment</i> waarop de gebeurtenis plaatsvond.
+N.B. : deze datum kan ook een incomplete datum zijn.
+      required:
+        - type
+        - datum
+        - gebeurtenisnummer
+        - juridischeGebeurtenisGegevens
+      properties:
+        type:
+          description: >-
+            Het type van de juridische gebeurtenis.
+          type: string
+          enum:
+            - WijzigenCommunicatiegegevens
+            - OprichtenRechtspersoon
+            - VerhuizenVestiging
+        datum:
+          description: >-
+            De datum van een juridische gebeurtenis is de datum waarop de <i>aangever </i>aangeeft dat de gebeurtenis heeft plaatsgevonden.
+          type: string
+          format: DatumIncompleet
+        gebeurtenisnummer:
+          description: >-
+            Het nummer van de juridische gebeurtenis.
+          type: string
+        materieleGebeurtenis:
+          $ref: '#/components/schemas/MaterieleGebeurtenis'
+        gebeurtenisregistratieRequest:
+          $ref: 'reg_meta_v1.yaml#/components/schemas/GebeurtenisregistratieRequest'
+        juridischeGebeurtenisGegevens:
+          type: array
+          items:
+            $ref: '#/components/schemas/JuridischeGebeurtenisGegevens'
+
+
+    # JuridischeGebeurtenisGegevens representatie
+    JuridischeGebeurtenisGegevens:
+      description: >-
+        
+      required:
+        - type
+      properties:
+        type:
+          description: >-
+            Het type van de juridische gebeurtenis.
+          type: string
+          enum:
+            - WijzigenCommunicatiegegevens
+            - OprichtenRechtspersoon
+            - VerhuizenVestiging
+        betreffendeEntiteit:
+          $ref: 'reg_meta_v1.yaml#/components/schemas/Entiteit'
+        bron:
+          $ref: '#/components/schemas/Bron'

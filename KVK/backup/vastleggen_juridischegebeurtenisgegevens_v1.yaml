@@ -1,0 +1,32 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    vastleggen_juridischegebeurtenisgegevens
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # NaamswijzigingNatuurlijkPersoonGegevens representatie
+    NaamswijzigingNatuurlijkPersoonGegevens:
+      description: >-
+        
+      required:
+        - betreffendeNatuurlijkPersoon
+      allOf:
+        - $ref: 'vastleggen_juridischegebeurtenis_v1.yaml#/components/schemas/JuridischeGebeurtenisGegevens'
+        - properties:
+            betreffendeNatuurlijkPersoon:
+              $ref: 'reg_natuurlijkpersoon_v1.yaml#/components/schemas/NatuurlijkPersoon'
+            natuurlijkPersoonsnaam:
+              $ref: 'reg_natuurlijkpersoon_v1.yaml#/components/schemas/NatuurlijkPersoonsnaam'
+            partnernaam:
+              $ref: 'reg_natuurlijkpersoon_v1.yaml#/components/schemas/Partnernaam'
+            naamgebruik:
+              $ref: 'reg_natuurlijkpersoon_v1.yaml#/components/schemas/Naamgebruik'

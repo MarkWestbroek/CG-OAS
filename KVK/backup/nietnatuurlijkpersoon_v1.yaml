@@ -1,0 +1,251 @@
+openapi: 3.0.0
+info:
+  version: 1.0
+  title: >-
+    nietnatuurlijkpersoon
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # GegevensOpTeRichtenRechtspersoon representatie
+    GegevensOpTeRichtenRechtspersoon:
+      description: >-
+        De rechtspersoon die wordt opgericht als gevolg van een fusie. Dit object wordt ook gebruikt als placeholder voor een rechtspersoon om tijdens de verwerking van de fusie of splitsing een bestaande rechtspersoon te selecteren. Er wordt een associatie bijgehouden naar de rechtspersoon (niet-natuurlijk persoon of privaatrechtelijke rechtspersoon) die opgericht is of gebruikt wordt.
+      required:
+        - naam
+        - rechtsvorm
+      properties:
+        naam:
+          description: >-
+            De naam van de op te richten rechtspersoon.
+          type: string
+        rechtsvorm:
+          description: >-
+            De rechtsvorm van de op te richten rechtspersoon.
+          
+          type: string
+
+
+    # NietNatuurlijkPersoon representatie
+    NietNatuurlijkPersoon:
+      description: >-
+        
+      required:
+        - naam
+      allOf:
+        - $ref: '#/components/schemas/NietNatuurlijkPersoonBasisgegevens'
+        - properties:
+            naam:
+              $ref: 'algemeen_v1.yaml#/components/schemas/Naamrelatie'
+
+
+    # NietNatuurlijkPersoonBasisgegevens representatie
+    NietNatuurlijkPersoonBasisgegevens:
+      description: >-
+        
+      required:
+        - type
+        - persoonsnummer
+        - rechtsvorm
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            type:
+              type: string
+              enum:
+            persoonsnummer:
+              type: string
+              format: UUID
+            rsin:
+              $ref: '#/components/schemas/RSIN'
+            surseanceVanBetaling:
+              $ref: '#/components/schemas/SurseanceVanBetaling'
+            beperkingInRechtshandeling:
+              $ref: 'persoon_v1.yaml#/components/schemas/BeperkingInRechtshandeling'
+            rechtsvorm:
+              $ref: '#/components/schemas/Rechtsvorm'
+
+
+    # Rechtsvorm representatie
+    Rechtsvorm:
+      description: >-
+        
+      required:
+        - naam
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            naam:
+              description: >-
+                <u>Afgeleid</u>
+          De rechtsvorm. Dit is ofwel het concrete type, of:
+          <ul>
+          	<li>bij een nieuw gemelde rechtsvorm</li>
+          	<li>bij overige privaatrechtelijke rechtsvormen</li>
+          </ul>
+          de 'rechtsvorm'.
+              type: string
+            buitenlandseRechtsvorm:
+              description: >-
+                Bijvoorbeeld Gmbh of Ltd.
+              type: string
+
+
+    # RSIN representatie
+    RSIN:
+      description: >-
+        
+      required:
+        - nummer
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            nummer:
+              type: string
+              format: numeriek9
+
+
+    # Vermogensoverdracht representatie
+    Vermogensoverdracht:
+      description: >-
+        Een fusie of splitsing die is gerealiseerd. De fusie- of splitsingsakte is verleden, waarmee de fusie of splitsing is ´gerealiseerd´.
+      required:
+        - type
+        - voorstel
+        - vermogensoverdrachtspartij
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            type:
+              type: string
+              enum:
+                - Splitsing
+                - Fusie
+            voorstel:
+              $ref: '#/components/schemas/VoorstelTotVermogensoverdracht'
+            vermogensoverdrachtsakte:
+              $ref: '#/components/schemas/Vermogensoverdrachtsakte'
+            vermogensoverdrachtspartij:
+              type: array
+              items:
+                $ref: '#/components/schemas/Vermogensoverdrachtspartij'
+
+
+    # Vermogensoverdrachtsakte representatie
+    Vermogensoverdrachtsakte:
+      description: >-
+        De akte waarin de gerealiseerde vermogensoverdracht (fusie of splitsing) is vastgelegd.
+      properties:
+        datumAkte:
+          description: >-
+            De datum waarop de splitsings- of fusieakte is verleden. De datum is alleen aanwezig indien de fusie of splitsing is 'gerealiseerd'.
+          type: string
+          format: Datum
+
+
+    # Vermogensoverdrachtspartij representatie
+    Vermogensoverdrachtspartij:
+      description: >-
+        Een partij bij een (voorstel tot) vermogensoverdracht.
+Bij een splitsing kan dit de:
+        <ul>
+        	<li>splitsende,</li>
+        	<li>verkrijgende of</li>
+        	<li>toekennende</li>
+        </ul>
+        en bij de fusie de:
+        <ul>
+        	<li>verdwijnende,</li>
+        	<li>verkrijgende of</li>
+        </ul>
+        <ul>
+        	<li>toekennende</li>
+        </ul>
+        rechtspersoon zijn.
+        Bij een voorstel kan de rechtspersoon nog moeten worden opgericht, waarbij we geen relatie naar een niet-natuurlijk persoon kunnen vastleggen, maar enkel de naam en rechtsvorm van de op te richten rechtspersoon vastleggen.
+      required:
+        - type
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            type:
+              type: string
+              enum:
+                - VerkrijgendeRechtspersoon
+                - VerdwijnendeRechtspersoon
+                - SplitsendeRechtspersoon
+                - ToekennendeRechtspersoon
+            zuivereSplitsing:
+              description: >-
+                ZuivereSplitsing geeft aan of de betreffende splitsende rechtspersoon blijft bestaan:
+          <ul>
+          	<li>Bij een zuivere splitsing houdt de splitsende rechtspersoon op te bestaan.</li>
+          	<li>Indien geen zuivere splitsing blijft de rechtspersoon bestaan.</li>
+          </ul>
+              type: boolean
+            nietNatuurlijkPersoonBasisgegevens:
+              $ref: '#/components/schemas/NietNatuurlijkPersoonBasisgegevens'
+            gegevensOpTeRichtenRechtspersoon:
+              $ref: '#/components/schemas/GegevensOpTeRichtenRechtspersoon'
+
+
+    # VoorstelTotVermogensoverdracht representatie
+    VoorstelTotVermogensoverdracht:
+      description: >-
+        Voor de rechtspersonen is een fusie- of splitsingsvoorstel gedeponeerd.
+      required:
+        - type
+      allOf:
+        - $ref: '#/components/schemas/Deponering'
+        - properties:
+            type:
+              type: string
+              enum:
+                - VoorstelTotSplitsing
+                - VoorstelTotFusie
+
+
+    # Rechtspersoonsactiviteiten representatie
+    Rechtspersoonsactiviteiten:
+      description: >-
+        De verzameling activiteiten die door de rechtspersoon wordt uitgevoerd.
+Deze activiteiten worden weergegeven middels een <i>activiteitenomschrijving </i>(vrije tekst) en één of meer <i>activiteitcodes</i>.
+      required:
+        - activiteitenomschrijving
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            hoofdactiviteitcode:
+              $ref: 'vestiging_v1.yaml#/components/schemas/Activiteitcode'
+            activiteitcode:
+              type: array
+              items:
+                $ref: 'vestiging_v1.yaml#/components/schemas/Activiteitcode'
+            activiteitenomschrijving:
+              $ref: 'algemeen_v1.yaml#/components/schemas/Activiteitenomschrijving'
+
+
+    # RechtsbevoegdheidVereniging representatie
+    RechtsbevoegdheidVereniging:
+      description: >-
+        De rechtsbevoegdheid van een vereniging. Deze kan beperkt of volledig zijn.
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - Volledige
+            - Beperkte
+        datumIngangStatuten:
+          description: >-
+            Ingangsdatum van de statuten van een onderhandse akte van een beperkt rechtsbevoegde vereniging.
+          Kan er alleen zijn als de Rechtsbevoegdheid een beperkte is.
+          type: string
+          format: DatumIncompleet

@@ -1,0 +1,326 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\opvragen\algemeen_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    Naam:
+      description: >-
+        De naam van de maatschappelijke activiteit, vestiging of rechtspersoon.
+N.B. de naam wordt alleen gebruikt onder de volgende voorwaarden:
+        <ul>
+        	<li>voor een MA indien de MA niet in een onderneming wordt uitgeoefend. In dat geval worden er één of meer handelsnamen vastgelegd.</li>
+        	<li>voor een vestiging alleen indien deze de vestiging van een MA is. Voor een vestiging van een onderneming worden er één of meer handelsnamen vastgelegd.</li>
+        </ul>
+<i>HR 2009: De naamgeving van een rechtspersoon, samenwerkingsverband of niet-commerciële vestiging.</i>
+      required:
+        - administratieveNaam
+        - naam
+        - verkorteNaam
+        - ookGenoemd
+      properties:
+        administratieveNaam:
+          description: >-
+            <i>Afgeleid.</i>
+          De administratieve naam in het handelsregister. Dit is de verkorte naam of de volledige naam indien er geen verkorte naam is vastgelegd.
+          type: 
+        naam:
+          description: >-
+            De volledige naam.
+          type: 
+        verkorteNaam:
+          description: >-
+            De 'verkorte naam' is de administratieve naam in het handelsregister indien de (gehele) 'naam' langer is dan 45 karakters.
+          
+          type: 
+        ookGenoemd:
+          description: >-
+            Een andere naam waaronder de maatschappelijk activiteit, rechtspersoon of vestiging ook bekend is.
+          type: 
+
+
+    Naamrelatie:
+      description: >-
+        #TODO
+      required:
+        - naam
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/MaterieleRelatie'
+        - properties:
+            naam:
+              $ref: '#/components/schemas/Naam'
+
+
+    Activiteitenomschrijving:
+      description: >-
+        De activiteitenomschrijving is de omschrijving van de activiteiten die worden uitgeoefend op de vestiging of rechtspersoon. Dit kan zowel de bedrijfsomschrijving zijn als een doelomschrijving van de rechtspersoon (vereniging/stichting/VvE/kerkgenootschap). Voor een vestiging is dit een korte omschrijving van de activiteiten van de betreffende vestiging.
+      required:
+        - tekst
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            tekst:
+              description: >-
+                De omschrijving.
+              type: 
+
+
+    VolgordelijkeNaamrelatie:
+      description: >-
+        #TODO
+      required:
+        - naam
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/VolgordelijkeMaterieleRelatie'
+        - properties:
+            naam:
+              $ref: '#/components/schemas/Naam'
+
+
+    Bezoeklocatie:
+      description: >-
+        De fysieke locatie waarop een Vestiging of Niet-natuurlijk Persoon bezocht kan worden.
+      properties:
+        afgeschermd:
+          description: >-
+            Afgeschermd is "ja" als er <u>op dit moment</u> (voor deze Bezoeklocatie) een AfgeschermdRegistratie is die op 'afgeschermd' staat.
+Afgeschermd is "nee" als er <u>op dit moment</u> (voor deze Bezoeklocatie) nooit een Afgeschermdregistratie is geweest of er een AfgeschermdRegistratie is die op 'NietAfgeschermd' staat.
+          type: string
+          enum:
+            - ja
+        toevoeging:
+          description: >-
+            Toevoeging bij de locatie, bijv. bij bedrijfsverzamelgebouwen.
+<i>Bijv. Schiphol Passage is &#233;&#233;n locatie. De Etos aan de zuidzijde krijgt dan de toevoeging 'Zuidzijde'.</i>
+          type: string
+          format: Alfanumeriek200
+        buitenlandseLocatie:
+          $ref: '#/components/schemas/BuitenlandseLocatie'
+        binnenlandseLocatie:
+          $ref: '#/components/schemas/BinnenlandseLocatie'
+
+
+    Postlocatie:
+      description: >-
+        De fysieke locatie waarop een Vestiging of Niet-natuurlijk Persoon bezocht kan worden.
+      properties:
+        toevoegingBezoeklocatie:
+          description: >-
+            Toevoeging bij de locatie, bijv. bij bedrijfsverzamelgebouwen.
+<i>Bijv. Schiphol Passage is &#233;&#233;n locatie. De Etos aan de zuidzijde krijgt dan de toevoeging 'Zuidzijde'.</i>
+          type: string
+          format: Alfanumeriek200
+        buitenlandseLocatie:
+          $ref: '#/components/schemas/BuitenlandseLocatie'
+        binnenlandseLocatie:
+          $ref: '#/components/schemas/BinnenlandseLocatie'
+        binnenlandsePostLocatie:
+          $ref: '#/components/schemas/BinnenlandsePostLocatie'
+
+
+    Land:
+      description: >-
+        Een land is een gebied, afgebakend door middel van grenzen, waar een zelfstandige regering de scepter zwaait. De Kamer van Koophandel beheert haar eigen lijst met landen. Deze lijst is gebaseerd op de landenlijst van de GBA en ISO-Landen.
+        
+      required:
+        - naam
+        - toegangsnummer
+        - landCode
+      properties:
+        naam:
+          type: string
+        toegangsnummer:
+          description: >-
+            Het land-toegangsnummer voor telefonie.
+Bijv. +32 of 0032 voor België of +44 voor Verenigd Koninkrijk.
+          type: string
+        landCode:
+          type: int
+        telecomnummer:
+          $ref: '#/components/schemas/Telecomnummer'
+
+
+    Communicatiegegevens:
+      description: >-
+        Een set aan communicatiegegevens zijnde één of meer van de volgende gegevens:
+        <ul>
+        	<li>(inter)nationaal telefoonnummer of faxnummer</li>
+        	<li>internet-domeinnaam</li>
+        	<li>emailadres</li>
+        	<li>berichtenbox</li>
+        </ul>
+      properties:
+        domeinnaam:
+          description: >-
+            Een lijst domeinnamen.
+          type: array
+          items:
+            $ref: '#/components/schemas/Domeinnaam'
+        emailadres:
+          description: >-
+            Een lijst emailadressen.
+          type: array
+          items:
+            $ref: '#/components/schemas/Emailadres'
+        telecomnummer:
+          description: >-
+            Een lijst met telecomnummers.
+          type: array
+          items:
+            $ref: '#/components/schemas/Telecomnummer'
+        berichtenbox:
+          $ref: '#/components/schemas/Berichtenbox'
+
+
+    Telecomnummer:
+      description: >-
+        Een telecomnummer is ofwel een Telefoonnummer, ofwel een Faxnummer, en is het nummer zonder het toegangsnummer van het land, waarbinnen het nummer geldig is.
+        Het land wordt aangegeven met een referentie.
+      required:
+        - nummer
+        - telecomtype
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            nummer:
+              type: string {Telefoonnummer}
+            telecomtype:
+              description: >-
+                De waarde is één van de volgende:
+                <li>Telefoonnummer
+                <li>Faxnummer
+              type: string
+              enum:
+                - Telefoonnummer
+                - Faxnummer
+
+
+    Emailadres:
+      description: >-
+        Een emailadres.
+      required:
+        - adres
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            adres:
+              type: string {Emailadres}
+
+
+    Domeinnaam:
+      description: >-
+        De domeinnaam is de naam (of namen) waaronder de onderneming zaken doet of informatie verschaft op het internet.
+      required:
+        - naam
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            naam:
+              description: >-
+                De naam is en string met het pattern {url}.
+              type: string {URL}
+
+
+    Berichtenbox:
+      description: >-
+        Een berichtenbox.
+      required:
+        - naam
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            naam:
+              description: >-
+                berichtenboxadres = &lt;berichtenboxnaam ondernemer&gt;@berichtenbox.antwoordvoorbedrijven.nl
+Het adres mag geen spaties en hoofdletters bevatten. Het berichtenboxnaam gedeelte moet uit minimaal 4 en maximaal 45 karakters bestaan.
+              type: string {Berichtenboxadres}
+
+
+    Aandelenkapitaal:
+      description: >-
+        De kapitaalgegevens van een BV, NV, SE of SCE.
+      required:
+        - type
+        - opgegevenInGuldens
+        - bedrag
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            type:
+              description: >-
+                De waarde is één van de volgende:
+                <li>GeplaatstKapitaal
+                <li>GestortKapitaal
+                <li>MaatschappelijkKapitaal
+              type: string
+              enum:
+                - GeplaatstKapitaal
+                - GestortKapitaal
+                - MaatschappelijkKapitaal
+            opgegevenInGuldens:
+              description: >-
+                Geeft aan of het kapitaal oorsponkelijk in guldens opgegeven is of niet.
+              type: string
+              enum:
+                - ja
+                - nee
+            bedrag:
+              $ref: 'referentie_v1.yaml#/components/schemas/Geld'
+            aandelen:
+              type: array
+              items:
+                $ref: '#/components/schemas/Aandeel'
+
+
+    Aandeel:
+      description: >-
+        Een aantal aandelen van een bepaald soort.
+      required:
+        - aantal
+        - soort
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            aantal:
+              type: integer
+              format: int64
+            soort:
+              $ref: '#/components/schemas/SoortAandeel'
+
+
+    SoortAandeel:
+      description: >-
+        Een soort aandeel, aangeduid door een tekstuele omschrijving van het soort aandeel en door de waarde in geld.
+      required:
+        - naam
+        - waarde
+      properties:
+        naam:
+          description: >-
+            Beschrijving van het soort aandeel (vrije tekst).
+          type: string
+          format: Alfanumeriek500
+        waarde:
+          $ref: 'referentie_v1.yaml#/components/schemas/Geld'
+
+
+    Nationaliteit:
+      description: >-
+        #TODO
+      required:
+        - code
+        - nationaliteit
+      properties:
+        code:
+          type: integer
+        nationaliteit:
+          type: string

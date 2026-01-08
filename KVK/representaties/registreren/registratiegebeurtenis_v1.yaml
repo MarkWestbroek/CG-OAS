@@ -1,0 +1,155 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\registreren\registratiegebeurtenis_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # LocatieRegistratieResponse representatie
+    LocatieRegistratieResponse:
+      description: >-
+        
+      required:
+        - locatie
+      allOf:
+        - $ref: '#/components/schemas/RegistratieResponse'
+        - properties:
+            locatie:
+              $ref: 'locatie_v1.yaml#/components/schemas/Locatie'
+
+
+    # NatuurlijkPersoonRegistratieRequest representatie
+    NatuurlijkPersoonRegistratieRequest:
+      description: >-
+        Een representatie t.b.v. alle requests die een natuurlijk persoon betreffen.
+      required:
+        - betreffendeNatuurlijkPersoon
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/GebeurtenisregistratieRequest'
+        - properties:
+            betreffendeNatuurlijkPersoon:
+              $ref: 'natuurlijkpersoon_v1.yaml#/components/schemas/NatuurlijkPersoon'
+
+
+    # NatuurlijkPersoonRegistratieResponse representatie
+    NatuurlijkPersoonRegistratieResponse:
+      description: >-
+        
+      required:
+        - natuurlijkPersoon
+      allOf:
+        - $ref: '#/components/schemas/RegistratieResponse'
+        - properties:
+            natuurlijkPersoon:
+              $ref: 'natuurlijkpersoon_v1.yaml#/components/schemas/NatuurlijkPersoon'
+
+
+    # RegistratieResponse representatie
+    RegistratieResponse:
+      description: >-
+        Het abstracte object voor elke RegistratieResponse.
+      required:
+        - gebeurtenisnummer
+        - gebeurtenistijdstip
+        - gebeurtenistype
+      properties:
+        gebeurtenisnummer:
+          description: >-
+            Het nummer van de gebeurtenis (de unieke identificatie).
+          type: string
+        gebeurtenistijdstip:
+          description: >-
+            Het moment waarop de gebeurtenis is geregistreerd.
+          type: string
+        gebeurtenistype:
+          description: >-
+            Het type van de registratiegebeurtenis die is geregistreerd.
+Dit weet alleen de concrete implementatie, bijvoorbeeld NPA.
+           
+          Daar zijn ondermeer de volgende gebeurtenistypen:
+          <ul>
+          	<li>NatuurlijkPersoonRegistratie</li>
+          	<li>LocatieRegistratie</li>
+          	<li>VerhuizingNatuurlijkPersoonRegistratie</li>
+          	<li>OverlijdenNatuurlijkPersoonRegistratie</li>
+          	<li>Enz.</li>
+          </ul>
+          type: string
+        gerelateerdeRegistratieResponse:
+          $ref: '#/components/schemas/RegistratieResponse'
+
+
+    # VerhuizingNatuurlijkPersoonRegistratieResponse representatie
+    VerhuizingNatuurlijkPersoonRegistratieResponse:
+      description: >-
+        Het registratie object dat wordt gemaakt als een verhuizing van een natuurlijk persoon is geregistreerd
+      required:
+        - locatieregistratie
+      allOf:
+        - $ref: '#/components/schemas/NatuurlijkPersoonRegistratieResponse'
+        - properties:
+            locatieregistratie:
+              $ref: '#/components/schemas/LocatieRegistratieResponse'
+
+
+    # Enz.NatuurlijkPersoonRegistratieRequest representatie
+    Enz.NatuurlijkPersoonRegistratieRequest:
+      description: >-
+        
+      allOf:
+        - $ref: '#/components/schemas/NatuurlijkPersoonRegistratieRequest'
+        - properties:
+
+
+    # HuwelijkScheidenNatuurlijkPersoonRegistratieRequest representatie
+    HuwelijkScheidenNatuurlijkPersoonRegistratieRequest:
+      description: >-
+        
+      allOf:
+        - $ref: '#/components/schemas/NatuurlijkPersoonRegistratieRequest'
+        - properties:
+
+
+    # NatuurlijkPersoonRegistratieRequest representatie
+    NatuurlijkPersoonRegistratieRequest:
+      description: >-
+        
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/GebeurtenisregistratieRequest'
+        - properties:
+
+
+    # VerhuizingNatuurlijkPersoonRegistratieRequest representatie
+    VerhuizingNatuurlijkPersoonRegistratieRequest:
+      description: >-
+        
+      required:
+        - nieuweBereikbaarheid
+      allOf:
+        - $ref: '#/components/schemas/NatuurlijkPersoonRegistratieRequest'
+        - properties:
+            nieuweBereikbaarheid:
+              $ref: 'natuurlijkpersoon_v1.yaml#/components/schemas/Bereikbaarheid'
+
+
+    # LocatieRegistratieRequest representatie
+    LocatieRegistratieRequest:
+      description: >-
+        
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/GebeurtenisregistratieRequest'
+        - properties:
+            buitenlandseLocatie:
+              $ref: '#/components/schemas/BuitenlandseLocatie'
+            binnenlandseLocatie:
+              $ref: '#/components/schemas/BinnenlandseLocatie'
+            binnenlandsePostLocatie:
+              $ref: '#/components/schemas/BinnenlandsePostLocatie'

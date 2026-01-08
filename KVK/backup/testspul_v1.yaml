@@ -1,0 +1,81 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    testspul
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # EenRepresentatie representatie
+    EenRepresentatie:
+      description: >-
+        
+      properties:
+
+
+    # OuderRepresentatie representatie
+    OuderRepresentatie:
+      description: >-
+        
+      required:
+        - ouderschap
+      properties:
+        ouderschap:
+          type: boolean
+
+
+    # TestRepresentatie representatie
+    TestRepresentatie:
+      description: >-
+        Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw, toen een onbekende drukker een vellen met Lorem Ipsum passages en meer recentelijk door desktop publishing software zoals Aldus PageMaker die versies van Lorem Ipsum bevatten.
+        Waarom gebruiken we het?
+Het is al geruime tijd een bekend gegeven dat een lezer, tijdens het bekijken van de layout van een pagina, afgeleid wordt door de tekstuele inhoud. Verscheidene versies hebben zich ontwikkeld in de loop van de jaren, soms per ongeluk soms expres (ingevoegde humor en dergelijke).
+Waar komt het vandaan?
+In tegenstelling tot wat algemeen aangenomen wordt is Lorem Ipsum niet zomaar willekeurige tekst. het heeft zijn wortels in een stuk klassieke latijnse literatuur uit 45 v.Chr. en is dus meer dan 2000 jaar oud. Richard McClintock,
+      required:
+        - veld1
+        - formattedVeld2
+        - enumVeld4
+        - meervoudigVeld
+        - deEen
+        - hoofdEen
+      allOf:
+        - $ref: '#/components/schemas/OuderRepresentatie'
+        - properties:
+            veld1:
+              description: >-
+                Het is al geruime tijd een bekend gegeven dat een lezer, tijdens het bekijken van de layout van een pagina, afgeleid wordt door de tekstuele inhoud.
+Er zijn vele variaties van passages van Lorem Ipsum beschikbaar maar het merendeel heeft te lijden gehad van wijzigingen in een of andere vorm.
+              type: string
+            formattedVeld2:
+              type: string
+              format: Formaat
+            optioneelVeld3:
+              type: int
+            enumVeld4:
+              type: string
+              enum:
+                - waarde1
+                - waarde2
+            meervoudigVeld:
+              type: array
+              items:
+                type: string
+                format: Kleur
+            deEen:
+              description: >-
+                Een lijstje van EenRepresentaties. Het mogen er maximaal 5 zijn.
+              type: array
+              items:
+                $ref: '#/components/schemas/EenRepresentatie'
+            deAnder:
+              $ref: 'anderemap_v1.yaml#/components/schemas/RepresentatieInAndereMap'
+            hoofdEen:
+              $ref: '#/components/schemas/EenRepresentatie'

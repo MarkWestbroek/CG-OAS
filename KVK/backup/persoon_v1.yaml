@@ -1,0 +1,190 @@
+openapi: 3.0.0
+info:
+  version: 1.0
+  title: >-
+    persoon
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # AanvakelijkeDuurSurseanceVanBetaling representatie
+    AanvakelijkeDuurSurseanceVanBetaling:
+      description: >-
+        
+      required:
+        - tijdsduur
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            tijdsduur:
+              type: string
+
+
+    # BeperkingInRechtshandeling representatie
+    BeperkingInRechtshandeling:
+      description: >-
+        Een beperking in de rechtshandeling betekent dat een persoon niet zelfstandig mag handelen in het economisch verkeer of dat de persoon beperkt wordt in het sluiten van overeenkomsten. Er zijn <b>drie </b>soorten beperkingen:
+        &nbsp;
+        <ul>
+        	<li>Curatele</li>
+        	<li>Onder bewind</li>
+        	<li>Provisioneel bewind</li>
+        </ul>
+Beperking van rechtshandeling is voornamelijk van toepassing op natuurlijke personen, echter in een aantal specifieke situaties geldt dat een rechtspersoon onder bewind gesteld kan worden. Zie daarvoor Niet-natuurlijk Persoon -&gt; Onderbewindstelling.
+      required:
+        - type
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            type:
+              description: >-
+                Het type beperking in rechtshandeling:
+          <ul>
+          	<li>onder bewind gesteld</li>
+          	<li>onder curatele gesteld</li>
+          	<li>provisioneel bewind</li>
+          </ul>
+NB: zowel voor rechtspersonen als natuurlijke personen kunnen 'onder bewind gesteld' worden. De andere twee beperkingen gelden alleen voor natuurlijke personen.
+              type: string
+              enum:
+                - Onderbewindgesteld
+                - Ondercuratelegesteld
+                - ProvisioneelBewind
+
+
+    # DuurVerlengingSurseanceVanBetaling representatie
+    DuurVerlengingSurseanceVanBetaling:
+      description: >-
+        
+      required:
+        - tijdsduur
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            tijdsduur:
+              type: string
+
+
+    # Faillissement representatie
+    Faillissement:
+      description: >-
+        De persoon heeft de bijzondere rechtstoestand faillissement. Faillissement is een gerechtelijk beslag op en in de regel executie van het gehele vermogen van de schuldenaar ten behoeve van zijn gezamenlijke schuldeisers. 
+      allOf:
+        - $ref: '#/components/schemas/Insolventie'
+        - properties:
+            redenEindeFaillissement:
+              type: string
+
+
+    # Insolventie representatie
+    Insolventie:
+      description: >-
+        Klasse voor de registratie van de bijzondere rechtstoestand betreffende insolventie. Deze klasse geeft de classificatie aan van de soorten insolventie die bij een persoon (natuurlijk persoon, vennootschap, rechtspersoon, buitenlandse vennootschap) geregistreerd kunnen worden.
+      required:
+        - type
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            type:
+              description: >-
+                Het type insolventie:
+          <ul>
+          	<li>Faillissement</li>
+          	<li>Schuldsanering</li>
+          	<li>SurseanceVanBetaling</li>
+          </ul>
+              type: string
+
+
+    # InsolventieMetOmgezetteInsolventies representatie
+    InsolventieMetOmgezetteInsolventies:
+      description: >-
+        
+      allOf:
+        - $ref: '#/components/schemas/Insolventie'
+        - properties:
+            omgezetteInsolventies:
+              type: array
+              items:
+                $ref: '#/components/schemas/OmgezetteInsolventie'
+
+
+    # OmgezetteInsolventie representatie
+    OmgezetteInsolventie:
+      description: >-
+        Representatie om de insolventie die is omgezet in de huidige (en welke één van de drie insolventietypes is) te bevatten.
+      properties:
+        faillissement:
+          $ref: '#/components/schemas/Faillissement'
+        schuldsanering:
+          $ref: 'natuurlijkpersoon_v1.yaml#/components/schemas/Schuldsanering'
+        surseanceVanBetaling:
+          $ref: '#/components/schemas/SurseanceVanBetaling'
+
+
+    # Persoon representatie
+    Persoon:
+      description: >-
+        
+      required:
+        - persoonsnummer
+        - type
+      properties:
+        persoonsnummer:
+          type: string {UUID}
+        type:
+          type: string
+          enum:
+            - NatuurlijkPersoon
+            - NietNatuurlijkPersoon
+        beperkingInRechtshandeling:
+          type: array
+          items:
+            $ref: '#/components/schemas/BeperkingInRechtshandeling'
+        insolventieMetOmgezetteInsolventies:
+          $ref: '#/components/schemas/InsolventieMetOmgezetteInsolventies'
+
+
+    # StatusInsolventie representatie
+    StatusInsolventie:
+      description: >-
+        Met StatusInsolventie wordt aangegeven of een schuldsanering of surceance van betaling definitief of voorlopig is verleend.
+      required:
+        - status
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            status:
+              description: >-
+                De status waarin de insolventie verkeert of heeft verkeerd. Dit kan voorlopig of definitief zijn.
+              type: string
+
+
+    # SurseanceVanBetaling representatie
+    SurseanceVanBetaling:
+      description: >-
+        Uitstel van betaling geldt vanaf het moment dat de rechter voorlopig uitstel van betaling heeft verleend tot het moment dat de (voorlopige of definitieve) surseance van betaling eindigt.
+        De aanvankelijke duur is verplicht indien de status van de surseance ´definitief´ is.
+      required:
+        - status
+      allOf:
+        - $ref: '#/components/schemas/Insolventie'
+        - properties:
+            redenEindeSurseance:
+              type: string
+            status:
+              type: array
+              items:
+                $ref: '#/components/schemas/StatusInsolventie'
+            aanvankelijkeDuur:
+              $ref: '#/components/schemas/AanvakelijkeDuurSurseanceVanBetaling'
+            verlengingen:
+              type: array
+              items:
+                $ref: '#/components/schemas/DuurVerlengingSurseanceVanBetaling'

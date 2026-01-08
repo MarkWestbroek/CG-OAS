@@ -1,0 +1,45 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\vastleggen\meta_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    Registratieverzoek:
+      description: >-
+        Een Registratieverzoek is het verzoek om de registratie van één of meer {Representaties} in het {Register}.
+        Daarbij wordt de volgende informatie meegegeven:
+        <ul>
+        	<li>de concrete juridische gebeurtenis die hieraan ten grondslag ligt (dit bevat het type, het gebeurtenisnummer en de datum van de gebeurtenis);</li>
+        	<li>minimaal de unieke identificatie van één {Entiteit} die deze registratie betreft, tenzij het een verzoek tot registratie van een nog niet bekende {Entiteit} betreft. Dan moeten voldoende gegevens worden meegegeven om deze {Entiteit} te kunnen; registeren (en van een uniek identificatienummer te voorzien);</li>
+        	<li>het type registratie (Registratie, Correctie, Herstel) waarom verzocht wordt;</li>
+        	<li>Voor correctie en herstel de referentieRegistratie;</li>
+        	<li>het registratietijdstip (datum en tijd) waarop deze registratie is goedgekeurd.</li>
+        </ul>
+      required:
+        - tijdstip
+        - actie
+      properties:
+        tijdstip:
+          type: Tijdstip
+        actie:
+          description: >-
+            De waarde is één van de volgende:
+            <li>Valideren
+            <li>Registreren
+          type: Registratieverzoekactie
+          enum:
+            - Valideren
+            - Registreren
+        referentieRegistratie:
+          type: array
+          items:
+            $ref: '#/components/schemas/Registratieverzoek'

@@ -1,0 +1,133 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\vastleggen\juridischegebeurtenis_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    CorrectieVanEenJuridischeGebeurtenis:
+      description: >-
+        De jurische gebeurtenis beschrijft, zoveel mogelijk in termen van het logisch model, een gebeurtenis, zoals die in jurische termen in 'de werkelijkheid' heeft plaatsgehad.
+Er kunnen één of meerdere juridische gebeurtenissen zijn die één of meer <i>materiële gebeurtenissen </i>beschrijven.
+Hoewel een gebeurtenis vanwege haar aard altijd gedurende een periode plaatsheeft, die verschillende lengten kan hebben, benoemen we altijd een datum als het <i>moment</i> waarop de gebeurtenis plaatsvond.
+N.B. : deze datum kan ook een incomplete datum zijn.
+      required:
+        - gebeurtenisnummer
+        - datum
+        - type
+        - gecorreigeerdeJuridischeGebeurtenis
+      properties:
+        gebeurtenisnummer:
+          description: >-
+            Het nummer van de juridische gebeurtenis.
+          type: string
+        datum:
+          description: >-
+            De datum van een juridische gebeurtenis is de datum waarop de <i>aangever </i>aangeeft dat de gebeurtenis heeft plaatsgevonden.
+          type: string
+          format: DatumIncompleet
+        type:
+          description: >-
+            Het type van de juridische gebeurtenis.
+          type: string
+        gecorreigeerdeJuridischeGebeurtenis:
+          $ref: '#/components/schemas/JuridischeGebeurtenis'
+
+
+    JuridischeGebeurtenis:
+      description: >-
+        De jurische gebeurtenis beschrijft, zoveel mogelijk in termen van het logisch model, een gebeurtenis, zoals die in jurische termen in 'de werkelijkheid' heeft plaatsgehad.
+Er kunnen één of meerdere juridische gebeurtenissen zijn die één of meer <i>materiële gebeurtenissen </i>beschrijven.
+Hoewel een gebeurtenis vanwege haar aard altijd gedurende een periode plaatsheeft, die verschillende lengten kan hebben, benoemen we altijd een datum als het <i>moment</i> waarop de gebeurtenis plaatsvond.
+N.B. : deze datum kan ook een incomplete datum zijn.
+      required:
+        - type
+        - datum
+        - gebeurtenisnummer
+        - gegevens
+      properties:
+        type:
+          description: >-
+            Het type van de juridische gebeurtenis.
+            De waarde is één van de volgende:
+            <li>WijzigenCommunicatiegegevens
+            <li>OprichtenRechtspersoon
+            <li>VerhuizenVestiging
+            <li>VerhuizingNatuurlijkPersoon
+            <li>VertrekkenNatuurlijkPersoonNaarOnbekendeLocatie
+            <li>TerugkeerNatuurlijkPersoon
+            <li>WijzigingNaamsgegevensNatuurlijkPersoon
+            <li>...
+          type: string
+          enum:
+            - WijzigenCommunicatiegegevens
+            - OprichtenRechtspersoon
+            - VerhuizenVestiging
+            - VerhuizingNatuurlijkPersoon
+            - VertrekkenNatuurlijkPersoonNaarOnbekendeLocatie
+            - TerugkeerNatuurlijkPersoon
+            - WijzigingNaamsgegevensNatuurlijkPersoon
+            - ...
+        datum:
+          description: >-
+            De datum van een juridische gebeurtenis is de datum waarop de <i>aangever </i>aangeeft dat de gebeurtenis heeft plaatsgevonden.
+          type: string
+          format: DatumIncompleet
+        gebeurtenisnummer:
+          description: >-
+            Het nummer van de juridische gebeurtenis.
+          type: string
+        materieleGebeurtenis:
+          $ref: '#/components/schemas/MaterieleGebeurtenis'
+        gebeurtenisregistratieRequest:
+          $ref: '../../representaties/registreren/meta_v1.yaml#/components/schemas/GebeurtenisregistratieRequest'
+        gegevens:
+          type: array
+          items:
+            $ref: '#/components/schemas/JuridischeGebeurtenisGegevens'
+        brondocument:
+          type: array
+          items:
+            $ref: 'document_v1.yaml#/components/schemas/Brondocument'
+        bewijsstuk:
+          type: array
+          items:
+            $ref: 'document_v1.yaml#/components/schemas/Bewijsstuk'
+
+
+    JuridischeGebeurtenisGegevens:
+      description: >-
+        #TODO
+      required:
+        - type
+      properties:
+        type:
+          description: >-
+            Het type van de juridische gebeurtenis.
+            De waarde is één van de volgende:
+            <li>WijzigenCommunicatiegegevens
+            <li>OprichtenRechtspersoon
+            <li>VerhuizenVestiging
+            <li>VerhuizingNatuurlijkPersoon
+            <li>VertrekkenNatuurlijkPersoonNaarOnbekendeLocatie
+            <li>TerugkeerNatuurlijkPersoon
+            <li>WijzigingNaamsgegevensNatuurlijkPersoon
+            <li>...
+          type: string
+          enum:
+            - WijzigenCommunicatiegegevens
+            - OprichtenRechtspersoon
+            - VerhuizenVestiging
+            - VerhuizingNatuurlijkPersoon
+            - VertrekkenNatuurlijkPersoonNaarOnbekendeLocatie
+            - TerugkeerNatuurlijkPersoon
+            - WijzigingNaamsgegevensNatuurlijkPersoon
+            - ...

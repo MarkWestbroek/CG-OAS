@@ -1,0 +1,169 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\registreren\meta_v1.yaml
+  description: >-
+    De representaties vanuit het metamodel zoals deze voor registreren gebruikt worden.
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # CorrectieregistratieRequest representatie
+    CorrectieregistratieRequest:
+      description: >-
+        Het abstracte <i>gebeurtenis-registratie-request</i> bevat de basisinformatie die nodig is in elk request van een Registratiegebeurtenisservice:
+        <ul>
+        	<li>de actie (registreren of valideren)</li>
+        	<li>het registratietijdstip</li>
+        	<li>de juridische gebeurtenis die aan de registratie ten grondslag ligt</li>
+        </ul>
+      required:
+        - actie
+        - registratietijdstip
+      properties:
+        actie:
+          description: >-
+            De actie die voor de gebeurtenis uitgevoerd moet worden. De acties kunnen zijn:
+          <ul>
+          	<li>Valideren - er wordt gevalideerd of de gebeurtenis geregistreerd kan worden</li>
+          	<li>Registreren - de gebeurtenis wordt geregistreerd</li>
+          </ul>
+          type: string
+          enum:
+            - Valideren
+            - Registreren
+        registratietijdstip:
+          description: >-
+            Het moment waarop de gebeurtenis geregistreerd moet worden.
+          type: string
+          format: datetime
+        correctieVanEenJuridischeGebeurtenis:
+          $ref: 'juridischegebeurtenis_v1.yaml#/components/schemas/CorrectieVanEenJuridischeGebeurtenis'
+
+
+    # DoorhalingJuridischeGebeurtenis representatie
+    DoorhalingJuridischeGebeurtenis:
+      description: >-
+        De doorhaling van een juridische gebeurtenis. Deze maakt dus alle door deze gebeurtenis geregistreerde registraties ongedaan.
+      required:
+        - doorhalingnummer
+        - tijdstip
+        - juridischeGebeurtenis
+      properties:
+        doorhalingnummer:
+          description: >-
+            Het nummer van de doorhaling.
+          type: string
+          format: UUID
+        tijdstip:
+          description: >-
+            het tijdstip waarop deze doorhaling is gedaan.
+          type: string
+          format: datetime
+        juridischeGebeurtenis:
+          $ref: 'juridischegebeurtenis_v1.yaml#/components/schemas/JuridischeGebeurtenis'
+
+
+    # GebeurtenisregistratieRequest representatie
+    GebeurtenisregistratieRequest:
+      description: >-
+        Het abstracte <i>gebeurtenis-registratie-request</i> bevat de basisinformatie die nodig is in elk request van een Registratiegebeurtenisservice:
+        <ul>
+        	<li>de actie (registreren of valideren)</li>
+        	<li>het registratietijdstip</li>
+        	<li>de juridische gebeurtenis die aan de registratie ten grondslag ligt</li>
+        </ul>
+      required:
+        - actie
+        - registratietijdstip
+      properties:
+        actie:
+          description: >-
+            De actie die voor de gebeurtenis uitgevoerd moet worden. De acties kunnen zijn:
+          <ul>
+          	<li>Valideren - er wordt gevalideerd of de gebeurtenis geregistreerd kan worden</li>
+          	<li>Registreren - de gebeurtenis wordt geregistreerd</li>
+          </ul>
+          type: string
+          enum:
+            - Valideren
+            - Registreren
+        registratietijdstip:
+          description: >-
+            Het moment waarop de gebeurtenis geregistreerd moet worden.
+          type: string
+          format: datetime
+        correctieVanEenJuridischeGebeurtenis:
+          $ref: 'juridischegebeurtenis_v1.yaml#/components/schemas/CorrectieVanEenJuridischeGebeurtenis'
+
+
+    # HerstelRegistratieRequest representatie
+    HerstelRegistratieRequest:
+      description: >-
+        De representatie met alle gegevens voor de request van de herstel registratie service.
+        
+      required:
+        - actie
+        - registratietijdstip
+        - doorTeHalenRegistratie
+      properties:
+        actie:
+          description: >-
+            De actie die voor de gebeurtenis uitgevoerd moet worden. De acties kunnen zijn:
+          <ul>
+          	<li>Valideren - er wordt gevalideerd of de gebeurtenis geregistreerd kan worden</li>
+          	<li>Registreren - de gebeurtenis wordt geregistreerd</li>
+          </ul>
+          type: string
+        registratietijdstip:
+          description: >-
+            Het moment waarop de gebeurtenis geregistreerd moet worden.
+          type: string
+          format: datetime
+        doorhalingJuridischeGebeurtenis:
+          $ref: '#/components/schemas/DoorhalingJuridischeGebeurtenis'
+        doorTeHalenRegistratie:
+          $ref: 'gebeurtenis_v1.yaml#/components/schemas/Registratiegebeurtenis'
+
+
+    # HerstelRegistratieResponse representatie
+    HerstelRegistratieResponse:
+      description: >-
+        
+      required:
+        - doorgehaaldeRegistratie
+      allOf:
+        - $ref: '#/components/schemas/RegistratieResponse'
+        - properties:
+            doorgehaaldeRegistratie:
+              $ref: 'gebeurtenis_v1.yaml#/components/schemas/Registratiegebeurtenis'
+
+
+    # RegistratieResponse representatie
+    RegistratieResponse:
+      description: >-
+        Het abstracte Registratiegebeurtenis object.
+      required:
+        - gebeurtenisnummer
+        - type
+      properties:
+        gebeurtenisnummer:
+          description: >-
+            Het nummer van de gebeurtenis (unieke identificatie).
+          type: string
+          format: UUID
+        type:
+          description: >-
+            Het type van de gebeurtenis die is geregistreerd.
+<i>Dit weet alleen de concrete implementatie, bijvoorbeeld NPA:</i>
+          <i>- NatuurlijkPersoonRegistratie</i>
+          <i>- LocatieRegistratie</i>
+          <i>- VerhuizingNatuurlijkPersoonRegistratie</i>
+          type: string
+        gerelateerdeRegistratie:
+          $ref: '#/components/schemas/RegistratieResponse'

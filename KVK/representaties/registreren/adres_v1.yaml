@@ -1,0 +1,145 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\registreren\adres_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    AanduidingBijBinnenlandsAdres:
+      description: >-
+        Een <i>aanduiding bij binnenlands adres</i> duidt een locatie aan die bij of tegenover een andere locatie ligt, die wordt aangeduid met een <i>binnenlands adres</i>. 
+Woonboten en woonwagens kunnen worden aangeduid door aan te geven waar de woonboot ligt of woonwagen staat ten opzichte van een binnenlands adres. Woonboten worden aangeduid door ´tegenover´ het binnenlandse adres. Woonwagens worden aangegeven door ´bij´ het binnenlandse adres.
+      required:
+        - referentielocatie
+      properties:
+        aanduiding:
+          description: >-
+            [optioneel] Geeft aan of het de locatie tegenover of bij een adres is gelegen.
+          Het is een aanduiding die door het GBA aan het adres is gegeven. Deze aanduiding wordt meegegeven voor woonboten en woonwagens.
+          De verdere adresgegevens hebben betrekking op het adres waar dit adres <i>bij</i> of <i>tegenover </i>ligt.
+          type: string
+        referentielocatie:
+          $ref: 'locatie_v1.yaml#/components/schemas/BinnenlandseLocatieMetAlleenBinnenlandsAdres'
+
+
+    BinnenlandsAdres:
+      description: >-
+        Een binnenlands adres is een aanduiding van een binnenlandse locatie. Een binnenlands adres wordt uitgegeven door de gemeente en geregistreerd in de basisregistratie adressen en gebouwen (BAG). In de BAG wordt een adres geregistreerd als nummeraanduiding. 
+      required:
+        - straatnaam
+        - huisnummer
+        - plaats
+      properties:
+        bagNummeraanduidingIdentificatie:
+          description: >-
+            De unieke identificatie van een deel van het binnenlands adres uitgegeven door het bevoegd gemeentelijke orgaan. In de BAG betreft dit de nummeraanduiding van als zodanig toegekende aanduiding van een verblijfsobject, een standplaats of een ligplaats.
+          De nummeraanduiding is:
+          <ul>
+          	<li>het huisnummer samen met</li>
+          	<li>eventueel de huisletter en</li>
+          	<li>eventueel de huisnummertoevoeging.</li>
+          </ul>
+          Deze is relatief ten opzichte van de zogenaamde 'openbare ruimte', die in de BAG wordt aangeduid door middel van:
+          <ul>
+          	<li>de straatnaam en</li>
+          	<li>de plaats.</li>
+          </ul>
+          type: string
+        straatnaam:
+          description: >-
+            Een door het bevoegde gemeentelijke orgaan aan een weg (openbare ruimte) toegekende benaming.
+          type: string
+        huisnummer:
+          description: >-
+            Een door het bevoegde gemeentelijke orgaan ten aanzien van een
+          adresseerbaar object toegekende nummering.
+          type: integer
+        postcode:
+          description: >-
+            De door TNT Post vastgestelde code behorende bij een bepaalde
+          combinatie van een naam van een woonplaats, naam van een
+          openbare ruimte en een huisnummer.
+          type: string
+          format: Postcode
+        huisletter:
+          description: >-
+            Een door het bevoegde gemeentelijke orgaan ten aanzien van een
+          adresseerbaar object toegekende toevoeging aan een huisnummer in de vorm van een alfanumeriek teken.
+          type: string
+          format: Letter
+        plaats:
+          description: >-
+            De door het bevoegde gemeentelijke orgaan aan een
+          WOONPLAATS toegekende benaming.
+          type: string
+        huisnummertoevoeging:
+          description: >-
+            Een door het bevoegde gemeentelijke orgaan ten aanzien van een
+          adresseerbaar object toegekende nadere toevoeging aan een
+          huisnummer of een combinatie van huisnummer en huisletter.
+          type: string
+
+
+    BinnenlandsPostadres:
+      description: >-
+        Een binnenlands postadres is een binnenlandse postlocatieaanduiding  waar (alleen) post naar toe gestuurd kan worden. Het adres kan niet worden bezocht (zoals een binnenlands adres of vrije locatie).
+We kennen postbussen en antwoordnummers.
+      required:
+        - postadrestype
+        - nummer
+        - postcode
+        - plaats
+      properties:
+        postadrestype:
+          type: string
+        nummer:
+          description: >-
+            Het nummer van de postbus.
+          type: integer
+        postcode:
+          description: >-
+            De door TNT Post vastgestelde code behorende bij de postbus of het antwoordnummer.
+          type: string
+          format: Postcode
+        plaats:
+          description: >-
+            De door het bevoegde gemeentelijke orgaan aan een
+          WOONPLAATS toegekende benaming.
+          type: string
+
+
+    BuitenlandsAdres:
+      description: >-
+        Een BuitenlandsAdres is een locatieaanduiding van een buitenlandse locatie in de vorm van drie adresregels en een land.
+      properties:
+        adresregel1:
+          description: >-
+            regel1
+          type: string
+          format: Alfanumeriek250
+        adresregel2:
+          type: string
+          format: Alfanumeriek250
+        adresregel3:
+          type: string
+          format: Alfanumeriek250
+
+
+    VrijeLocatie:
+      description: >-
+        De aanduiding van een vrije locatie die gegeven wordt aan een locatie indien geen binnenlands adres bekend is. De aanduiding wordt geleverd door de BRP.
+      required:
+        - locatiebeschrijving
+      properties:
+        locatiebeschrijving:
+          description: >-
+            Een geheel of gedeeltelijke omschrijving van de binnenlandse locatie.
+          type: string

@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  version: 1.0
+  title: >-
+    natuurlijkpersoon
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # Aansprakelijke representatie
+    Aansprakelijke:
+      description: >-
+        De specifieke rol van aansprakelijke.
+        N.B.: dit object bestaat t.b.v. de handlichting, en bevat geen formele en materiele historie.
+      required:
+        - rolnummer
+        - type
+      properties:
+        rolnummer:
+          type: string [UUID}
+        type:
+          description: >-
+            - Maat
+          - Vennoot
+          - Mede-eigenaar
+          - BevoegdFunctionaris
+          - LidRederij
+          - VereffenaarAansprakelijke #rare naam
+          type: string
+
+
+    # NatuurlijkPersoonHR representatie
+    NatuurlijkPersoonHR:
+      description: >-
+        
+      required:
+        - afgeschermd
+      allOf:
+        - $ref: '#/components/schemas/NatuurlijkPersoon'
+        - properties:
+            afgeschermd:
+              description: >-
+                <i>Afgeleid.</i>
+          afgeschermd is 'ja' als er <u>op dit moment</u> (voor deze Bezoeklocatie) een AfgeschermdRegistratie is die op 'afgeschermd' staat.
+<b><u>afgeschermd is er niet</u></b> als er <u>op dit moment</u> (voor deze Bezoeklocatie) nooit een Afgeschermdregistratie is geweest of er een AfgeschermdRegistratie is die op 'NietAfgeschermd' staat.
+<i>N.B. de waarde van deze property kan dus alleen maar 'ja' zijn!</i>
+              type: string
+            afgeschermdRegistratie:
+              $ref: '#/components/schemas/AfgeschermdRegistratie'
+            handlichting:
+              $ref: '#/components/schemas/Handlichting'
+
+
+    # NatuurlijkPersoonReferentie representatie
+    NatuurlijkPersoonReferentie:
+      description: >-
+        
+      allOf:
+        - $ref: 'persoon_v1.yaml#/components/schemas/Persoon'
+        - properties:
+
+
+    # Schuldsanering representatie
+    Schuldsanering:
+      description: >-
+        Schuldsanering zorgt ervoor dat de schuldenaar na verloop van een zekere tijd bevrijd wordt van zijn schuldenlast omdat de vorderingen van zijn schuldeisers niet langer afdwingbaar zijn. Een schuldsanering is alleen van toepassing op een natuurlijk persoon.
+      required:
+        - status
+      allOf:
+        - $ref: 'persoon_v1.yaml#/components/schemas/Insolventie'
+        - properties:
+            redenEindeSchuldsanering:
+              type: string
+            status:
+              type: array
+              items:
+                $ref: 'persoon_v1.yaml#/components/schemas/StatusInsolventie'
+
+
+    # Onderneming representatie
+    Onderneming:
+      description: >-
+        Een onderneming levert goederen en/of diensten waarvoor meer dan een symbolische vergoeding voor wordt gevraagd, en neemt deel aan het (normale) economische verkeer.
+Verder is het zo dat een onderneming die in het handelsregister wordt ingeschreven (zie HRW 2007, art 5):
+    a. een onderneming is die in Nederland is gevestigd en die toebehoort aan een naamloze vennootschap, een besloten vennootschap met beperkte aansprakelijkheid, een vennootschap onder firma, een commanditaire vennootschap, een maatschap, een rederij, een coöperatie, een onderlinge waarborgmaatschappij, een vereniging, een stichting, een kerkgenootschap of een publiekrechtelijke rechtspersoon;
+    b. een onderneming is die in Nederland gevestigd is en die toebehoort aan een natuurlijke persoon;
+    c. een onderneming is die toebehoort aan een Europese naamloze vennootschap, een Europese coöperatieve vennootschap of een Europees economisch samenwerkingverband die volgens haar statuten haar zetel in Nederland heeft;
+    d. een onderneming is die toebehoort aan een buitenlandse rechtspersoon die een hoofd- of een nevenvestiging in Nederland heeft;
+    e. een onderneming die in Nederland is gevestigd en die toebehoort aan een ander dan genoemd in onderdeel a tot en met d.
+      required:
+        - kvkNummer
+      properties:
+        kvkNummer:
+          description: >-
+            Het door de Kamer van Koophandel aan de maatschappelijke activiteit toegekende unieke 8-cijferige nummer.
+          type: string
+          format: Numeriek8

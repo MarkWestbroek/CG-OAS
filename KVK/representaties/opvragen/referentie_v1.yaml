@@ -1,0 +1,258 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\opvragen\referentie_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    BrondocumentType:
+      description: >-
+        Type brondocument bij een gebeurtenis
+      required:
+        - code
+        - omschrijving
+      allOf:
+        - $ref: '#/components/schemas/ReferentielijstItem'
+        - properties:
+            code:
+              type: string
+            omschrijving:
+              type: string
+
+
+    GebeurtenisType:
+      description: >-
+        Type gebeurtenis
+      required:
+        - code
+        - omschrijving
+      allOf:
+        - $ref: '#/components/schemas/ReferentielijstItem'
+        - properties:
+            code:
+              type: string
+            omschrijving:
+              type: string
+
+
+    Geld:
+      description: >-
+        Een geldbedrag waarbij de waarde en de valuta wordt aangegeven.
+      required:
+        - waarde
+        - valuta
+      properties:
+        waarde:
+          type: string
+        valuta:
+          type: string
+
+
+    Land:
+      description: >-
+        Een land is een gebied, afgebakend door middel van grenzen, waar een zelfstandige regering de scepter zwaait. De Kamer van Koophandel beheert haar eigen lijst met landen. Deze lijst is gebaseerd op de landenlijst van de GBA en ISO-Landen.
+      required:
+        - code
+        - naam
+      allOf:
+        - $ref: '#/components/schemas/ReferentielijstItem'
+        - properties:
+            code:
+              description: >-
+                De unieke code die door de BRP is uitgegeven voor het betreffende land. Voor natuurlijke personen die gekoppeld zijn aan de BRP kan op basis van de code de naamgeving van het land geraadpleegd worden.
+              type: Numeriek4
+            naam:
+              description: >-
+                De naam van het land.
+              type: 
+
+
+    ReferentielijstItem:
+      description: >-
+        (abstract)
+        Een item in een referentielijst.
+        Dit item kan qua geldigheid worden beperkt door een datum ingang en/of een datum einde.. 
+      properties:
+        datumIngang:
+          type: string
+          format: Datum
+        datumBeëindiging:
+          type: string
+          format: Datum
+
+
+    SBICode:
+      description: >-
+        Een SBI-code is een code bestaande uit 1 tot 5 cijfers. De codes vallen elk onder een sectie, aangeduid door een letter.
+Deze codes zijn ingedeeld in:
+        <ul>
+        	<li>divisies (2 cijfers)</li>
+        	<li>groepen (de 2 cijfers van de divisie plus één extra cijfer)</li>
+        	<li>klassen (de 3 cijfers van de groep plus één of twee extra cijfers)</li>
+        </ul>
+      required:
+        - code
+        - titel
+        - toelichting
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            code:
+              description: >-
+                De SBI-code.
+          <ul>
+          	<li>Een code bestaande uit 2 cijfers stelt een divisie voor.</li>
+          	<li>Daaronder vallen codes bestaande uit de 2 cijfers van de divisie, aangevuld met een extra cijfer. Deze code geeft een groep binnen een divisie aan.</li>
+          	<li>Onder elke groep vallen codes met één of twee extra cijfers achter de groepscode, die elk een klasse binnen de groep voorstelt. Een klasse geeft aan wat een activiteit van een onderneming, maatschappelijke activiteit of vestiging van één van deze is.</li>
+          </ul>
+              type: string
+              format: Numeriek5
+            titel:
+              description: >-
+                De titel van de SBI-code.
+<i>Bijvoorbeeld: code 0121 heeft als titel "Teelt van druiven".</i>
+              type: string
+            toelichting:
+              description: >-
+                De toelichting op de code en titel van de code.
+<i>Bijvoorbeeld:</i>
+          <i>Code 0121 "Teelt van druiven" heeft als toelichting:</i>
+          <i>"Deze klasse omvat:</i>
+          <i>- teelt van wijn- en tafeldruiven;</i>
+          <i>- vervaardiging van wijn van zelfgeteelde druiven."</i>
+              type: string
+
+
+    Vaststelling:
+      description: >-
+        #TODO
+      required:
+        - code
+        - omschrijving
+      allOf:
+        - $ref: '#/components/schemas/ReferentielijstItem'
+        - properties:
+            code:
+              type: string
+            omschrijving:
+              type: string
+
+
+    BuitenlandsHandelsregister:
+      description: >-
+        Bron: 
+        - art. 10 Hrb
+        - verslag BOT 011208: <i><u>Besluit:</u></i> De naam van het register in het buitenland wordt ingevoerd en de plaats daarbij is vrij invulbare tekst. Wordt niet via tabel ingevoerd.
+      required:
+        - code
+        - naam
+        - land
+      allOf:
+        - $ref: '#/components/schemas/ReferentielijstItem'
+        - properties:
+            code:
+              description: >-
+                De referentielijst-code voor het buitenlands handelsregister.
+              type: Numeriek4
+            naam:
+              type: Alfanumeriek250
+            land:
+              $ref: '#/components/schemas/Land'
+
+
+    GrootteRechtspersoon:
+      description: >-
+        De verschillende groottes van een rechtspersoon. De grootte van de rechtspersoon wordt bepaald door de aanlevering van de jaarrekening door de rechtspersoon.
+      required:
+        - code
+        - omschrijving
+      allOf:
+        - $ref: '#/components/schemas/ReferentielijstItem'
+        - properties:
+            code:
+              type: string
+            omschrijving:
+              type: string
+
+
+    MaandEindeBoekjaar:
+      description: >-
+        De verschillende groottes van een rechtspersoon. De grootte van de rechtspersoon wordt bepaald door de aanlevering van de jaarrekening door de rechtspersoon.
+      required:
+        - code
+        - omschrijving
+      allOf:
+        - $ref: '#/components/schemas/ReferentielijstItem'
+        - properties:
+            code:
+              type: string
+            omschrijving:
+              type: string
+
+
+    NadereSpecificatiePubliekrechtelijkeRechtsvorm:
+      description: >-
+        De verschillende groottes van een rechtspersoon. De grootte van de rechtspersoon wordt bepaald door de aanlevering van de jaarrekening door de rechtspersoon.
+      required:
+        - code
+        - omschrijving
+      allOf:
+        - $ref: '#/components/schemas/ReferentielijstItem'
+        - properties:
+            code:
+              type: string
+            omschrijving:
+              type: string
+
+
+    OverigePrivaatrechtelijkeRechtsvorm:
+      description: >-
+        De verschillende groottes van een rechtspersoon. De grootte van de rechtspersoon wordt bepaald door de aanlevering van de jaarrekening door de rechtspersoon.
+      required:
+        - code
+        - omschrijving
+      allOf:
+        - $ref: '#/components/schemas/ReferentielijstItem'
+        - properties:
+            code:
+              type: string
+            omschrijving:
+              type: string
+
+
+    PlaatsJaarverslag:
+      description: >-
+        De verschillende groottes van een rechtspersoon. De grootte van de rechtspersoon wordt bepaald door de aanlevering van de jaarrekening door de rechtspersoon.
+      required:
+        - code
+        - omschrijving
+      allOf:
+        - $ref: '#/components/schemas/ReferentielijstItem'
+        - properties:
+            code:
+              type: string
+            omschrijving:
+              type: string
+
+
+    Rechtsvorm:
+      description: >-
+        De verschillende groottes van een rechtspersoon. De grootte van de rechtspersoon wordt bepaald door de aanlevering van de jaarrekening door de rechtspersoon.
+      required:
+        - code
+        - omschrijving
+      allOf:
+        - $ref: '#/components/schemas/ReferentielijstItem'
+        - properties:
+            code:
+              type: string
+            omschrijving:
+              type: string

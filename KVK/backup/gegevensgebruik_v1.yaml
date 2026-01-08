@@ -1,0 +1,26 @@
+openapi: 3.0.0
+info:
+  version: 1.0
+  title: >-
+    gegevensgebruik
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # DirectMailing representatie
+    DirectMailing:
+      description: >-
+        De eigenaar van de maatschappelijke activiteit wil al dan niet of zijn / haar adresgegevens door derden gebruikt worden voor direct-mailing.
+      required:
+        - directMailing
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            directMailing:
+              type: string

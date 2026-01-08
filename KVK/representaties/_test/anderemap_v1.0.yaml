@@ -1,0 +1,24 @@
+openapi: 3.0.0
+info:
+  version: 1.0
+  title: >-
+    representaties\_test\anderemap_v1.0.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    RepresentatieInAndereMap:
+      description: >-
+        #TODO
+      required:
+        - eigenschap
+      properties:
+        eigenschap:
+          type: string
+          format: SpeciaalFormaat

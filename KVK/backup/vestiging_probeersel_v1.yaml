@@ -1,0 +1,82 @@
+openapi: 3.0.0
+info:
+  version: 1.0
+  title: >-
+    vestiging_probeersel
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # FormelePeriode representatie
+    FormelePeriode:
+      description: >-
+        Een Formele Periode geeft een periode weer waarin een object - of relatie - geregistreerd is of is geweest.
+Het bevat altijd een tijdstip (registratietijdstipOpvoer) waarop de regsitratie heeft aangevangen en kan een tijdstip ( registratietijdstipAfvoer) bevatten waarop de registratie is beëindigd.
+      required:
+        - registratietijdstipOpvoer
+      properties:
+        registratietijdstipOpvoer:
+          description: >-
+            <i>Afgeleid.</i>
+          Het eerste tijdstip waarop deze representatie is geregistreerd (registratieGebeurtenis.registratie), en waarvan de registratie niet ongedaan gemaakt is.
+          type: string
+        registratietijdstipAfvoer:
+          description: >-
+            <i>Afgeleid</i>, <i>optioneel</i>.
+          Het tijdstip waarop deze representatie is gederegistreerd (deregistratieGebeurtenis.registratie) en waarvan de deregistratie niet ongedaan gemaakt is.
+          type: string
+
+
+    # MaterielePeriode representatie
+    MaterielePeriode:
+      description: >-
+        Een Materiele Periode geeft een periode weer waarin een object - of relatie - juridisch bestaat of heeft bestaan.
+Het bevat altijd de datum waarop de periode is aangevangen en mogelijk een einddatum van de periode.
+Wanneer de einddatum leeg is, bestaat het betreffende object juridisch nog.
+      required:
+        - datumAanvang
+      properties:
+        datumAanvang:
+          description: >-
+            De datum waarop deze representatie is aangevangen.
+          type: DatumIncompleet
+        datumEinde:
+          description: >-
+            (optioneel) De datum waarop deze representatie is beeindigd.
+          type: DatumIncompleet
+
+
+    # OndernemingBasisgegevens representatie
+    OndernemingBasisgegevens:
+      description: >-
+        Deze representatie geeft alleen een set aan basisgegevens terug van de onderneming. Het betreft de periode waarin de onderneming geldig is en het KvK-nummer
+      required:
+        - kvkNummer
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            kvkNummer:
+              type: string
+              format: Numeriek8
+
+
+    # VestigingsOnderneming representatie
+    VestigingsOnderneming:
+      description: >-
+        De onderneming die bij de vestiging hoort
+      required:
+        - heeftDeVestigingGedurende
+        - geregistreerdGedurende
+      allOf:
+        - $ref: '#/components/schemas/OndernemingBasisgegevens'
+        - properties:
+            heeftDeVestigingGedurende:
+              $ref: '#/components/schemas/MaterielePeriode'
+            geregistreerdGedurende:
+              $ref: '#/components/schemas/FormelePeriode'

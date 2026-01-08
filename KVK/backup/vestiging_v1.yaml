@@ -1,0 +1,262 @@
+openapi: 3.0.0
+info:
+  version: 1.0.
+  title: >-
+    vestiging
+  description: >-
+    De representaties voor de Vestiging resource.
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # Activiteitcode representatie
+    Activiteitcode:
+      description: >-
+        
+      required:
+        - sBICode
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            sBICode:
+              $ref: 'referentie_v1.yaml#/components/schemas/SBICode'
+
+
+    # BehoortToeAan representatie
+    BehoortToeAan:
+      description: >-
+        
+      required:
+        - wordtUitgeoefendIn
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/MaterieleRelatie'
+        - properties:
+            wordtUitgeoefendIn:
+              type: string
+              enum:
+                - rechtspersoon
+                - onderneming
+
+
+    # Vestiging representatie
+    Vestiging:
+      description: >-
+        Een gebouw of complex van gebouwen waar duurzame uitoefening van de activiteiten van een onderneming of rechtspersoon plaatsvindt.
+      required:
+        - hoofdvestiging
+        - behoortToeAan
+      allOf:
+        - $ref: '#/components/schemas/VestigingBasisgegevens'
+        - properties:
+            hoofdvestiging:
+              type: string
+              enum:
+                - ja
+            behoortToeAan:
+              $ref: '#/components/schemas/BehoortToeAan'
+            naam:
+              $ref: 'algemeen_v1.yaml#/components/schemas/Naamrelatie'
+            handelsnamen:
+              type: array
+              items:
+                $ref: 'maatschappelijkeactiviteit_v1.yaml#/components/schemas/VolgordelijkeHandelsnaamrelatie'
+
+
+    # VestigingBasisgegevens representatie
+    VestigingBasisgegevens:
+      description: >-
+        
+      required:
+        - vestigingsnummer
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            vestigingsnummer:
+              type: string
+              format: Numeriek12
+
+
+    # Vestigingen representatie
+    Vestigingen:
+      description: >-
+        
+      properties:
+        vestiging:
+          $ref: '#/components/schemas/Vestiging'
+
+
+    # VestigingsactiviteitenMetImportExport representatie
+    VestigingsactiviteitenMetImportExport:
+      description: >-
+        De activiteiten van de vestiging, bestaande uit de activiteitenomschrijving, hoofdactiviteitcode, nevenactiviteitcodes en de aanduidingen of de vestiging import en/of export bedrijft.
+      required:
+        - activiteiten
+      properties:
+        activiteiten:
+          $ref: '#/components/schemas/Vestigingsactiviteiten'
+        importOfExport:
+          $ref: '#/components/schemas/ImportOfExport'
+
+
+    # VestigingsOnderneming representatie
+    VestigingsOnderneming:
+      description: >-
+        De onderneming die bij de vestiging hoort
+      required:
+        - heeftDeVestigingGedurende
+      allOf:
+        - $ref: 'maatschappelijkeactiviteit_v1.yaml#/components/schemas/Onderneming'
+        - properties:
+            heeftDeVestigingGedurende:
+              $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterielePeriode'
+
+
+    # VestigingsRechtspersoon representatie
+    VestigingsRechtspersoon:
+      description: >-
+        De rechtspersoon zoals deze een vestiging heeft of heeft gehad.
+      required:
+        - heeftDeVestigingGedurende
+      allOf:
+        - $ref: 'nietnatuurlijkpersoon_v1.yaml#/components/schemas/NietNatuurlijkPersoon'
+        - properties:
+            heeftDeVestigingGedurende:
+              $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterielePeriode'
+
+
+    # Vestigingsrelatie representatie
+    Vestigingsrelatie:
+      description: >-
+        
+      required:
+        - vestiging
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/MaterieleRelatie'
+        - properties:
+            vestiging:
+              $ref: '#/components/schemas/VestigingBasisgegevens'
+
+
+    # Vestigingsactiviteiten representatie
+    Vestigingsactiviteiten:
+      description: >-
+        De verzameling activiteiten die op de Vestiging wordt uitgevoerd.
+Deze activiteiten worden weergegeven middels een <i>activiteitenomschrijving </i>(vrije tekst) en één of meer <i>activiteitcodes</i>.
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            activiteitenomschrijving:
+              $ref: 'algemeen_v1.yaml#/components/schemas/Activiteitenomschrijving'
+            hoofdactiviteitcode:
+              $ref: '#/components/schemas/Activiteitcode'
+            activiteitcodes:
+              type: array
+              items:
+                $ref: '#/components/schemas/Activiteitcode'
+
+
+    # AantalWerkzamePersonen representatie
+    AantalWerkzamePersonen:
+      description: >-
+        Het aantal werkzame personen van een vestiging van een onderneming of rechtspersoon (verenigingen en stichtingen) verdeeld in het aantal part-time en full-time werkzame personen.
+      required:
+        - peildatum
+        - fulltime
+        - parttime
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            peildatum:
+              description: >-
+                De datum vanaf wanneer de aantallen werkzame personen (parttime / fulltime) in elk geval van toepassing zijn.
+              type: string
+              format: DatumIncompleet
+            fulltime:
+              description: >-
+                Het aantal fulltime werkzame personen.
+              type: string
+              format: Numeriek4
+            parttime:
+              description: >-
+                Het aantal parttime werkzame personen.
+          
+              type: string
+              format: Numeriek4
+
+
+    # ImportOfExport representatie
+    ImportOfExport:
+      description: >-
+        Geeft aan of een Vestiging import en/of export bedrijft.
+      required:
+        - bedrijftImport
+        - bedrijftExport
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            bedrijftImport:
+              description: >-
+                Indien "ja" bedrijft de onderneming op deze vestiging import.
+          <i>N.B. de waarde van deze property kan dus alleen maar 'ja' zijn!</i>
+              type: string
+            bedrijftExport:
+              description: >-
+                Indien "ja" bedrijft de onderneming op deze vestiging export.
+          <i>N.B. de waarde van deze property kan dus alleen maar 'ja' zijn!</i>
+              type: string
+
+
+    # Vestigingsoverdracht representatie
+    Vestigingsoverdracht:
+      description: >-
+        De overdracht van een Vestiging van de ene maatschappelijke activiteit of onderneming (overdragende partij) naar de andere maatschappelijke activiteit of onderneming (overnemende partij).
+N.B.: de Vestiging kan dus van een maatschappelijke activiteit naar een onderneming worden overgedragen of andersom. In dit geval is er van overdracht echter alleen sprake als de betreffende onderneming door een andere maatschappelijke activiteit wordt uitgeoefend.
+        <font color="#ff0000">
+        </font>N.B.: een vestiging kan meermalen overgedragen zijn. Op enig moment kunnen er dus meer vestigingsoverdrachten bij een vestiging bekend zijn.
+      required:
+        - momentVanOverdracht
+        - type
+      properties:
+        momentVanOverdracht:
+          type: string
+          format: DatumIncompleet
+        type:
+          type: string
+          enum:
+            - Vestigingsoverdracht
+            - Vestigingssamenvoeging
+            - Vestigingsopname
+        overnemer:
+          $ref: 'algemeen_v1.yaml#/components/schemas/RechtspersoonOfOnderneming'
+        overdrager:
+          $ref: 'algemeen_v1.yaml#/components/schemas/RechtspersoonOfOnderneming'
+
+
+    # Vestigingsopname representatie
+    Vestigingsopname:
+      description: >-
+        Een vestigingsopname is de opname van een vestiging van een andere rechtspersoon of onderneming in een vestiging.
+        De vestigingsopname is een afgeleide klasse en bevat de vestigingssamenvoeging van de opgenomen vestiging.
+Voor elke vestigingssamenvoeging waarbij de betreffende vestiging de opnemende vestiging is, is er een dus een afgeleide vestigingsopname.
+N.B.: een vestiging kan dus meer dan &#233;&#233;n vestigingsopname &#180;hebben&#180;.
+      allOf:
+        - $ref: '#/components/schemas/Vestigingsoverdracht'
+        - properties:
+            opgenomenVestiging:
+              $ref: '#/components/schemas/VestigingBasisgegevens'
+
+
+    # Vestigingssamenvoeging representatie
+    Vestigingssamenvoeging:
+      description: >-
+        Een speciale vorm van vestigingsoverdracht, waarbij een vestiging van een rechtspersoon of onderneming samen wordt gevoegd met een vestiging van een andere rechtspersoon of onderneming.
+De overgedragen vestiging houdt dus hierbij op te bestaan.
+      allOf:
+        - $ref: '#/components/schemas/Vestigingsoverdracht'
+        - properties:
+            opnemendeVestiging:
+              $ref: '#/components/schemas/VestigingBasisgegevens'

@@ -1,0 +1,45 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\vastleggen\juridischegebeurtenisgegevens_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    NaamswijzigingNatuurlijkPersoonGegevens:
+      description: >-
+        #TODO
+      required:
+        - betreffendeNatuurlijkPersoon
+      allOf:
+        - $ref: 'juridischegebeurtenis_v1.yaml#/components/schemas/JuridischeGebeurtenisGegevens'
+        - properties:
+            betreffendeNatuurlijkPersoon:
+              $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/NatuurlijkPersoon'
+            natuurlijkPersoonsnaam:
+              $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/NatuurlijkPersoonsnaam'
+            partnernaam:
+              $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/Partnernaam'
+            naamgebruik:
+              $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/Naamgebruik'
+
+
+    VerhuizingNatuurlijkPersoonGegevens:
+      description: >-
+        #TODO
+      required:
+        - betreffendeNatuurlijkPersoon
+      allOf:
+        - $ref: 'juridischegebeurtenis_v1.yaml#/components/schemas/JuridischeGebeurtenisGegevens'
+        - properties:
+            betreffendeNatuurlijkPersoon:
+              $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/NatuurlijkPersoon'
+            bereikbaarheid:
+              $ref: '../../representaties/registreren/natuurlijkpersoon_v1.yaml#/components/schemas/Bereikbaarheid'

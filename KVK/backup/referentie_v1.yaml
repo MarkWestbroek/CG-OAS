@@ -1,0 +1,56 @@
+openapi: 3.0.0
+info:
+  version: 1.0
+  title: >-
+    referentie
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    # SBICode representatie
+    SBICode:
+      description: >-
+        Een SBI-code is een code bestaande uit 1 tot 5 cijfers. De codes vallen elk onder een sectie, aangeduid door een letter.
+Deze codes zijn ingedeeld in:
+        <ul>
+        	<li>divisies (2 cijfers)</li>
+        	<li>groepen (de 2 cijfers van de divisie plus één extra cijfer)</li>
+        	<li>klassen (de 3 cijfers van de groep plus één of twee extra cijfers)</li>
+        </ul>
+      required:
+        - code
+        - titel
+        - toelichting
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            code:
+              description: >-
+                De SBI-code.
+          <ul>
+          	<li>Een code bestaande uit 2 cijfers stelt een divisie voor.</li>
+          	<li>Daaronder vallen codes bestaande uit de 2 cijfers van de divisie, aangevuld met een extra cijfer. Deze code geeft een groep binnen een divisie aan.</li>
+          	<li>Onder elke groep vallen codes met één of twee extra cijfers achter de groepscode, die elk een klasse binnen de groep voorstelt. Een klasse geeft aan wat een activiteit van een onderneming, maatschappelijke activiteit of vestiging van één van deze is.</li>
+          </ul>
+              type: string
+              format: Numeriek5
+            titel:
+              description: >-
+                De titel van de SBI-code.
+<i>Bijvoorbeeld: code 0121 heeft als titel "Teelt van druiven".</i>
+              type: 
+            toelichting:
+              description: >-
+                De toelichting op de code en titel van de code.
+<i>Bijvoorbeeld:</i>
+          <i>Code 0121 "Teelt van druiven" heeft als toelichting:</i>
+          <i>"Deze klasse omvat:</i>
+          <i>- teelt van wijn- en tafeldruiven;</i>
+          <i>- vervaardiging van wijn van zelfgeteelde druiven."</i>
+              type: 

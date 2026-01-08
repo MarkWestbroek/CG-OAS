@@ -1,0 +1,64 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\opvragen\meta_v1.yaml
+  description: >-
+    De representaties vanuit het metamodel zoals deze voor het opvragen gebruikt worden.
+     
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    FormeleRelatie:
+      description: >-
+        Een formele relatie geeft de relatie weer tussen twee gegevenselementen, waarbij het ene tot het andere gedurende een zekere formele periode geregistreerd is (geweest).
+      required:
+        - geregistreerdVanaf
+      properties:
+        geregistreerdVanaf:
+          $ref: 'gebeurtenis_v1.yaml#/components/schemas/Registratie'
+        geregistreerdTot:
+          $ref: 'gebeurtenis_v1.yaml#/components/schemas/Registratie'
+
+
+    MaterieleRelatie:
+      description: >-
+        Een materiele relatie geeft de relatie weer tussen twee gegevenselementen, waarbij het ene tot het andere toebehoort (of heeft toebehoord) gedurende een zekere materiele periode.
+      required:
+        - behoortToeGedurende
+      properties:
+        behoortToeGedurende:
+          $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterielePeriode'
+
+
+    VolgordelijkeMaterieleRelatie:
+      description: >-
+        Een volgordelijke materiele relatie is een materiële relatie, waarbij elke relatie geördend is ten opzichte van de andere relaties van het hetzelfde type (als die op hetzelfde - materiële en formele - moment bestaan).
+N.B.: in de praktijk is deze volgordelijkheid alleen beschikbaar voor opvragingen in het materiële en formele nu (peiltijdstip "nu" en peildatum "vandaag"), omdat er in de (HRD) database van deze volgordelijkheid geen historie wordt bijgehouden.
+      required:
+        - positie
+      allOf:
+        - $ref: '#/components/schemas/MaterieleRelatie'
+        - properties:
+            positie:
+              description: >-
+                De positie in de lijst (1 of meer, 1 is de hoogste positie).
+              type: integer
+
+
+    VolgordelijkeFormeleRelatie:
+      description: >-
+        Een volgordelijke materiele relatie is een materiële relatie, waarbij elke relatie geördend is ten opzichte van de andere relaties van het hetzelfde type (als die op hetzelfde - materiële en formele - moment bestaan).
+N.B.: in de praktijk is deze volgordelijkheid alleen beschikbaar voor opvragingen in het materiële en formele nu (peiltijdstip "nu" en peildatum "vandaag"), omdat er in de (HRD) database van deze volgordelijkheid geen historie wordt bijgehouden.
+      required:
+        - positie
+      properties:
+        positie:
+          description: >-
+            De positie in de lijst (1 of meer, 1 is de hoogste positie).
+          type: int

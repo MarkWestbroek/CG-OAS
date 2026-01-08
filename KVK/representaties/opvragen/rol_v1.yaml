@@ -1,0 +1,609 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\opvragen\rol_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    AansprakelijkeType:
+      description: >-
+        De specifieke rol van aansprakelijke.
+        N.B.: dit object bestaat t.b.v. de handlichting, en bevat geen formele en materiele historie.
+      required:
+        - type
+      properties:
+        type:
+          description: >-
+            - Maat
+          - Vennoot
+          - Mede-eigenaar
+          - BevoegdFunctionaris
+          - LidRederij
+          - VereffenaarAansprakelijke #rare naam
+            De waarde is één van de volgende:
+            <li>Maat: - Maat
+            - Vennoot
+            - Mede-eigenaar
+            - BevoegdFunctionaris
+            - LidRederij
+            - VereffenaarAansprakelijke #rare naam
+            <li>Vennoot
+            <li>Mede-eigenaar
+            <li>BevoegdFunctionaris
+            <li>LidRederij
+            <li>VereffenaarAansprakelijke
+          type: string
+          enum:
+            - Maat
+            - Vennoot
+            - Mede-eigenaar
+            - BevoegdFunctionaris
+            - LidRederij
+            - VereffenaarAansprakelijke
+
+
+    BevoegdheidBewindvoerder:
+      description: >-
+        #TODO
+      required:
+        - soortBevoegdheid
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            soortBevoegdheid:
+              description: >-
+                De waarde is één van de volgende:
+                <li>AlleenZelfstandigBevoegd: de bewindvoerder is namens de persoon alleen/zelfstandig bevoegd te handelen
+                <li>GezamenlijkBevoegd: de bewindvoerder is gezamenlijk met de onder bewind gestelde bevoegd te handelen namens de persoon.
+              type: SoortBevoegdheidBewindvoerder
+              enum:
+                - AlleenZelfstandigBevoegd
+                - GezamenlijkBevoegd
+
+
+    BevoegdheidFunctionarisVolgensBuitenlandsRecht:
+      description: >-
+        #TODO
+      required:
+        - soortBevoegdheid
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            soortBevoegdheid:
+              description: >-
+                De waarde is één van de volgende:
+                <li>AlleenZelfstandigBevoegd
+                <li>GezamenlijkBevoegd
+                <li>NietBevoegd
+              type: SoortBevoegdheidFunctionarisVolgensBuitenlandsRecht
+              enum:
+                - AlleenZelfstandigBevoegd
+                - GezamenlijkBevoegd
+                - NietBevoegd
+
+
+    BevoegdheidPubliekrechtelijkeFunctionaris:
+      description: >-
+        #TODO
+      required:
+        - soortBevoegdheid
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            soortBevoegdheid:
+              description: >-
+                De waarde is één van de volgende:
+                <li>BevoegdTotVertegenwoordigen: bevoegd tot vertegenwoordigen (zie opgaaf)
+                <li>NietBevoegdTotVertegenwoordigen: niet bevoegd tot vertegenwoordigen
+              type: BevoegdheidPubliekrechtelijkeFunctionaris
+              enum:
+                - BevoegdTotVertegenwoordigen
+                - NietBevoegdTotVertegenwoordigen
+
+
+    FunctionarisVolgensBuitenlandsRecht:
+      description: >-
+        #TODO
+      allOf:
+        - $ref: '#/components/schemas/Rol'
+        - properties:
+            bevoegdheidFunctionarisVolgensBuitenlandsRecht:
+              $ref: '#/components/schemas/BevoegdheidFunctionarisVolgensBuitenlandsRecht'
+
+
+    Rol:
+      description: >-
+        #TODO
+      required:
+        - rolnummer
+        - type
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/Entiteit'
+        - properties:
+            rolnummer:
+              type: string
+              format: UUID
+            type:
+              description: >-
+                De waarde is één van de volgende:
+                <li>Bestuurder
+                <li>LidVanHetBesturendOrgaan
+                <li>LidVanHetLeidinggevendOrgaan
+                <li>PersoonKrachtensStatutenBevoegd
+                <li>Maat
+                <li>Vennoot
+                <li>MedeEigenaar
+                <li>BevoegdFunctionaris
+                <li>LidRederij
+                <li>Vereffenaar
+                <li>PubliekrechtelijkBestuurder
+                <li>PubliekrechtelijkCommissaris
+                <li>PubliekrechtelijkLidToezichthoudendOrgaan
+                <li>Curator
+                <li>RechterCommissaris
+                <li>Bewindvoerder
+                <li>Gevolmachtigde
+                <li>Boekhouder
+                <li>Handelsagent
+                <li>Beheerder
+                <li>PubliekrechtelijkeRechtspersoonPrivaatrechtelijkGevolmachtigde
+                <li>BewaarderBoekenEnBescheiden
+                <li>AandeelhouderNietVolgestorteAandelen
+                <li>LidEESV
+                <li>LidToezichthoudendOrgaan
+                <li>FunctionarisVolgensBuitenlandsRecht
+                <li>Commissaris
+                <li>EnigAandeelhouder
+              type: string
+              enum:
+                - Bestuurder
+                - LidVanHetBesturendOrgaan
+                - LidVanHetLeidinggevendOrgaan
+                - PersoonKrachtensStatutenBevoegd
+                - Maat
+                - Vennoot
+                - MedeEigenaar
+                - BevoegdFunctionaris
+                - LidRederij
+                - Vereffenaar
+                - PubliekrechtelijkBestuurder
+                - PubliekrechtelijkCommissaris
+                - PubliekrechtelijkLidToezichthoudendOrgaan
+                - Curator
+                - RechterCommissaris
+                - Bewindvoerder
+                - Gevolmachtigde
+                - Boekhouder
+                - Handelsagent
+                - Beheerder
+                - PubliekrechtelijkeRechtspersoonPrivaatrechtelijkGevolmachtigde
+                - BewaarderBoekenEnBescheiden
+                - AandeelhouderNietVolgestorteAandelen
+                - LidEESV
+                - LidToezichthoudendOrgaan
+                - FunctionarisVolgensBuitenlandsRecht
+                - Commissaris
+                - EnigAandeelhouder
+            titel:
+              $ref: '#/components/schemas/Titel'
+            rolvervuller:
+              $ref: '#/components/schemas/Rolvervuller'
+            persoonTenOpzichteVanWieDeRolVervuldWordt:
+              $ref: 'persoon_v1.yaml#/components/schemas/PersoonReferentie'
+
+
+    Rolvervuller:
+      description: >-
+        #TODO
+      properties:
+        functionaris:
+          $ref: 'persoon_v1.yaml#/components/schemas/PersoonReferentie'
+        anoniemeRolvervuller:
+          $ref: '#/components/schemas/AnoniemeRolvervuller'
+
+
+    Naampersoon:
+      description: >-
+        #TODO
+      required:
+        - naam
+      properties:
+        naam:
+          type: string
+        telefoonnummer:
+          type: string
+          format: Telefoonnummer
+        locatie:
+          $ref: '#/components/schemas/Locatie'
+
+
+    AandeelhouderNietVolgestorteAandelen:
+      description: >-
+        #TODO
+      allOf:
+        - $ref: '#/components/schemas/Rol'
+        - properties:
+            nietVolgestorteAandelen:
+              type: array
+              items:
+                $ref: 'algemeen_v1.yaml#/components/schemas/Aandelenkapitaal'
+
+
+    Aansprakelijke:
+      description: >-
+        #TODO
+      required:
+        - bevoegdheid
+      allOf:
+        - $ref: '#/components/schemas/Rol'
+        - properties:
+            bevoegdheid:
+              $ref: '#/components/schemas/BevoegdheidAansprakelijke'
+
+
+    AnoniemeRolvervuller:
+      description: >-
+        #TODO
+      properties:
+        naampersoon:
+          $ref: '#/components/schemas/Naampersoon'
+
+
+    BeperkingenBevoegdheidInOpgave:
+      description: >-
+        Geeft aan of er beperkingen in de opgave zijn opgenomen, die verder niet in het handelsregister zijn verwerkt.
+      required:
+        - overigeBeperkingenInOpgave
+      allOf:
+        - $ref: '#/components/schemas/Beperking'
+        - properties:
+            overigeBeperkingenInOpgave:
+              description: >-
+                Een indicatie dat er een beperkte volmacht terug te vinden is in de opgave
+              type: string
+              format: Indicatie
+
+
+    BeperkingInHandeling:
+      description: >-
+        #TODO
+      required:
+        - soortHandeling
+      properties:
+        soortHandeling:
+          description: >-
+            De waarde is één van de volgende:
+            <li>OpstellenOffertes
+            <li>AfsluitenInkoopcontracten
+            <li>AfsluitenVerkoopcontracten
+            <li>AfsluitenGarantieovereenkomsten
+            <li>AfsluitenOnderhoudscontracten
+            <li>AfsluitenLeasecontracten
+            <li>AfsluitenFinancieringscontracten
+            <li>AfsluitenSoftwarecontracten
+          type: string
+          enum:
+            - OpstellenOffertes
+            - AfsluitenInkoopcontracten
+            - AfsluitenVerkoopcontracten
+            - AfsluitenGarantieovereenkomsten
+            - AfsluitenOnderhoudscontracten
+            - AfsluitenLeasecontracten
+            - AfsluitenFinancieringscontracten
+            - AfsluitenSoftwarecontracten
+        geldelijkeBeperking:
+          $ref: '#/components/schemas/GeldelijkeBeperkingBevoegdheid'
+
+
+    BeperkteVolmacht:
+      description: >-
+        #TODO
+      allOf:
+        - $ref: '#/components/schemas/BeperkteVolmachtZonderVestigingsrelatie'
+        - properties:
+            vestigingenWaarvoorGemachtigd:
+              type: array
+              items:
+                $ref: 'vestiging_v1.yaml#/components/schemas/VestigingReferentie'
+
+
+    BeperkteVolmachtZonderVestigingsrelatie:
+      description: >-
+        Een beperkte volmacht met alle eigenschappen, behalve de relaties naar de vestigingen waarvoor de beperkte volmacht geldt.
+      allOf:
+        - $ref: '#/components/schemas/Volmacht'
+        - properties:
+            doenVanOpgaveAanHetHandelsregister:
+              type: string
+              format: Indicatie
+            geldelijkeBeperking:
+              $ref: '#/components/schemas/GeldelijkeBeperkingBevoegdheid'
+            beperkingenInOpgave:
+              $ref: '#/components/schemas/BeperkingenBevoegdheidInOpgave'
+            omschrevenBeperking:
+              $ref: '#/components/schemas/OmschrevenBeperkingBevoegdheid'
+            beperkingenInHandeling:
+              type: array
+              items:
+                $ref: '#/components/schemas/BeperkingInHandeling'
+
+
+    Bestuurder:
+      description: >-
+        #TODO
+      required:
+        - bevoegdheid
+      allOf:
+        - $ref: '#/components/schemas/Bestuursfunctie'
+        - properties:
+            bevoegdheid:
+              $ref: '#/components/schemas/BevoegdheidBestuurder'
+            monistischeBestuurdersrol:
+              $ref: '#/components/schemas/MonistischeBestuurdersrol'
+            vertegenwoordigerEESV:
+              $ref: '#/components/schemas/VertegenwoordigerEESVRelatie'
+
+
+    Bestuursfunctie:
+      description: >-
+        #TODO
+      allOf:
+        - $ref: '#/components/schemas/Rol'
+        - properties:
+
+
+    BevoegdheidAansprakelijke:
+      description: >-
+        #TODO
+      required:
+        - soortBevoegdheid
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            soortBevoegdheid:
+              description: >-
+                De waarde is één van de volgende:
+                <li>beperkt bevoegd
+                <li>onbeperkt bevoegd
+                <li>niet bevoegd
+              type: string
+              enum:
+                - beperkt bevoegd
+                - onbeperkt bevoegd
+                - niet bevoegd
+            geldelijkeBeperking:
+              $ref: '#/components/schemas/GeldelijkeBeperkingBevoegdheid'
+            beperkingenInOpgave:
+              $ref: '#/components/schemas/BeperkingenBevoegdheidInOpgave'
+
+
+    BevoegdheidBestuurder:
+      description: >-
+        #TODO
+      required:
+        - soortBevoegdheid
+        - bevoegdMetAnderePersonen
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            soortBevoegdheid:
+              description: >-
+                Het soort bevoegdheid van de bestuurder.
+                De waarde is één van de volgende:
+                <li>AlleenZelfstandigBevoegd: de bestuurder is namens de rechtspersoon alleen/zelfstandig bevoegd te handelen
+                <li>GezamenlijkBevoegd: de bestuurder mag gezamenlijk met andere bestuurders/personen handelen namens de rechtspersoon
+                <li>NietBevoegd
+              type: string
+              enum:
+                - AlleenZelfstandigBevoegd
+                - GezamenlijkBevoegd
+                - NietBevoegd
+            bevoegdMetAnderePersonen:
+              description: >-
+                De bestuurder is bevoegd met andere personen die geen bestuurder zijn (bij deze rechtspersoon).
+              type: string
+              format: Indicatie
+
+
+    BevoegdheidVereffenaarVolgensBuitenlandsRecht:
+      description: >-
+        #TODO
+      required:
+        - soortBevoegdheid
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            soortBevoegdheid:
+              description: >-
+                De waarde is één van de volgende:
+                <li>BevoegdTotVertegenwoordigen_zieOpgave: voor een vereffenaar naar buitenlands recht moet een bevoegdheid kunnen worden opgegeven. Indien opgegeven dan wordt voor de  bevoegdheid naar de opgave verwezen.
+              type: string
+              enum:
+                - BevoegdTotVertegenwoordigen_zieOpgave
+
+
+    FunctionarisBijzondereRechtstoestand:
+      description: >-
+        #TODO
+      allOf:
+        - $ref: '#/components/schemas/Rol'
+        - properties:
+            bevoegdheidBewindvoerder:
+              $ref: '#/components/schemas/BevoegdheidBewindvoerder'
+
+
+    GeldelijkeBeperkingBevoegdheid:
+      description: >-
+        De beperking van een bevoegdheid, uitgedrukt in een maximaal geldbedrag.
+      required:
+        - beperking
+      allOf:
+        - $ref: '#/components/schemas/Beperking'
+        - properties:
+            beperking:
+              $ref: 'referentie_v1.yaml#/components/schemas/Geld'
+
+
+    Gemachtigde:
+      description: >-
+        #TODO
+      allOf:
+        - $ref: '#/components/schemas/Rol'
+        - properties:
+            volledigeVolmacht:
+              $ref: '#/components/schemas/VolledigeVolmacht'
+            beperkteVolmacht:
+              $ref: '#/components/schemas/BeperkteVolmacht'
+
+
+    LidEESV:
+      description: >-
+        #TODO
+      required:
+        - afwijkendAansprakelijkheidsbeding
+      allOf:
+        - $ref: '#/components/schemas/Rol'
+        - properties:
+            afwijkendAansprakelijkheidsbeding:
+              description: >-
+                De leden van het E.E.S.V. zijn hoofdelijk voor het geheel aansprakelijk voor de schulden van het E.E.S.V. (evenals in ons recht de vennoten van een v.o.f.). In de oprichtings-overeenkomst of bij het toetredingsbesluit van een nieuw lid kan bepaald worden, dat een nieuw lid niet aansprakelijk is voor de schulden, die reeds bestonden op het moment van toetreding (art. 26 lid 2 Verordening).
+              type: string
+              enum:
+                - ja
+                - nee
+
+
+    MonistischeBestuurdersrol:
+      description: >-
+        #TODO
+      required:
+        - uitvoeringVanBestuurstaken
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            uitvoeringVanBestuurstaken:
+              description: >-
+                De waarde is één van de volgende:
+                <li>uitvoerend
+                <li>nietUitvoerend
+              type: string
+              enum:
+                - uitvoerend
+                - nietUitvoerend
+
+
+    OmschrevenBeperkingBevoegdheid:
+      description: >-
+        Een in tekst omschreven beperking of beperkingen van een bevoegdheid.
+      required:
+        - omschrijvingOverigeBeperkingen
+      properties:
+        omschrijvingOverigeBeperkingen:
+          description: >-
+            De omschrijving van de overige beperkingen.
+<u>Opmerking: wordt niet opnieuw gevuld, maar is gemigreerde data uit NMP.</u>
+          <i>"Vrije tekst geïntroduceerd in het kader van RFC 0022 om de in het NMP opgenomen omschrijving bij 'Overige beperkingen' voor een gevolmachtigde te kunnen migreren."</i>
+          type: String
+
+
+    PubliekrechtelijkeFunctionaris:
+      description: >-
+        Roltype is &#233;&#233;n van onderstaande:
+        <ul>
+        	<li>PubliekrechtelijkBestuurder</li>
+        	<li>PubliekrechtelijkCommissaris PubliekrechtelijkLidToezichthoudendOrgaan</li>
+        </ul>
+      required:
+        - bevoegdheid
+      allOf:
+        - $ref: '#/components/schemas/Rol'
+        - properties:
+            bevoegdheid:
+              $ref: '#/components/schemas/BevoegdheidPubliekrechtelijkeFunctionaris'
+
+
+    Titel:
+      description: >-
+        #TODO
+      required:
+        - statutair
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            titel:
+              description: >-
+                De titel die de functievervuller draagt. Dit kan - per rol verschillend - doorgaans een item uit een lisjt zijn, bijv. de lijst van titels van bestuurders van een BV of NV, echter mag altijd afwijken daarvan.
+              type: string
+            statutair:
+              description: >-
+                Geeft aan of de titel in de statuten is opgenomen.
+              type: string
+
+
+    Vereffenaar:
+      description: >-
+        De vereffenaar vereffent t.b.v. &#233;&#233;n van deze soorten functionarissen:
+        <ul>
+        	<li>Bestuurder</li>
+        	<li>Aansprakelijke</li>
+        	<li>Functionaris volgens buitenlands recht</li>
+        </ul>
+      allOf:
+        - $ref: '#/components/schemas/Rol'
+        - properties:
+            bevoegdheidVereffenaarBestuurder:
+              $ref: '#/components/schemas/BevoegdheidBestuurder'
+            bevoegdheidVereffenaarAansprakelijke:
+              $ref: '#/components/schemas/BevoegdheidAansprakelijke'
+            bevoegdheidVereffenaarVolgensBuitenlandsRecht:
+              $ref: '#/components/schemas/BevoegdheidVereffenaarVolgensBuitenlandsRecht'
+
+
+    VertegenwoordigerEESVRelatie:
+      description: >-
+        #TODO
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/MaterieleRelatie'
+        - properties:
+            natuurlijkPersoonReferentie:
+              $ref: 'natuurlijkpersoon_v1.yaml#/components/schemas/NatuurlijkPersoonReferentie'
+
+
+    VolledigeVolmacht:
+      description: >-
+        #TODO
+      allOf:
+        - $ref: '#/components/schemas/Volmacht'
+        - properties:
+
+
+    Volmacht:
+      description: >-
+        Volmacht is de volgens een rechtshandeling verstrekte bevoegdheid om in naam van een ander rechtshandelingen te kunnen verrichten.
+      required:
+        - type
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            type:
+              description: >-
+                De waarde is één van de volgende:
+                <li>VolledigeVolmacht
+                <li>BeperkteVolmacht
+              type: string
+              enum:
+                - VolledigeVolmacht
+                - BeperkteVolmacht
+            statutair:
+              description: >-
+                Geeft aan of de volmacht in de statuten is opgenomen.
+              type: string
+              format: Indicatie

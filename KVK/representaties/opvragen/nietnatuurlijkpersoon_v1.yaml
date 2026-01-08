@@ -1,0 +1,798 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\opvragen\nietnatuurlijkpersoon_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    AfgeslotenMoeder:
+      description: >-
+        #TODO
+      required:
+        - kvkNummer
+        - redenAfsluiting
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            kvkNummer:
+              type: String
+              format: Numeriek8
+            redenAfsluiting:
+              type: String
+
+
+    BuitenlandseRechtsvorm:
+      description: >-
+        De code en naam van de buitenlandse rechtsvorm. 
+<i>Bijvoorbeeld: Gmbh of Ltd.</i>
+        
+      required:
+        - code
+        - naam
+      allOf:
+        - $ref: 'referentie_v1.yaml#/components/schemas/ReferentielijstItem'
+        - properties:
+            code:
+              description: >-
+                De referentielijst-code voor de buitenlandse rechtsvorm.
+          
+              type: Numeriek4
+            naam:
+              description: >-
+                De naam van de buitenlandse rechtsvorm zoals deze bekend is in het buitenlands register.
+          Bron: Hrw 2007, art 10 lid 3d
+              type: Alfanumeriek200
+
+
+    BuitenlandseRegistratie:
+      description: >-
+        Het buitenlandse register waar de niet natuurlijke persoon is geregistreerd.
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            plaatsBuitenlandsRegister:
+              description: >-
+                Bron:
+          verslag BOT 011208: <i><u>Besluit:</u></i> De naam van het register in het buitenland wordt ingevoerd en de plaats daarbij is vrij invulbare tekst. Wordt niet via tabel ingevoerd.
+              type: string
+              format: Alfanumeriek250
+            inschrijfnummerBuitenland:
+              description: >-
+                VARCHAR(50)
+          Bron: art. 10 Hrb
+              type: string
+              format: Alfanumeriek50
+            buitenlandsHandelsregister:
+              $ref: 'referentie_v1.yaml#/components/schemas/BuitenlandsHandelsregister'
+
+
+    CommanditairKapitaal:
+      description: >-
+        Het bedrag en/of de goederen waarmee de commanditaire vennooten deelnemen aan de commanditairre vennootschap.
+Vraag of DatumAanvang-DatumEinde relevant is (navraag BOT), 27-juli 2007. Meegenomen op basis van rubriek datumingang op het wijzigingsformulier kapitaalgegevens.
+      required:
+        - soort
+        - waarde
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            soort:
+              description: >-
+                De waarde is één van de volgende:
+                <li>Geld
+                <li>Goederen
+              type: string
+              enum:
+                - Geld
+                - Goederen
+            waarde:
+              $ref: 'referentie_v1.yaml#/components/schemas/Geld'
+
+
+    Doel:
+      description: >-
+        Indicatie (ja/nee) of er doel is opgegeven van het samenwerkingsverband.
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            opgaveVanDoel:
+              description: >-
+              type: string
+              enum:
+                - ja
+
+
+    Duur:
+      description: >-
+        De opgegeven duur van een samenwerkingsverband.
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            eindeDuur:
+              type: string
+              format: DatumIncompleet
+            eindeOnbepaald:
+              description: >-
+              type: string
+              enum:
+                - ja
+
+
+    EindeSurseanceVanBetaling:
+      description: >-
+        #TODO
+      required:
+        - reden
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            reden:
+              description: >-
+                De waarde is één van de volgende:
+                <li>AanvangFaillissement: de surseance eindigt door faillissement (o.a. artt. 218, 242, 272, 277, 280 Fw.).
+
+                <li>AanvangSchuldsanering?: de surseance eindigt door schuldsanering.
+<font color="#ff0000"><b><i>Kan dit wel? op grond van welke regeling?</i></b></font>
+                <li>HomologatieAkkoord: de surseance eindigt door de definitieve beslissing over een akkoord (artt. 272, 276, 277 Fw).
+
+                <li>IntrekkingBijRechterlijkVonnis: de surseance is ingetrokken door een uitspraak van de rechter (art. 242 FW). 
+                <li>VerloopSurseanceTermijn: de surseance eindigt doordat de duur (termijn) van de surseance is verlopen (art. 223 Fw). 
+
+                <li>VernietigingHogerBeroep: de surseance eindigt door vernietiging door de rechter na hoger beroep (art. 219 Fw).
+                <li>VernietigingNaCassatie: de surseance eindigt door vernietiging door de rechter na cassatie (art. 221 Fw).
+              type: string
+              enum:
+                - AanvangFaillissement
+                - AanvangSchuldsanering?
+                - HomologatieAkkoord
+                - IntrekkingBijRechterlijkVonnis
+                - VerloopSurseanceTermijn
+                - VernietigingHogerBeroep
+                - VernietigingNaCassatie
+
+
+    LandVanOprichting:
+      description: >-
+        Het land waar de onderneming is opgericht.
+      required:
+        - land
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            land:
+              $ref: 'referentie_v1.yaml#/components/schemas/Land'
+
+
+    LandVanVestiging:
+      description: >-
+        Het land waar een natuurlijke- of niet natuurlijke persoon zijn activiteiten voornamelijk uitvoert.
+        
+      required:
+        - land
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            land:
+              $ref: 'referentie_v1.yaml#/components/schemas/Land'
+
+
+    Liquidatie:
+      description: >-
+        Er is een liquidatie indien het samenwerkingsverband, de rechtspersoon of de buitenlandse vennootschap opgave heeft gedaan van een vereffening (ontbinding met baten).
+        Bij een vereffening is er sprake van dat de rechtspersoon of het samenwerkingsverband activiteiten ontplooit om zich op te heffen. De schulden worden afgewikkeld en een eventueel batig saldo wordt verdeeld onder de rechthebbenden.
+        De liquidatie eindigt wanneer de vereffening is be&#235;indigd.
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+
+
+    NietNatuurlijkPersoon:
+      description: >-
+        Een niet-natuurlijk persoon is een organisatie of samenwerkingsverband dat rechten en plichten heeft.
+      required:
+        - type
+        - persoonsnummer
+        - datumInschrijving
+        - datumUitschrijving
+        - rechtsvorm
+        - naam
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/Entiteit'
+        - properties:
+            type:
+              description: >-
+                De waarde is één van de volgende:
+                <li>BinnenlandseRechtspersoon
+                <li>BuitenlandseEntiteit
+                <li>PubliekrechtelijkeRechtspersoon
+                <li>OverigePrivaatrechtelijkeRechtspersoon
+                <li>Samenwerkingsverband
+                <li>BinnenlandseNietNatuurlijkPersoon
+              type: string
+              enum:
+                - BinnenlandseRechtspersoon
+                - BuitenlandseEntiteit
+                - PubliekrechtelijkeRechtspersoon
+                - OverigePrivaatrechtelijkeRechtspersoon
+                - Samenwerkingsverband
+                - BinnenlandseNietNatuurlijkPersoon
+            persoonsnummer:
+              type: string
+              format: UUID
+            datumInschrijving:
+              description: >-
+                Afgeleid: de datum inschrijving is het moment waarop de eerste inschrijving van de niet-natuurlijk persoon in het register heeft plaatsgevonden.
+          
+              type: String
+              format: DatumIncompleet
+            datumUitschrijving:
+              description: >-
+                Afgeleid: registratiedatum van de be&#235;indiging van de niet-natuurlijk persoon.
+          Er zijn niet-natuurlijk personen die kunnen worden uitgeschreven, maar daarbij blijven voortbestaan.
+          Daarvan wordt geen be&#235;indiging geregistreerd.
+          De datum van uitschrijving is in dat geval het moment waarop deze uitschrijving is geregistreerd.
+          
+              type: String
+              format: DatumIncompleet
+            rsin:
+              $ref: '#/components/schemas/RSIN'
+            rechtsvorm:
+              $ref: '#/components/schemas/Rechtsvorm'
+            zetel:
+              $ref: '#/components/schemas/Zetel'
+            aandelenkapitalen:
+              type: array
+              items:
+                $ref: 'algemeen_v1.yaml#/components/schemas/Aandelenkapitaal'
+            oprichting:
+              $ref: '#/components/schemas/Oprichting'
+            naam:
+              $ref: 'algemeen_v1.yaml#/components/schemas/Naamrelatie'
+            activiteiten:
+              $ref: '#/components/schemas/Rechtspersoonsactiviteiten'
+            rechtsbevoegdheidVereniging:
+              $ref: '#/components/schemas/RechtsbevoegdheidVereniging'
+            ontbinding:
+              $ref: '#/components/schemas/Ontbinding'
+            landVanOprichting:
+              $ref: '#/components/schemas/LandVanOprichting'
+            landVanVestiging:
+              $ref: '#/components/schemas/LandVanVestiging'
+            buitenlandseRegistratie:
+              $ref: '#/components/schemas/BuitenlandseRegistratie'
+            omzettingenRechtsvorm:
+              type: array
+              items:
+                $ref: '#/components/schemas/OmzettingRechtsvorm'
+            commanditairKapitaal:
+              type: array
+              items:
+                $ref: '#/components/schemas/CommanditairKapitaal'
+            duur:
+              $ref: '#/components/schemas/Duur'
+            doel:
+              $ref: '#/components/schemas/Doel'
+            bezoeklocatie:
+              $ref: 'algemeen_v1.yaml#/components/schemas/Bezoeklocatie'
+            postlocatie:
+              $ref: 'algemeen_v1.yaml#/components/schemas/Postlocatie'
+            communicatiegegevens:
+              $ref: 'algemeen_v1.yaml#/components/schemas/Communicatiegegevens'
+            statuten:
+              type: array
+              items:
+                anyOf:
+                  - $ref: '#/components/schemas/StatutenInEenNotarieleAkte'
+                  - $ref: '#/components/schemas/StatutenInEenOnderhandseAkte'
+
+
+    NietNatuurlijkPersoonReferentie:
+      description: >-
+        #TODO
+      required:
+        - type
+        - persoonsnummer
+        - rechtsvorm
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/Entiteit'
+        - properties:
+            type:
+              description: >-
+                De waarde is één van de volgende:
+                <li>BinnenlandseRechtspersoon
+                <li>BuitenlandseEntiteit
+                <li>PubliekrechtelijkeRechtspersoon
+                <li>OverigePrivaatrechtelijkeRechtspersoon
+                <li>Samenwerkingsverband
+                <li>BinnenlandseNietNatuurlijkPersoon
+              type: string
+              enum:
+                - BinnenlandseRechtspersoon
+                - BuitenlandseEntiteit
+                - PubliekrechtelijkeRechtspersoon
+                - OverigePrivaatrechtelijkeRechtspersoon
+                - Samenwerkingsverband
+                - BinnenlandseNietNatuurlijkPersoon
+            persoonsnummer:
+              type: string
+              format: UUID
+            rechtsvorm:
+              $ref: '#/components/schemas/Rechtsvorm'
+            rsin:
+              $ref: '#/components/schemas/RSIN'
+
+
+    NietNatuurlijkPersoonRelatie:
+      description: >-
+        #TODO
+      allOf:
+        - $ref: 'meta_v1.yaml#/components/schemas/MaterieleRelatie'
+        - properties:
+            nietNatuurlijkPersoon:
+              $ref: '#/components/schemas/NietNatuurlijkPersoonReferentie'
+            afgeslotenMoeder:
+              $ref: '#/components/schemas/AfgeslotenMoeder'
+
+
+    NietNatuurlijkPersoonStatus:
+      description: >-
+        De status van een niet natuurlijke persoon.
+      required:
+        - status
+      properties:
+        status:
+          description: >-
+            De waarde is één van de volgende:
+            <li>Ontbonden
+            <li>Beëindigd na liquidatie
+            <li>Beëindigd na turbo liquidatie
+            <li>Faillissement
+            <li>Surseance van betaling
+            <li>Beëindigd door fusie
+            <li>Beëindigd door splitsing
+            <li>Ambtshalve opgeheven
+            <li>Onterecht ingeschreven
+            <li>Uitgeschreven
+          type: String
+          enum:
+            - Ontbonden
+            - Beëindigd na liquidatie
+            - Beëindigd na turbo liquidatie
+            - Faillissement
+            - Surseance van betaling
+            - Beëindigd door fusie
+            - Beëindigd door splitsing
+            - Ambtshalve opgeheven
+            - Onterecht ingeschreven
+            - Uitgeschreven
+
+
+    NotarieleAkte:
+      description: >-
+        De notari&#235;le akte.
+        Er zijn een aantal soorten akten die als brondocument worden vastgelegd. Van alle akten wordt de datum van het passeren van de akte geregistreerd.
+      required:
+        - type
+        - datum
+      properties:
+        type:
+          description: >-
+            De waarde is één van de volgende:
+            <li>AkteVanOprichting
+            <li>AkteVanStatutenwijziging
+            <li>AkteVanFusie
+            <li>AkteVanSplitsing
+            <li>AkteVanOmzetting
+            <li>Rectificatieakte
+            <li>AkteVanSplitsingAppartementsrechten
+            <li>BuitenlandseAkte
+          type: string
+          enum:
+            - AkteVanOprichting
+            - AkteVanStatutenwijziging
+            - AkteVanFusie
+            - AkteVanSplitsing
+            - AkteVanOmzetting
+            - Rectificatieakte
+            - AkteVanSplitsingAppartementsrechten
+            - BuitenlandseAkte
+        datum:
+          description: >-
+            De datum van het passeren van de akte. Dit wordt ook wel 'de datum waarop de akt e is verleden' genoemd.
+          type: string
+          format: DatumIncompleet
+
+
+    OmzettingRechtsvorm:
+      description: >-
+        De omzetting (van de ene rechtsvorm naar de andere).
+Wanneer een rechtspersoon meer dan &#233;&#233;n rechtsvorm heeft gehad, is er dus een omzetting geweest.
+N.B.: de oude en nieuw rechtsvorm kunnen worden afgeleid uit de materi&#235;le historie van de rechtsvormen, net als de datum van omzetting.
+      required:
+        - datumOmzetting
+        - oudeRechtsvorm
+        - nieuweRechtsvorm
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            datumOmzetting:
+              type: string
+              format: Datum
+            akteVanOmzetting:
+              $ref: '#/components/schemas/NotarieleAkte'
+            oudeRechtsvorm:
+              $ref: '#/components/schemas/Rechtsvorm'
+            nieuweRechtsvorm:
+              $ref: '#/components/schemas/Rechtsvorm'
+
+
+    OnderhandseAkte:
+      description: >-
+        #TODO
+      required:
+        - type
+      properties:
+        type:
+          description: >-
+            De waarde is één van de volgende:
+            <li>Statutenwijziging
+            <li>Oprichtingsovereenkomst
+            <li>AuthentiekAfschrift_Splitsingsakte_StatutenEventueelMet_Model_Regelement
+            <li>Statuten
+          type: string
+          enum:
+            - Statutenwijziging
+            - Oprichtingsovereenkomst
+            - AuthentiekAfschrift_Splitsingsakte_StatutenEventueelMet_Model_Regelement
+            - Statuten
+
+
+    Ontbinding:
+      description: >-
+        Geeft aan dat de rechtspersoon is ontbonden, waarbij de reden van de ontbinding wordt vastgelegd. 
+        Indien er vereffening plaatsvindt tijdens de ontbinding dan is er sprake van 'liquidatie'.
+        Bij een ontbinding zonder baten is er geen liquidatie.
+De datum aanvang van de ontbinding geeft aan wanneer de buitenlandse vennootschap, het samenwerkingsverband of de rechtspersoon is ontbonden.
+Een ontbinding eindigt alleen indien er sprake is van een herroeping van het ontbindingsbesluit.
+        
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            redenOntbinding:
+              description: >-
+                De waarde is één van de volgende:
+                <li>Ontbindingsbesluit: een naamloze vennootschap of een besloten vennootschap kan worden ontbonden door een <b>besluit</b> van de algemene vergadering van aandeelhouders; een vereniging, coöperatie of onderlinge waarborgmaatschappij door een <b>besluit</b> van de algemene ledenvergadering. Een stichting kan door een <b>besluit</b> van het stichtingsbestuur worden ontbonden, tenzij dit in de statuten anders is geregeld. De leden van een Europees economisch samenwerkingsverband kunnen door een <b>besluit</b> het samen werkingsverband ontbinden.
+                <li>GeheelOntbrekenVanLeden: een vereniging, coöperatie of onderlinge waarborgmaatschappij wordt ook ontbonden als er helemaal <b>geen leden meer</b> zijn
+                <li>StatutaireBepaling: de statuten kunnen bepalen dat de rechtspersoon ontbonden wordt bij een <b>bepaalde gebeurtenis</b>
+                <li>OntbindingDoorDeKvK: de <b>kamer</b> een rechtspersoon ontbinden als deze bepaalde wettelijke verplichtingen niet nakomt.
+                <li>RechterlijkeUitspraak: er is verzoek gedaan tot ontbinding bij de rechtbank en de rechter heeft <b>uitspraak</b> gedaan van de ontbinding van de rechtspersoon.
+                <li>StaatVanInsolventie: de reden van de ontbinding is de staat waarin de failliete boedel zich bevindt na de verificatievergadering, zonder dat een akkoord is bekrachtigd door de rechtbank en waarin de curator de vereffening van de failliete boedel ter hand neemt. De vereffening betekent staat van insolventie.
+                <li>OpheffingFaillissementWegensToestandVanDeBoedel: de reden van ontbinding is het einde van het faillissement als gevolg van gebrek aan baten/wegens toestand van de boedel.
+              type: string
+              enum:
+                - Ontbindingsbesluit
+                - GeheelOntbrekenVanLeden
+                - StatutaireBepaling
+                - OntbindingDoorDeKvK
+                - RechterlijkeUitspraak
+                - StaatVanInsolventie
+                - OpheffingFaillissementWegensToestandVanDeBoedel
+            liquidatie:
+              $ref: '#/components/schemas/Liquidatie'
+
+
+    Oprichting:
+      description: >-
+        Datum van oprichting: dit is de datum van het passeren van de akte van oprichting. 
+        •Indien de oprichting tot stand is gekomen door een fusie- of splitsing is het de datum van het passeren van de akte van fusie- of splitsing
+        •Indien er geen datum van een akte aanwezig is, wordt hier de datum aanvang van de niet natuurlijk persoon getoond.
+      required:
+        - datum
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            datum:
+              description: >-
+                Afgeleid
+          De datum van oprichting (aanvang) van de niet-natuurlijk persoon.
+              type: string
+              format: DatumIncompleet
+            akteOprichting:
+              $ref: '#/components/schemas/NotarieleAkte'
+            kostenOprichting:
+              $ref: 'referentie_v1.yaml#/components/schemas/Geld'
+
+
+    RechtsbevoegdheidVereniging:
+      description: >-
+        De rechtsbevoegdheid van een vereniging. Deze kan beperkt of volledig zijn.
+      required:
+        - type
+      properties:
+        type:
+          description: >-
+            De waarde is één van de volgende:
+            <li>Volledige
+            <li>Beperkte
+          type: string
+          enum:
+            - Volledige
+            - Beperkte
+        datumIngangStatuten:
+          description: >-
+            Ingangsdatum van de statuten van een onderhandse akte van een beperkt rechtsbevoegde vereniging.
+          Kan er alleen zijn als de Rechtsbevoegdheid een beperkte is.
+          type: string
+          format: DatumIncompleet
+
+
+    Rechtspersoonsactiviteiten:
+      description: >-
+        De verzameling activiteiten die door de rechtspersoon wordt uitgevoerd.
+Deze activiteiten worden weergegeven middels een <i>activiteitenomschrijving </i>(vrije tekst) en één of meer <i>activiteitcodes</i>.
+      required:
+        - activiteitenomschrijving
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            hoofdactiviteitcode:
+              $ref: 'maatschappelijkeactiviteit_v1.yaml#/components/schemas/Activiteitcode'
+            activiteitcode:
+              type: array
+              items:
+                $ref: 'maatschappelijkeactiviteit_v1.yaml#/components/schemas/Activiteitcode'
+            activiteitenomschrijving:
+              $ref: 'algemeen_v1.yaml#/components/schemas/Activiteitenomschrijving'
+
+
+    Rechtsvorm:
+      description: >-
+        #TODO
+      required:
+        - naam
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            naam:
+              description: >-
+                <u>Afgeleid</u>
+          De rechtsvorm. Dit is ofwel het concrete type, of:
+          <ul>
+          	<li>bij een nieuw gemelde rechtsvorm</li>
+          	<li>bij overige privaatrechtelijke rechtsvormen</li>
+          </ul>
+          de 'rechtsvorm'.
+              type: string
+            buitenlandseRechtsvorm:
+              $ref: '#/components/schemas/BuitenlandseRechtsvorm'
+            overigePrivaatrechtelijkeRechtsvorm:
+              $ref: 'referentie_v1.yaml#/components/schemas/OverigePrivaatrechtelijkeRechtsvorm'
+            rechtsvorm:
+              $ref: 'referentie_v1.yaml#/components/schemas/Rechtsvorm'
+            nadereSpecificatiePubliekrechtelijkeRechtsvorm:
+              $ref: 'referentie_v1.yaml#/components/schemas/NadereSpecificatiePubliekrechtelijkeRechtsvorm'
+
+
+    RSIN:
+      description: >-
+        Alle rechtspersonen en samenwerkingsverbanden, zoals bv’s, verenigingen, stichtingen, vof’s en maatschappen (eenmanszaken niet) krijgen bij inschrijving bij KVK naast een KVK-nummer ook een Rechtspersonen en Samenwerkingsverbanden Informatienummer (RSIN). Dit nummer wordt gebruikt om gegevens uit te wisselen met andere (overheids)organisaties, zoals de Belastingdienst.
+      required:
+        - nummer
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            nummer:
+              type: string
+              format: RSINummer
+
+
+    StatusSurseanceVanBetaling:
+      description: >-
+        #TODO
+      required:
+        - status
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            status:
+              description: >-
+                De status waarin de surseance van betaling verkeert. Dit kan voorlopig of definitief zijn.
+                De waarde is één van de volgende:
+                <li>Voorlopig: de surseance van betaling is voorlopig verleend.
+                <li>Definitief: de surseance van betaling is definitief verleend.
+              type: string
+              enum:
+                - Voorlopig
+                - Definitief
+
+
+    Statuten:
+      description: >-
+        Statuten zijn grondregels, bepalingen die ten grondslag liggen aan de binnenlandse privaatrechtelijke rechtspersonen: naamloze vennootschap, besloten vennootschap, vereniging en stichting, die in de  akte van oprichting staan, of later in een ander soort notari&#235;le akte kunnen worden bijgewerkt.
+        Ook de vereniging met beperkte rechtsbevoegdheid heeft statuten. Deze zijn opgenomen in een onderhandse akte.
+      required:
+        - type
+        - laatsteStatutenwijziging
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            type:
+              description: >-
+                De waarde is één van de volgende:
+                <li>StatutenInEenNotarieleAkte
+                <li>StatutenInEenOnderhandseAkte
+              type: string
+              enum:
+                - StatutenInEenNotarieleAkte
+                - StatutenInEenOnderhandseAkte
+            laatsteStatutenwijziging:
+              description: >-
+                <i>Afgeleid.</i>
+          De laatste statutenwijziging (indien die er is geweest) is de datum waarop de statuten het laatst gewijzigd zijn.
+Dit is de datum van het passeren van de akte waarin de wijziging is opgegeven.
+          N.B.: dit kan een akte van statutenwijziging zijn, maar ook bijvoorbeeld een akte van fusie of splitsing.
+              type: string
+              format: DatumIncompleet
+
+
+    StatutenInEenNotarieleAkte:
+      description: >-
+        De statuten indien deze in een notari&#235;le akte zijn opgenomen, waarvan de datum van passeren wordt geregistreerd.
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            notarieleAkte:
+              $ref: '#/components/schemas/NotarieleAkte'
+
+
+    StatutenInEenOnderhandseAkte:
+      description: >-
+        Statuten die in een onderhandse akte zijn opgenomen. Er wordt naar de onderhandse akte verwezen, echter is het alleen de soort akte die wordt geregistreerd.
+        N.B.: de datum van ingang van de statuten wordt apart opgegeven, en is dus een statuten-gegeven, en geen gegeven van de akte.
+      required:
+        - ingangsdatum
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            ingangsdatum:
+              description: >-
+                De datum van ingang van de onderhandse akte.
+N.B. DIt gegeven wordt opgegeven.
+              type: string
+              format: DatumIncompleet
+            onderhandseAkte:
+              $ref: '#/components/schemas/OnderhandseAkte'
+
+
+    SurseanceVanBetaling:
+      description: >-
+        Uitstel van betaling geldt vanaf het moment dat de rechter voorlopig uitstel van betaling heeft verleend tot het moment dat de (voorlopige of definitieve) surseance van betaling eindigt.
+      required:
+        - statusSurseanceVanBetaling
+      allOf:
+        - $ref: 'persoon_v1.yaml#/components/schemas/Insolventie'
+        - properties:
+            duurInMaanden:
+              description: >-
+                De duur in maanden van de surseance van betaling. Deze duur is verplicht indien de status van de surseance ´Definitief´ is.
+              type: integer
+            eindeSurseanceVanBetaling:
+              $ref: '#/components/schemas/EindeSurseanceVanBetaling'
+            statusSurseanceVanBetaling:
+              $ref: '#/components/schemas/StatusSurseanceVanBetaling'
+
+
+    Vermogensoverdracht:
+      description: >-
+        Een Vermogensoverdracht betreft een splitsing of een fusie die is gerealiseerd. De fusie- of splitsingsakte is verleden, waarmee de fusie of splitsing is &#180;gerealiseerd&#180;.
+        De partijen die waren betrokken bij de fusie of splitsing worden aangegeven.
+        Het bevat tevens het voorstel tot fusie of het voorstel tot splitsing dat tot realisatie heeft geleid.
+      required:
+        - type
+        - voorstel
+        - partijen
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            type:
+              description: >-
+                De waarde is één van de volgende:
+                <li>Splitsing
+                <li>Fusie
+              type: string
+              enum:
+                - Splitsing
+                - Fusie
+            voorstel:
+              $ref: 'deponering_v1.yaml#/components/schemas/Deponering'
+            vermogensoverdrachtsakte:
+              $ref: '#/components/schemas/Vermogensoverdrachtsakte'
+            partijen:
+              type: array
+              items:
+                $ref: '#/components/schemas/Vermogensoverdrachtspartij'
+
+
+    Vermogensoverdrachtsakte:
+      description: >-
+        De akte waarin de gerealiseerde vermogensoverdracht (fusie of splitsing) is vastgelegd.
+      properties:
+        datumAkte:
+          description: >-
+            De datum waarop de splitsings- of fusieakte is verleden. De datum is alleen aanwezig indien de fusie of splitsing is 'gerealiseerd'.
+          type: string
+          format: Datum
+
+
+    Vermogensoverdrachtspartij:
+      description: >-
+        Een partij bij een (voorstel tot) vermogensoverdracht.
+Bij een splitsing kan dit de:
+        <ul>
+        	<li>splitsende,</li>
+        	<li>verkrijgende of</li>
+        	<li>toekennende</li>
+        </ul>
+        en bij de fusie de:
+        <ul>
+        	<li>verdwijnende,</li>
+        	<li>verkrijgende of</li>
+        </ul>
+        <ul>
+        	<li>toekennende</li>
+        </ul>
+        rechtspersoon zijn.
+        Bij een voorstel kan de rechtspersoon nog moeten worden opgericht, waarbij we geen relatie naar een niet-natuurlijk persoon kunnen vastleggen, maar enkel de naam en rechtsvorm van de op te richten rechtspersoon vastleggen.
+      required:
+        - type
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/FormeelObject'
+        - properties:
+            type:
+              description: >-
+                De waarde is één van de volgende:
+                <li>VerkrijgendeRechtspersoon
+                <li>VerdwijnendeRechtspersoon
+                <li>SplitsendeRechtspersoon
+                <li>ToekennendeRechtspersoon
+              type: string
+              enum:
+                - VerkrijgendeRechtspersoon
+                - VerdwijnendeRechtspersoon
+                - SplitsendeRechtspersoon
+                - ToekennendeRechtspersoon
+            zuivereSplitsing:
+              description: >-
+                ZuivereSplitsing geeft aan of de betreffende splitsende rechtspersoon blijft bestaan:
+          <ul>
+          	<li>Bij een zuivere splitsing houdt de splitsende rechtspersoon op te bestaan.</li>
+          	<li>Indien geen zuivere splitsing blijft de rechtspersoon bestaan.</li>
+          </ul>
+              type: boolean
+            rechtspersoon:
+              $ref: '#/components/schemas/NietNatuurlijkPersoonReferentie'
+            gegevensOpTeRichtenRechtspersoon:
+              $ref: 'deponering_v1.yaml#/components/schemas/GegevensOpTeRichtenRechtspersoon'
+
+
+    Zetel:
+      description: >-
+        De statutaire zetel is de vestigingsplaats van een rechtspersoon, zoals benoemd in de statuten. N.B.: niet elke rechtspoon hoeft een zetel te hebben.
+        Bron: art. 12 (c.) Hrw.
+      required:
+        - statutaireZetel
+      allOf:
+        - $ref: 'gebeurtenis_v1.yaml#/components/schemas/MaterieelObject'
+        - properties:
+            statutaireZetel:
+              description: >-
+                Gemeentenaam van de statutaire zetel.
+              type: string

@@ -1,0 +1,46 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\opvragen\domein_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    RechtspersoonOfOnderneming:
+      description: >-
+        De referentie naar een rechtspersoon of een onderneming. plus de (afgeleide) naam van de rechtspersoon of de onderneming.
+      required:
+        - type
+        - naam
+      properties:
+        type:
+          description: >-
+            De waarde is één van de volgende:
+            <li>Rechtspersoon
+            <li>Onderneming
+          type: string
+          enum:
+            - Rechtspersoon
+            - Onderneming
+        naam:
+          type: string
+        persoonsnummer:
+          description: >-
+            Het persoonsnummer in het geval van een rechtspersoon.
+          type: string
+          format: UUID
+        kvkNummer:
+          description: >-
+            <ul>
+          	<li>Het KVK-nummer van de onderneming (en de rechtspersoon die de onderneming drijft) in het geval van een onderneming of</li>
+          	<li>het KVK-nummer van de maatschappelijke activiteit van de rechtspersoon.</li>
+          </ul>
+          type: string
+          format: Numeriek8

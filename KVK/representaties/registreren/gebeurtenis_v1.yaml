@@ -1,0 +1,61 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: >-
+    representaties\registreren\gebeurtenis_v1.yaml
+  description: >-
+    
+  contact:
+    name: GGM Team
+    email: ggm@kvk.nl
+paths: {}
+components:
+  schemas:
+
+
+    Registratiegebeurtenis:
+      description: >-
+        Het abstracte Registratiegebeurtenis object.
+      required:
+        - gebeurtenisnummer
+        - tijdstip
+        - type
+        - juridischeGebeurtenis
+        - betreffendeEntiteit
+      properties:
+        gebeurtenisnummer:
+          description: >-
+            Het nummer van de gebeurtenis (unieke identificatie).
+          type: string
+          format: UUID
+        tijdstip:
+          description: >-
+            Het moment waarop de gebeurtenis is geregistreerd.
+          type: string
+          format: datetime
+        type:
+          description: >-
+            Het type van de gebeurtenis die is geregistreerd.
+<i>Dit weet alleen de concrete implementatie, bijvoorbeeld NPA:</i>
+          <i>- NatuurlijkPersoonRegistratie</i>
+          <i>- LocatieRegistratie</i>
+          <i>- VerhuizingRegistratie</i>
+            De waarde is één van de volgende:
+            <li>NatuurlijkPersoonRegistratie
+            <li>LocatieRegistratie
+            <li>VerhuizingNatuurlijkPersoonRegistratie
+            <li>OverlijdenNatuurlijkPersoonRegistratie
+            <li>Enz.
+          type: string
+          enum:
+            - NatuurlijkPersoonRegistratie
+            - LocatieRegistratie
+            - VerhuizingNatuurlijkPersoonRegistratie
+            - OverlijdenNatuurlijkPersoonRegistratie
+            - Enz.
+        juridischeGebeurtenis:
+          $ref: '../../representaties/vastleggen/juridischegebeurtenis_v1.yaml#/components/schemas/JuridischeGebeurtenis'
+        gerelateerdeRegistratie:
+          $ref: '#/components/schemas/Registratiegebeurtenis'
+        betreffendeEntiteit:
+          $ref: '../../representaties/meta_v1.yaml#/components/schemas/Entiteit'
