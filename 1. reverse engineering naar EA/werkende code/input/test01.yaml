@@ -1,0 +1,116 @@
+openapi: 3.0.3
+info:
+  title: Test01 API
+  version: 0.1.0
+  description: De 'Test01-Service' is een gestandaardiseerde architectuur voor Nederlandse
+    overheidssystemen,ontworpen om acties (testen) te definiëren en te beheren die
+    burgers moeten uitvoeren.Het zorgt voor consistente communicatie tussen verschillende
+    applicaties.
+  contact:
+    email: standaarden.ondersteuning@vng.nl
+    name: VNG
+    url: https://zaakgerichtwerken.vng.cloud
+  license:
+    name: EUPL 1.2
+    url: https://opensource.org/licenses/EUPL-1.2
+paths:
+  /betaaltesten/{uuid}:
+    get:
+      operationId: betaaltestenRetrieve
+      description: Een specifieke betaal test opvragen.
+      summary: Een specifieke betaal test opvragen.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: Een UUID waarmee een ZAC een link kan leggen tussen de test
+            en zijn eigen administratie.
+        required: true
+      tags:
+      - betaaltesten
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          headers:
+            API-version:
+              schema:
+                type: string
+              description: 'Geeft een specifieke API-versie aan in de context van
+                een specifieke aanroep. Voorbeeld: 1.2.1.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Betaaltest'
+          description: ''
+components:
+  schemas:
+    Betaaltest:
+      type: object
+      description: Betaaltest beschrijving
+      properties:
+        bedrag:
+          type: string
+          description: Bedrag dat betaald moet worden
+        valuta:
+          type: string
+          default: EUR
+          description: Valuta van de betaling
+        transactieomschrijving:
+          type: string
+          description: Omschrijving van de transactie
+          maxLength: 80
+        doelrekening:
+          $ref: '#/components/schemas/Doelrekening'
+          description: Gegevens van de ontvangende bankrekening
+      required:
+      - bedrag
+      - doelrekening
+      - transactieomschrijving
+    Doelrekening:
+      type: object
+      description: Doelrekening beschrijving
+      properties:
+        naam:
+          type: string
+          description: Naam van de ontvanger van de betaling
+          maxLength: 200
+        iban:
+          type: string
+          description: IBAN code van de ontvanger
+        blabnummer:
+          type: string
+      required:
+      - iban
+      - naam
+    StatusEnum:
+      description: open, uitgevoerd, enz.
+      enum:
+      - open
+      - uitgevoerd
+      - niet_uitgevoerd
+      - afgebroken
+      - verwerkt
+      type: string
+    testSoortEnum:
+      description: soort test
+      enum:
+      - betaaltest
+      - gegevensuitvraagtest
+      - formuliertest
+      type: string
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+servers:
+- url: /testen/api/v1
+tags:
+- name: externetesten
+- name: betaaltesten
+- name: gegevensuitvraagtesten
+- name: formuliertesten
